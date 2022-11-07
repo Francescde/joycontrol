@@ -1,3 +1,47 @@
+# about this version
+
+As it will require a diferent script for each game. The idea is to simplify the writing of the scripts and its execution. 
+
+To archive that this versions has two new scripts to load amiibos.
+
+- load_amiibos: load an amiibo
+```bash
+sudo python3 load_amiibos.py -nfc=<amiiboPath> -script=<scriptPath>
+```
+
+- load_all_amiibos: load all amiibos from a folder (the idea is to not keep the connection alive as the picking of the amiibo at least on botw is not automatizable)
+```bash
+sudo python3 load_all_amiibos.py -folder=<folderPath> -script=<scriptPath>
+```
+
+Next is an example of a script to load amiibos on zelda botw.
+
+The only new comand in this version is sleep, it is ussed to not send to much comands at once or to wait before releasing a button or changing directions.
+
+The other thing to have in mind is to write {nfc} on the place the amiibo path should go. The script will replace it for the path
+
+Enjoy
+```bash
+sleep 1
+a
+sleep 1
+b
+sleep 0.5
+hold up
+sleep 0.5
+stick r right
+sleep 3
+stick r center
+sleep 0.5
+release up
+sleep 0.5
+l
+sleep 0.5
+nfc {nfc}
+sleep 3
+b
+sleep 0.5
+```
 # joycontrol
 
 Branch: master->amiibo_edits
