@@ -21,7 +21,7 @@ async def _send_empty_input_reports(transport):
         await asyncio.sleep(1)
 
 async def create_hid_server(protocol_factory, ctl_psm=17, itr_psm=19, device_id=None, reconnect_bt_addr=None,
-                            capture_file=None, interactive=False):
+                            capture_file=None, interactive=False, auto_unpair=False):
     """
     :param protocol_factory: Factory function returning a ControllerProtocol instance
     :param ctl_psm: hid control channel port
@@ -55,10 +55,13 @@ async def create_hid_server(protocol_factory, ctl_psm=17, itr_psm=19, device_id=
                 print("try modifieing /lib/systemd/system/bluetooth.service and see")
                 print("https://github.com/Poohl/joycontrol/issues/4 if it doesn't work")
             for sw in hid.get_paired_switches():
-                print(f"Warning: a switch ({sw}) was found paired, do you want to unpair it?")
-                i = input("y/n [y]: ")
-                if i == '' or i == 'y' or i == 'Y':
+                if auto_unpair:
                     hid.unpair_path(sw)
+                else:
+                    print(f"Warning: a switch ({sw}) was found paired, do you want to unpair it?")
+                    i = input("y/n [y]: ")
+                    if i == '' or i == 'y' or i == 'Y':
+                        hid.unpair_path(sw)
         else:
             if len(hid.get_UUIDs()) > 3:
                 logger.warning("detected too many SDP-records. Switch might refuse connection.")
