@@ -42,6 +42,9 @@ async def load_amiibos(script, nfc):
 
         await controller_state.connect()
         for line in lines:
+            if '{nfc}' in line:
+                line = line.replace('{nfc}', nfc)
+            print('cmd>>'+line)
             await cli.run_line(line)
     finally:
         await transport.close()
