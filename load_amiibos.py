@@ -14,13 +14,13 @@ async def load_amiibos(script, nfc):
     controller = Controller.PRO_CONTROLLER  # or JOYCON_L or JOYCON_R
     spi_flash = FlashMemory()
     # a callback to create the corresponding protocol once a connection is established
-    factory = controller_protocol_factory(controller, spi_flash=spi_flash, auto_unpair=True)
+    factory = controller_protocol_factory(controller, spi_flash=spi_flash)
     ctl_psm, itr_psm = 17, 19
     # start the emulated controller
     transport, protocol = await create_hid_server(factory,
                                                   ctl_psm=ctl_psm,
                                                   itr_psm=itr_psm,
-                                                  interactive=True)
+                                                  interactive=True, auto_unpair=True)
     # get a reference to the state beeing emulated.
     controller_state = protocol.get_controller_state()
     # wait for input to be accepted
