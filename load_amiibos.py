@@ -3,6 +3,7 @@ from joycontrol.protocol import controller_protocol_factory
 from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
+from run_controller_cli import _register_commands_with_controller_state
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
@@ -24,6 +25,7 @@ async def load_amiibos(script, nfc):
     # get a reference to the state beeing emulated.
     controller_state = protocol.get_controller_state()
     cli = ControllerCLI(controller_state)
+    _register_commands_with_controller_state(controller_state, cli)
     # wait for input to be accepted
     try:
 
@@ -39,6 +41,7 @@ async def load_amiibos(script, nfc):
             print(args[0])
             await asyncio.sleep(float(args[0]))
         cli.add_command(sleep.__name__, sleep)
+
 
         await controller_state.connect()
         for line in lines:
@@ -60,7 +63,6 @@ if __name__ == '__main__':
             nfc = str(arg).replace('-nfc=', '')
         if '-script=' in arg:
             script = str(arg).replace('-script=', '')
-
     if script and nfc:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(load_amiibos(script, nfc))
