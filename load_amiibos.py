@@ -36,8 +36,8 @@ async def load_amiibos(script, nfc):
         f.close()
 
         async def sleep(*args):
-            print(args)
-            await asyncio.sleep(3)
+            print(args[0])
+            await asyncio.sleep(float(args[0]))
         cli.add_command(sleep.__name__, sleep)
 
         await controller_state.connect()
