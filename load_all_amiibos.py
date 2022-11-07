@@ -1,13 +1,13 @@
 from aioconsole import ainput
 import asyncio
 import os
+import sys
 
 
-async def load_amiibos():
+async def load_amiibos(script, amiiboFolder):
     # wait for input to be accepted
-    directory = '/home/pi/joycontrol/Zelda'
     actual = 0
-    listD = [filename for filename in os.listdir(directory) if '.bin' in filename]
+    listD = [filename for filename in os.listdir(amiiboFolder) if '.bin' in filename]
     while actual < len(listD):
         message = listD[actual] + " loading write n to skip amiibo or anyting else to load (" + str(actual + 1) + "/" + str(
             len(listD)) + ")\n"
@@ -19,10 +19,23 @@ async def load_amiibos():
             actual = actual - 1
         if instruction != "n":
             filename = listD[actual]
-            file = os.path.join(directory, filename)
-            os.system('sudo python3 load_amiibos.py PRO_CONTROLLER --nfc ' + file)
+            file = os.path.join(amiiboFolder, filename)
+            os.system('sudo python3 load_amiibos.py -nfc=' + file +' -script=' + script)
         actual += 1
 
 
-loop = asyncio.get_event_loop()
-loop.run_until_complete(load_amiibos())
+if __name__ == '__main__':
+    # check if root
+    print(sys.argv)
+    amiiboFolder = None
+    script = None
+    for arg in sys.argv:
+        if '-folder=' in arg:
+            amiiboFolder = str(arg).replace('-folder=', '')
+        if '-script=' in arg:
+            script = str(arg).replace('-script=', '')
+    if script and amiiboFolder:
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(load_amiibos(script, amiiboFolder))
+
+
