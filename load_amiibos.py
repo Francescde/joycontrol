@@ -23,54 +23,26 @@ async def load_amiibos(script, nfc):
                                                   interactive=True, auto_unpair=True)
     # get a reference to the state beeing emulated.
     controller_state = protocol.get_controller_state()
+    cli = ControllerCLI(controller_state)
     # wait for input to be accepted
     try:
+
+        f = open(script, 'r+')
+        lines = []
+        try:
+            lines = f.readlines()
+        except Exception as e:
+            print("An exception occurred" + str(e))
+        f.close()
+
+        async def sleep(*args):
+            print(args)
+            await asyncio.sleep(3)
+        cli.add_command(sleep.__name__, sleep)
+
         await controller_state.connect()
-
-        controller_state.button_state.set_button('a', True)
-        await controller_state.send()
-        await asyncio.sleep(1)
-        controller_state.button_state.set_button('a', False)
-        await controller_state.send()
-
-        controller_state.button_state.set_button('b', True)
-        await controller_state.send()
-        await asyncio.sleep(1)
-        controller_state.button_state.set_button('b', False)
-        await controller_state.send()
-        await asyncio.sleep(0.5)
-
-        controller_state.button_state.set_button('up', True)
-        await controller_state.send()
-        await asyncio.sleep(0.5)
-        stick = controller_state.r_stick_state
-        ControllerCLI._set_stick(stick, "right", None)
-        await controller_state.send()
-        await asyncio.sleep(3)
-        ControllerCLI._set_stick(stick, "center", None)
-        await controller_state.send()
-        await asyncio.sleep(0.5)
-        controller_state.button_state.set_button('up', False)
-        await controller_state.send()
-        await asyncio.sleep(0.5)
-
-        controller_state.button_state.set_button('l', True)
-        await controller_state.send()
-        await asyncio.sleep(1)
-        controller_state.button_state.set_button('l', False)
-        await controller_state.send()
-        await asyncio.sleep(0.5)
-
-        controller_state.set_nfc(NFCTag.load_amiibo(nfc))
-        await controller_state.send()
-        await asyncio.sleep(3)
-
-        controller_state.button_state.set_button('b', True)
-        await controller_state.send()
-        await asyncio.sleep(1)
-        controller_state.button_state.set_button('b', False)
-        await controller_state.send()
-
+        for line in lines:
+            await cli.run_line(line)
     finally:
         await transport.close()
 

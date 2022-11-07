@@ -1,0 +1,18 @@
+a
+sleep 1
+b
+sleep 0.5
+hold up
+sleep 0.5
+stick r right
+sleep 3
+stick r center
+sleep 0.5
+release up
+sleep 0.5
+l
+sleep 0.5
+nfc {nfc}
+sleep 3
+b
+sleep 0.5
