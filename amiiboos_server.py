@@ -81,7 +81,7 @@ async def disconnect():
 
 @app.route('/controller')
 def send_report():
-    return send_from_directory('controller.html')
+    return send_from_directory('/static', 'controller.html')
 
 
 if __name__ == '__main__':
