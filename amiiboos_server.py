@@ -1,3 +1,4 @@
+import json
 from os.path import isfile, join
 
 from flask import request
@@ -74,7 +75,7 @@ async def connected():
 
 @app.route("/comand", methods=['POST'])
 async def comand():
-    content = request.json
+    content = json.loads(request.get_json())
     line = content.line
     await client_sent_line(line)
     return {'message': 'Send'}
@@ -93,7 +94,7 @@ def send_report():
 
 @app.route('/files', methods=['POST'])
 def get_files():
-    content = request.get_json()
+    content = json.loads(request.get_json())
     print('content')
     print(content)
     for key in content.keys:
