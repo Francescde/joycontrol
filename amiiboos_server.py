@@ -53,7 +53,7 @@ async def client_sent_line(line):
         await objectMap['cli'].run_line(line)
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 
 
 @app.route('/connect')
@@ -81,7 +81,7 @@ async def disconnect():
 
 @app.route('/controller')
 def send_report():
-    return send_from_directory('/static', 'controller.html')
+    return send_from_directory(app.static_folder, 'controller.html')
 
 
 if __name__ == '__main__':
