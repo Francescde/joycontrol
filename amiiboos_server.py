@@ -19,7 +19,7 @@ ctl_psm, itr_psm = 17, 19
 objectMap = {}
 objectMap['cli']=None
 objectMap['transport']=None
-objectMap['active']= True
+objectMap['active']= False
 
 async def get_client_transport():
     # start the emulated controller
@@ -45,7 +45,7 @@ async def close_transport():
         await objectMap['transport'].close()
     objectMap['cli'] = None
     objectMap['transport'] = None
-    objectMap['active'] = True
+    objectMap['active'] = False
 
 
 async def client_sent_line(line):
