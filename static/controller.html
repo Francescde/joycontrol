@@ -12,35 +12,63 @@
 
         function sendComandHold(cmd) {
             if (!comands[cmd]) {
-
-                $.post("/comand", { line:'hold ' + cmd}, function (data, status) {
-                    console.log("Data: " + data + "\nStatus: " + status);
-                    comands[cmd] = true;
-                },'json');
+                $.ajax({
+                    url: '/comand',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data, status) {
+                        console.log("Data: " + data + "\nStatus: " + status);
+                        comands[cmd] = true;
+                    },
+                    data: JSON.stringify({line: 'hold ' + cmd})
+                });
             } else {
-                $.post("/comand", { line: 'release ' + cmd}, function (data, status) {
-                    console.log("Data: " + data + "\nStatus: " + status);
-                    comands[cmd] = false;
-                },'json');
+                $.ajax({
+                    url: '/comand',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data, status) {
+                        console.log("Data: " + data + "\nStatus: " + status);
+                        comands[cmd] = false;
+                    },
+                    data: JSON.stringify({line: 'release ' + cmd})
+                });
             }
         }
 
         function sendComand(cmd) {
-            $.post("/comand", { line: cmd}, function (data, status) {
-                console.log("Data: " + data + "\nStatus: " + status);
-            },'json');
+
+            $.ajax({
+                url: '/comand',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                },
+                data: JSON.stringify({line: cmd})
+            });
         }
 
         function fillAmiiboList() {
             let folderName = $("#amiibo").val();
             //amiiboList
             $("#amiiboList").empty();
-            $.post("/files", {path: folderName}, function (data, status) {
-                console.log("Data: " + data + "\nStatus: " + status);
-                for (let i = 0; i < data.length; i++) {
-                    $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(\"nfc "+data[i]+"\")'>"+data[i]+"</button>");
-                }
-            },'json');
+            $.ajax({
+                url: '/files',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    for (let i = 0; i < data.length; i++) {
+                        $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(\"nfc " + data[i] + "\")'>" + data[i] + "</button>");
+                    }
+                },
+                data: JSON.stringify({path: folderName})
+            });
         }
 
         function Connection() {
