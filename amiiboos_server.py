@@ -1,3 +1,5 @@
+from os.path import isfile, join
+
 from joycontrol.command_line_interface import ControllerCLI
 from joycontrol.protocol import controller_protocol_factory
 from joycontrol.server import create_hid_server
@@ -82,6 +84,10 @@ async def disconnect():
 @app.route('/controller')
 def send_report():
     return send_from_directory(app.static_folder, 'controller.html')
+
+@app.route('/files/<folderpath>')
+def get_files(folderpath):
+    return [f for f in os.listdir(folderpath) if isfile(join(folderpath, f))]
 
 
 if __name__ == '__main__':
