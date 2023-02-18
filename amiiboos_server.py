@@ -75,7 +75,7 @@ async def connected():
 
 @app.route("/comand", methods=['POST'])
 async def comand():
-    content = json.loads(request.get_json())
+    content = request.get_json()
     line = content['line']
     await client_sent_line(line)
     return {'message': 'Send'}
@@ -94,7 +94,7 @@ def send_report():
 
 @app.route('/files', methods=['POST'])
 def get_files():
-    content = json.loads(request.get_json())
+    content = request.get_json()
     print('content')
     print(content)
     folderpath = content['path']
