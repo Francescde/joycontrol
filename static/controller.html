@@ -37,7 +37,7 @@
             $.get("/files/" + folderName, function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
                 for (let i = 0; i < data.length; i++) {
-                    $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(\"nfc \""+data[i]+")'>"+data[i]+"</button>");
+                    $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(\"nfc "+data[i]+"\")'>"+data[i]+"</button>");
                 }
             });
         }
