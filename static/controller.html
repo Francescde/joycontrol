@@ -30,6 +30,18 @@
             });
         }
 
+        function fillAmiiboList() {
+            let folderName = $("#amiibo").val();
+            //amiiboList
+            $("#amiiboList").empty();
+            $.get("/files/" + folderName, function (data, status) {
+                console.log("Data: " + data + "\nStatus: " + status);
+                for (let i = 0; i < data.length; i++) {
+                    $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(\"nfc \""+data[i]+")'>"+data[i]+"</button>");
+                }
+            });
+        }
+
         function Connection() {
             $.get("/connected", function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
@@ -45,13 +57,12 @@
             });
         }
 
-        function showController() {
+        function showAmiiboMenu() {
             $("#controller").hide();
             $("#amiboolister").show();
         }
 
-        function showAmiiboMenu() {
-
+        function showController() {
             $("#amiboolister").hide();
             $("#controller").show();
         }
@@ -209,7 +220,17 @@
         </div>
     </div>
     <div id="amiboolister">
-        amiiiiibo
+        <div class="form-group">
+            <label for="amiibo">AmiiboFolder</label>
+            <input type="text" class="amiibo" id="amiibo" aria-describedby="amiibot"
+                   placeholder="Enter amiibo folder">
+            <small id="amiibot" class="form-text text-muted">Folder where amiibos are found</small>
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" onclick="fillAmiiboList()"></button>
+        </div>
+        <div id="amiiboList" class="d-flex flex-column justify-content-around">
+        </div>
     </div>
 </div>
 </body>

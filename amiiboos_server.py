@@ -87,7 +87,7 @@ def send_report():
 
 @app.route('/files/<folderpath>')
 def get_files(folderpath):
-    return [f for f in os.listdir(folderpath) if isfile(join(folderpath, f))]
+    return [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)]
 
 
 if __name__ == '__main__':
