@@ -4,6 +4,7 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
+from flask import Flask, send_from_directory
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
@@ -52,29 +53,31 @@ async def client_sent_line(line):
         await objectMap['cli'].run_line(line)
 
 
-from flask import Flask
-from flask import send_from_directory
-
 app = Flask(__name__)
+
 
 @app.route('/connect')
 async def connect():
     await get_client_transport()
     return {'message': 'Created'}
 
+
 @app.route('/connected')
 async def connected():
     return {'connected': objectMap['active']}
 
-@app.route("/comand/<comand")
+
+@app.route("/comand/<line>")
 async def comand(line):
     await client_sent_line(line)
     return {'message': 'Send'}
+
 
 @app.route('/disconnect')
 async def disconnect():
     await close_transport()
     return {'message': 'Closed'}
+
 
 @app.route('/controller')
 def send_report():
