@@ -93,8 +93,9 @@ def send_report():
 
 @app.route('/files', methods=['POST'])
 def get_files():
-    content = request.json
+    content = request.get_json()
     print('content')
+    print(content)
     for key in content.keys:
         print(key)
     folderpath = content.data.path
