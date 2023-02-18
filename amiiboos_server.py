@@ -10,18 +10,18 @@ import asyncio
 import os
 import sys
 
-# the type of controller to create
-controller = Controller.PRO_CONTROLLER  # or JOYCON_L or JOYCON_R
-spi_flash = FlashMemory()
-# a callback to create the corresponding protocol once a connection is established
-factory = controller_protocol_factory(controller, spi_flash=spi_flash)
-ctl_psm, itr_psm = 17, 19
 objectMap = {}
 objectMap['cli']=None
 objectMap['transport']=None
 objectMap['active']= False
 
 async def get_client_transport():
+    # the type of controller to create
+    controller = Controller.PRO_CONTROLLER  # or JOYCON_L or JOYCON_R
+    spi_flash = FlashMemory()
+    # a callback to create the corresponding protocol once a connection is established
+    factory = controller_protocol_factory(controller, spi_flash=spi_flash)
+    ctl_psm, itr_psm = 17, 19
     # start the emulated controller
     transport, protocol = await create_hid_server(factory,
                                                   ctl_psm=ctl_psm,
