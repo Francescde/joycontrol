@@ -6,7 +6,7 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask import Flask, send_from_directory
+from aioflask import Flask, send_from_directory, jsonify
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
@@ -87,7 +87,7 @@ def send_report():
 
 @app.route('/files/<folderpath>')
 def get_files(folderpath):
-    return [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)]
+    return jsonify([join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
 
 
 if __name__ == '__main__':
