@@ -58,21 +58,21 @@ from flask import send_from_directory
 app = Flask(__name__)
 
 @app.route('/connect')
-async def index():
+async def connect():
     await get_client_transport()
     return {'message': 'Created'}
 
 @app.route('/connected')
-async def index():
+async def connected():
     return {'connected': objectMap['active']}
 
 @app.route("/comand/<comand")
-async def data(line):
+async def comand(line):
     await client_sent_line(line)
     return {'message': 'Send'}
 
 @app.route('/disconnect')
-async def index():
+async def disconnect():
     await close_transport()
     return {'message': 'Closed'}
 
