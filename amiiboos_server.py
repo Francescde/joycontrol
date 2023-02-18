@@ -94,8 +94,8 @@ def send_report():
 @app.route('/files', methods=['POST'])
 def get_files():
     content = request.json
-    print('content' + content)
-    folderpath = content.path
+    print('content' + content.keys)
+    folderpath = content.data.path
     return jsonify(
         [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
 
