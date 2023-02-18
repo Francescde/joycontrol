@@ -37,5 +37,7 @@ if __name__ == '__main__':
     if script and amiiboFolder:
         loop = asyncio.get_event_loop()
         loop.run_until_complete(load_amiibos(script, amiiboFolder))
+    else:
+        print("amiboo folder or script missing")
 
 
