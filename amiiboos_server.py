@@ -1,5 +1,7 @@
 from os.path import isfile, join
 
+from flask import request
+
 from joycontrol.command_line_interface import ControllerCLI
 from joycontrol.protocol import controller_protocol_factory
 from joycontrol.server import create_hid_server
@@ -13,9 +15,10 @@ import os
 import sys
 
 objectMap = {}
-objectMap['cli']=None
-objectMap['transport']=None
-objectMap['active']= False
+objectMap['cli'] = None
+objectMap['transport'] = None
+objectMap['active'] = False
+
 
 async def get_client_transport():
     # the type of controller to create
@@ -36,14 +39,14 @@ async def get_client_transport():
     # wait for input to be accepted
 
     await controller_state.connect()
-    objectMap['cli']=cli
-    objectMap['transport']=transport
-    objectMap['active']= True
+    objectMap['cli'] = cli
+    objectMap['transport'] = transport
+    objectMap['active'] = True
     return cli, transport
 
 
 async def close_transport():
-    if(objectMap['active']):
+    if (objectMap['active']):
         await objectMap['transport'].close()
     objectMap['cli'] = None
     objectMap['transport'] = None
@@ -51,7 +54,7 @@ async def close_transport():
 
 
 async def client_sent_line(line):
-    if(objectMap['active']):
+    if (objectMap['active']):
         await objectMap['cli'].run_line(line)
 
 
@@ -69,8 +72,10 @@ async def connected():
     return {'connected': objectMap['active']}
 
 
-@app.route("/comand/<line>")
-async def comand(line):
+@app.route("/comand", methods=['POST'])
+async def comand():
+    content = request.json
+    line = content.line
     await client_sent_line(line)
     return {'message': 'Send'}
 
@@ -85,9 +90,13 @@ async def disconnect():
 def send_report():
     return send_from_directory(app.static_folder, 'controller.html')
 
-@app.route('/files/<folderpath>')
-def get_files(folderpath):
-    return jsonify([join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
+
+@app.route('/files', methods=['POST'])
+def get_files():
+    content = request.json
+    folderpath = content.path
+    return jsonify(
+        [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
 
 
 if __name__ == '__main__':

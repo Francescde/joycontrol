@@ -12,12 +12,13 @@
 
         function sendComandHold(cmd) {
             if (!comands[cmd]) {
-                $.get("/comand/" + 'hold ' + cmd, function (data, status) {
+
+                $.post("/comand", { line:'hold ' + cmd}, function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
                     comands[cmd] = true;
                 });
             } else {
-                $.get("/comand/" + 'release ' + cmd, function (data, status) {
+                $.post("/comand", { line: 'release ' + cmd}, function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
                     comands[cmd] = false;
                 });
@@ -25,7 +26,7 @@
         }
 
         function sendComand(cmd) {
-            $.get("/comand/" + cmd, function (data, status) {
+            $.post("/comand", { line: cmd}, function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
             });
         }
@@ -34,7 +35,7 @@
             let folderName = $("#amiibo").val();
             //amiiboList
             $("#amiiboList").empty();
-            $.get("/files/" + folderName, function (data, status) {
+            $.post("/files", {path: folderName}, function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
                 for (let i = 0; i < data.length; i++) {
                     $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(\"nfc "+data[i]+"\")'>"+data[i]+"</button>");
