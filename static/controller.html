@@ -16,19 +16,19 @@
                 $.post("/comand", { line:'hold ' + cmd}, function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
                     comands[cmd] = true;
-                });
+                },'json');
             } else {
                 $.post("/comand", { line: 'release ' + cmd}, function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
                     comands[cmd] = false;
-                });
+                },'json');
             }
         }
 
         function sendComand(cmd) {
             $.post("/comand", { line: cmd}, function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
-            });
+            },'json');
         }
 
         function fillAmiiboList() {
@@ -40,7 +40,7 @@
                 for (let i = 0; i < data.length; i++) {
                     $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(\"nfc "+data[i]+"\")'>"+data[i]+"</button>");
                 }
-            });
+            },'json');
         }
 
         function Connection() {
