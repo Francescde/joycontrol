@@ -76,7 +76,7 @@ async def connected():
 @app.route("/comand", methods=['POST'])
 async def comand():
     content = json.loads(request.get_json())
-    line = content.line
+    line = content['line']
     await client_sent_line(line)
     return {'message': 'Send'}
 
@@ -97,9 +97,7 @@ def get_files():
     content = json.loads(request.get_json())
     print('content')
     print(content)
-    for key in content.keys:
-        print(key)
-    folderpath = content.data.path
+    folderpath = content['path']
     return jsonify(
         [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
 
