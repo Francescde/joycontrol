@@ -8,6 +8,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script>
+        comands = {}
+        function sendComandHold(cmd){
+            if (!comands[cmd]) {
+                $.get("/comand/" + 'hold '+  cmd, function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    comands[cmd] = true;
+                });
+            }else{
+                $.get("/comand/" + 'release '+  cmd, function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                    comands[cmd] = false;
+                });
+            }
+        }
         function sendComand(cmd) {
             $.get("/comand/" + cmd, function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
@@ -43,41 +57,42 @@
     </ul>
     <div class="d-flex flex-row justify-content-between">
         <div class="d-flex flex-row justify-content-around" style="width: 40%;">
-            <button type="button" class="btn btn-primary" style="border-style: solid;" onmousedown="sendComand('hold l2')" onmouseup="sendComand('release l2')">
+            <button type="button" class="btn btn-primary" style="border-style: solid;" onclick="sendComand('l2')">
                 --l2--
             </button>
-            <button type="button" class="btn btn-primary" style="border-style: solid;" onmousedown="sendComand('hold l')" onmouseup="sendComand('release l')">
+            <button type="button" class="btn btn-primary" style="border-style: solid;" onclick="sendComand('l')">
                 --l1--
             </button>
         </div>
         <div class="d-flex flex-row justify-content-around" style="width: 40%;">
-            <button type="button" class="btn btn-primary" style="border-style: solid;" onmousedown="sendComand('hold r')" onmouseup="sendComand('release r')">
+            <button type="button" class="btn btn-primary" style="border-style: solid;" onclick="sendComand('r')">
                 --r1--
             </button>
-            <button type="button" class="btn btn-primary" style="border-style: solid;" onmousedown="sendComand('hold r2')" onmouseup="sendComand('release r2')">
+            <button type="button" class="btn btn-primary" style="border-style: solid;" onclick="sendComand('r2')">
                 --r2--
             </button>
         </div>
     </div>
     <div class="d-flex flex-row justify-content-around">
-        <div class="d-flex flex-column justify-content-center" onmouseup="sendComand('stick l center')">
+        <div class="d-flex flex-column justify-content-center">
             <div class="d-flex flex-row justify-content-center">
                 <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;"
-                     onmousedown="sendComand('stick l up')">up
+                     onclick="sendComand('stick l up')">up
                 </button>
             </div>
             <div class="d-flex flex-row justify-content-center">
                 <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;"
-                     onmousedown="sendComand('stick l left')">left
+                     onclick="sendComand('stick l left')">left
                 </button>
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;">jl</button>
                 <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;"
-                     onmousedown="sendComand('stick l right')">right
+                onclick="sendComand('stick l center')">jl</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;"
+                     onclick="sendComand('stick l right')">right
                 </button>
             </div>
             <div class="d-flex flex-row justify-content-center">
                 <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;"
-                     onmousedown="sendComand('stick l down')">down
+                     onclick="sendComand('stick l down')">down
                 </button>
             </div>
         </div>
@@ -88,30 +103,30 @@
         </div>
         <div class="d-flex flex-column justify-content-center">
             <div class="d-flex flex-row justify-content-center">
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onmousedown="sendComand('hold x')" onmouseup="sendComand('release x')">x</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onclick="sendComand('x')">x</button>
             </div>
             <div class="d-flex flex-row justify-content-center">
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onmousedown="sendComand('hold y')" onmouseup="sendComand('release y')">y</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onclick="sendComand('y')">y</button>
                 <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;">key</button>
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onmousedown="sendComand('hold a')" onmouseup="sendComand('release a')">a</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onclick="sendComand('a')">a</button>
             </div>
             <div class="d-flex flex-row justify-content-center">
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onmousedown="sendComand('hold b')" onmouseup="sendComand('release b')">b</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onclick="sendComand('b')">b</button>
             </div>
         </div>
     </div>
     <div class="d-flex flex-row justify-content-around">
         <div class="d-flex flex-column justify-content-center">
             <div class="d-flex flex-row justify-content-center">
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onmousedown="sendComand('hold up')" onmouseup="sendComand('release up')">up</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onclick="sendComandHold('up')" >up</button>
             </div>
             <div class="d-flex flex-row justify-content-center">
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onmousedown="sendComand('hold left')" onmouseup="sendComand('release left')">left</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onclick="sendComandHold('left')" >left</button>
                 <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;">arrow</button>
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onmousedown="sendComand('hold right')" onmouseup="sendComand('release right')">right</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onclick="sendComandHold('right')">right</button>
             </div>
             <div class="d-flex flex-row justify-content-center">
-                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onmousedown="sendComand('hold down')" onmouseup="sendComand('release down')">down</button>
+                <button type="button" class="btn btn-primary" style="border-style: solid; width: 45px; text-align: center;" onclick="sendComandHold('down')">down</button>
             </div>
         </div>
 
