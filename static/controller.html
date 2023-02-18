@@ -21,7 +21,7 @@
                         console.log("Data: " + data + "\nStatus: " + status);
                         comands[cmd] = true;
                     },
-                    data: JSON.stringify({line: 'hold ' + cmd})
+                    data: {line: 'hold ' + cmd}
                 });
             } else {
                 $.ajax({
@@ -33,7 +33,7 @@
                         console.log("Data: " + data + "\nStatus: " + status);
                         comands[cmd] = false;
                     },
-                    data: JSON.stringify({line: 'release ' + cmd})
+                    data: {line: 'release ' + cmd}
                 });
             }
         }
@@ -48,7 +48,7 @@
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
                 },
-                data: JSON.stringify({line: cmd})
+                data: {line: cmd}
             });
         }
 
@@ -67,7 +67,7 @@
                         $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(\"nfc " + data[i] + "\")'>" + data[i] + "</button>");
                     }
                 },
-                data: JSON.stringify({path: folderName})
+                data: {path: folderName}
             });
         }
 
