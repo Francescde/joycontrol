@@ -37,7 +37,7 @@ async def load_one(script, amiiboFolder):
     amiiboList = [filename for filename in os.listdir(amiiboFolder) if '.bin' in filename]
     message = "enter amiibo key\n"
     for k in range(len(amiiboList)):
-        message += "key: " + str(k) + "amiibo: " + amiiboList[k]
+        message += "key: " + str(k) + "amiibo: " + amiiboList[k]+"\n"
     indx = await ainput(prompt=message)
     await load_script_for_amiibo_of_array(indx, amiiboList, amiiboFolder, script)
 
