@@ -20,6 +20,9 @@ objectMap['cli'] = None
 objectMap['transport'] = None
 objectMap['active'] = False
 
+amiiboFolder = None
+script = None
+
 
 async def get_client_transport():
     # the type of controller to create
@@ -89,7 +92,7 @@ async def disconnect():
 
 @app.route('/controller')
 def send_report():
-    return send_from_directory(app.static_folder, 'controller.html')
+    return send_from_directory(app.static_folder, 'controller.html', amiiboFolder=amiiboFolder, script=script )
 
 
 @app.route('/files', methods=['POST'])
@@ -103,4 +106,9 @@ def get_files():
 
 
 if __name__ == '__main__':
+    for arg in sys.argv:
+        if '-folder=' in arg:
+            amiiboFolder = str(arg).replace('-folder=', '')
+        if '-script=' in arg:
+            script = str(arg).replace('-script=', '')
     app.run(host='0.0.0.0', port=8082)
