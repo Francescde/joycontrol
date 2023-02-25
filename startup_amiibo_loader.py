@@ -43,11 +43,11 @@ async def await_instruction(script, amiiboFolder):
         message = "write server to launch server, all to execute the script for all amiibos, and one to load one amiibo"
         instruction = await ainput(prompt=message)
         if(instruction=="server"):
-            load_server(script, amiiboFolder)
+            await load_server(script, amiiboFolder)
         if (instruction=="all"):
-            load_amiibos(script, amiiboFolder)
+            await load_amiibos(script, amiiboFolder)
         if (instruction=="one"):
-            load_one(script, amiiboFolder)
+            await load_one(script, amiiboFolder)
 
 if __name__ == '__main__':
     # check if root
@@ -60,6 +60,7 @@ if __name__ == '__main__':
         if '-script=' in arg:
             script = str(arg).replace('-script=', '')
     if script and amiiboFolder:
-        await_instruction(script, amiiboFolder)
+        loop = asyncio.get_event_loop()
+        loop.run_until_complete(await_instruction(script, amiiboFolder))
     else:
         print("amiboo folder or script missing")
