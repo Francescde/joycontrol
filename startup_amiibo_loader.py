@@ -28,7 +28,7 @@ async def load_amiibos(script, amiiboFolder):
         actual += 1
 
 async def load_server(script, amiiboFolder):
-    os.system('sudo python3 load_amiibos.py -folder=' + amiiboFolder + ' -script=' + script)
+    os.system('sudo python3 amiiboos_server.py -folder=' + amiiboFolder + ' -script=' + script)
 
 async def load_one(script, amiiboFolder):
     amiiboList = [filename for filename in os.listdir(amiiboFolder) if '.bin' in filename]
@@ -40,7 +40,7 @@ async def load_one(script, amiiboFolder):
 
 async def await_instruction(script, amiiboFolder):
     while True:
-        message = "write server to launch server, all to execute the script for all amiibos, and one to load one amiibo"
+        message = "write server to launch server, all to execute the script for all amiibos, and one to load one amiibo\n"
         instruction = await ainput(prompt=message)
         if(instruction=="server"):
             await load_server(script, amiiboFolder)
