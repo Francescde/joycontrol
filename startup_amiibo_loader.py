@@ -23,7 +23,7 @@ async def load_amiibos(script, amiiboFolder):
         instruction = await ainput(prompt=message)
         if instruction == 'r' and actual > 0:
             actual = actual - 1
-        if instruction != "n":
+        if instruction != "n" and actual < len(listD):
             await load_script_for_amiibo_of_array(actual, listD, amiiboFolder, script)
         actual += 1
 
