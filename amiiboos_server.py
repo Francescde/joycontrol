@@ -9,7 +9,7 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask import Flask, send_from_directory, jsonify
+from aioflask import Flask, send_from_directory, jsonify, render_template
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
@@ -92,7 +92,7 @@ async def disconnect():
 
 @app.route('/controller')
 def send_report():
-    return send_from_directory(app.static_folder, 'controller.html', amiiboFolder=amiiboFolder, script=script )
+    return render_template(app.static_folder + 'controller.html', amiiboFolder=amiiboFolder, script=script )
 
 
 @app.route('/files', methods=['POST'])
