@@ -92,7 +92,7 @@ async def disconnect():
 
 @app.route('/controller')
 def send_report():
-    return render_template(app.static_folder + 'controller.html', amiiboFolder=amiiboFolder, script=script )
+    return render_template('controller.html', amiiboFolder=amiiboFolder, script=script )
 
 
 @app.route('/files', methods=['POST'])
