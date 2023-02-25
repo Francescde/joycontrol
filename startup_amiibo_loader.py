@@ -39,7 +39,7 @@ async def load_one(script, amiiboFolder):
     for k in range(len(amiiboList)):
         message += "key: " + str(k) + " amiibo: " + amiiboList[k]+"\n"
     indx = await ainput(prompt=message)
-    await load_script_for_amiibo_of_array(indx, amiiboList, amiiboFolder, script)
+    await load_script_for_amiibo_of_array(int(indx), amiiboList, amiiboFolder, script)
 
 
 async def await_instruction(script, amiiboFolder):
