@@ -90,9 +90,9 @@ async def disconnect():
     return {'message': 'Closed'}
 
 
-@app.route('/controller')
-async def send_report():
-    return await render_template('controller.html', amiiboFolder=amiiboFolder, script=script )
+@app.route('/controller/<controllerName>')
+async def send_report(controllerName):
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
 
 
 @app.route('/files', methods=['POST'])
