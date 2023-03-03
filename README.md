@@ -42,6 +42,11 @@ sleep 3
 b
 sleep 0.5
 ```
+# server version
+
+## installation
+sudo pip3 install aioflask
+
 # joycontrol
 
 Branch: master->amiibo_edits
