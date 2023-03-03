@@ -101,6 +101,7 @@
         }
 
         $(document).ready(function () {
+            screen.orientation.lock('landscape');
             showController();
             if({{amiiboFolder}}){
                 requestAmiibosFromFolder({{amiiboFolder}});

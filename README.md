@@ -46,7 +46,7 @@ sleep 0.5
 
 ## installation
 sudo pip3 install aioflask
-
+sudo pip3 install Flask==2
 # joycontrol
 
 Branch: master->amiibo_edits
