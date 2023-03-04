@@ -11,7 +11,11 @@ canvas { border: 1px solid black; }
 <script type="text/javascript">
 	$(document).ready(function () {
 		locOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || screen.orientation?.lock;
-		locOrientation('landscape');
+		if(locOrientation){
+			locOrientation('landscape');
+		}
+		else{
+			window.orientation.toFixed(1)}
         });
 </script>
 <script type="text/javascript" src="/static/magictouch.js"></script>
