@@ -10,7 +10,7 @@ canvas { border: 1px solid black; }
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 	$(document).ready(function () {
-		locOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || screen.orientation.lock;
+		locOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || screen.orientation?.lock;
 		locOrientation('landscape');
         });
 </script>
