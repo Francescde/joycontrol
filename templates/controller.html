@@ -102,10 +102,11 @@
 
         $(document).ready(function () {
             showController();
-            window.screen.orientation.lock('landscape');
             if("{{amiiboFolder}}"!=""){
                 requestAmiibosFromFolder("{{amiiboFolder}}");
             }
+            locOrientation = screen.lockOrientation || screen.mozLockOrientation || screen.msLockOrientation || screen.orientation.lock;
+            locOrientation('landscape');
         });
     </script>
 
