@@ -30,7 +30,105 @@ const holder = 2;
 const analog = 1;
 const defauld = 0;
 
-const figures = [{
+const figures = [];
+
+var timer;
+var updateStarted = false;
+var touches = [];
+var previusSelected = [];
+var previusActionObject = {};
+
+
+function update() {
+	if (updateStarted) return;
+	updateStarted = true;
+
+	var nw = window.innerWidth;
+	var nh = window.innerHeight;
+
+	if ((w != nw) || (h != nh)) {
+		w = nw;
+		h = nh;
+		canvas.style.width = w+'px';
+		canvas.style.height = h+'px';
+		canvas.width = w;
+		canvas.height = h;
+	}
+	let selected = [];
+	let actionObject = {};
+	figures.forEach(figure => {
+		console.log(figure);
+		figure.selected = false;
+		touches.forEach(touch => {
+			let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2))
+			if(distance < figure.radius+20){
+				figure.selected = true;
+				selected.push(figure.text);
+				actionObject[figure.text]={
+					figure: figure,
+					touch: touch
+				};
+			}
+		});
+	});
+	let unselected = [];
+
+	previusSelected.forEach(ps=>{
+		if(selected.filter(s=>s==ps).length==0){
+			unselected.push(ps);
+			actionObject[ps]=previusActionObject[ps];
+		}
+	});
+	clear();
+	/*var i, len = touches.length;
+	for (i=0; i<len; i++) {
+		var touch = touches[i];
+    	var px = touch.pageX;
+    	var py = touch.pageY;
+
+		ctx.beginPath();
+		ctx.arc(px, py, 20, 0, 2*Math.PI, true);
+
+		ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+		ctx.fill();
+
+		ctx.lineWidth = 2.0;
+		ctx.strokeStyle = "rgba(0, 0, 200, 0.8)";
+		ctx.stroke();
+    	console.log('drawn circle at ' + px +',' + py);
+	}*/
+	// TODO: after promises
+	console.log(selected);
+	console.log(unselected);
+	previusSelected = selected;
+	previusActionObject = actionObject;
+	updateStarted = false;
+}
+
+function ol() {
+	canvas = document.getElementById('canvas');
+	ctx = canvas.getContext('2d');
+	timer = setInterval(update, 15);
+
+	canvas.addEventListener('touchend', function() {
+		clear();
+	});
+
+	canvas.addEventListener('touchmove', function(event) {
+	event.preventDefault();
+	touches = event.touches;
+	});
+
+	canvas.addEventListener('touchstart', function(event) {
+	console.log('start');
+	});
+};
+
+function clear(){
+	ctx.clearRect(0, 0, w, h);
+	let drawTop = h/8;
+	let drawHeight = h-drawTop;
+	figures = [{
 		center: {
 			w: w/16,
 			h: drawTop/2
@@ -206,104 +304,6 @@ const figures = [{
 		actionType: defauld
 	}
 ];
-
-var timer;
-var updateStarted = false;
-var touches = [];
-var previusSelected = [];
-var previusActionObject = {};
-
-
-function update() {
-	if (updateStarted) return;
-	updateStarted = true;
-
-	var nw = window.innerWidth;
-	var nh = window.innerHeight;
-
-	if ((w != nw) || (h != nh)) {
-		w = nw;
-		h = nh;
-		canvas.style.width = w+'px';
-		canvas.style.height = h+'px';
-		canvas.width = w;
-		canvas.height = h;
-	}
-	let selected = [];
-	let actionObject = {};
-	figures.forEach(figure => {
-		console.log(figure);
-		figure.selected = false;
-		touches.forEach(touch => {
-			let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2))
-			if(distance < figure.radius+20){
-				figure.selected = true;
-				selected.push(figure.text);
-				actionObject[figure.text]={
-					figure: figure,
-					touch: touch
-				};
-			}
-		});
-	});
-	let unselected = [];
-
-	previusSelected.forEach(ps=>{
-		if(selected.filter(s=>s==ps).length==0){
-			unselected.push(ps);
-			actionObject[ps]=previusActionObject[ps];
-		}
-	});
-	clear();
-	/*var i, len = touches.length;
-	for (i=0; i<len; i++) {
-		var touch = touches[i];
-    	var px = touch.pageX;
-    	var py = touch.pageY;
-
-		ctx.beginPath();
-		ctx.arc(px, py, 20, 0, 2*Math.PI, true);
-
-		ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
-		ctx.fill();
-
-		ctx.lineWidth = 2.0;
-		ctx.strokeStyle = "rgba(0, 0, 200, 0.8)";
-		ctx.stroke();
-    	console.log('drawn circle at ' + px +',' + py);
-	}*/
-	// TODO: after promises
-	console.log(selected);
-	console.log(unselected);
-	previusSelected = selected;
-	previusActionObject = actionObject;
-	updateStarted = false;
-}
-
-function ol() {
-	canvas = document.getElementById('canvas');
-	ctx = canvas.getContext('2d');
-	timer = setInterval(update, 15);
-
-	canvas.addEventListener('touchend', function() {
-		clear();
-	});
-
-	canvas.addEventListener('touchmove', function(event) {
-	event.preventDefault();
-	touches = event.touches;
-	});
-
-	canvas.addEventListener('touchstart', function(event) {
-	console.log('start');
-	});
-};
-
-function clear(){
-	ctx.clearRect(0, 0, w, h);
-	let drawTop = h/8;
-	let drawHeight = h-drawTop;
-	
 
 	figures.forEach(fig => {
 		ctx.beginPath();
