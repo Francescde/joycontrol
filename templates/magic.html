@@ -62,9 +62,7 @@ function update() {
 			let i, len = touches.length;
 			for (i=0; i<len; i++) {
 				var touch = touches[i];
-				console.log(touch);
-				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2))
-				console.log(distance);
+				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2));
 				if(distance < figure.radius+20){
 					figure.selected = true;
 					selected.push(figure.text);
@@ -314,7 +312,7 @@ function clear(){
 
 	figures.forEach(fig => {
 		ctx.beginPath();
-		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI);
+		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
 		if(fig.selected){
 			ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
 			ctx.fill();
