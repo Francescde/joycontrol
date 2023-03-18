@@ -57,7 +57,6 @@ function update() {
 	let selected = [];
 	let actionObject = {};
 	figures.forEach(figure => {
-		console.log(figure);
 		figure.selected = false;
 		touches.forEach(touch => {
 			let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2))
