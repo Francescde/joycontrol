@@ -97,8 +97,10 @@ function update() {
     	console.log('drawn circle at ' + px +',' + py);
 	}*/
 	// TODO: after promises
+	if(selected.length>0 || unselected.length>0) {
 	console.log(selected);
 	console.log(unselected);
+	}
 	previusSelected = selected;
 	previusActionObject = actionObject;
 	updateStarted = false;
