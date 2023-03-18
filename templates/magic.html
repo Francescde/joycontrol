@@ -58,17 +58,21 @@ function update() {
 	let actionObject = {};
 	figures.forEach(figure => {
 		figure.selected = false;
-		touches.forEach(touch => {
-			let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2))
-			if(distance < figure.radius+20){
-				figure.selected = true;
-				selected.push(figure.text);
-				actionObject[figure.text]={
-					figure: figure,
-					touch: touch
-				};
-			}
-		});
+		if(touches) {
+			touches.forEach(touch => {
+				console.log(touch);
+				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2))
+				console.log(distance);
+				if(distance < figure.radius+20){
+					figure.selected = true;
+					selected.push(figure.text);
+					actionObject[figure.text]={
+						figure: figure,
+						touch: touch
+					};
+				}
+			});
+		}
 	});
 	let unselected = [];
 
