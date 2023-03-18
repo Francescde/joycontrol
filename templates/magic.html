@@ -59,7 +59,9 @@ function update() {
 	figures.forEach(figure => {
 		figure.selected = false;
 		if(touches && touches.length>0) {
-			touches.forEach(touch => {
+			let i, len = touches.length;
+			for (i=0; i<len; i++) {
+				var touch = touches[i];
 				console.log(touch);
 				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2))
 				console.log(distance);
@@ -71,7 +73,7 @@ function update() {
 						touch: touch
 					};
 				}
-			});
+			}
 		}
 	});
 	let unselected = [];
