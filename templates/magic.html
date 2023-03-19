@@ -289,6 +289,7 @@ function ol() {
 	timer = setInterval(update, 500);
 
 	canvas.addEventListener('touchend', function(event) {
+	event.preventDefault();
 		touches = event.touches;
 	});
 
@@ -298,6 +299,7 @@ function ol() {
 	});
 
 	canvas.addEventListener('touchstart', function(event) {
+	event.preventDefault();
 	console.log('start');
 	touches = event.touches;
 	});
