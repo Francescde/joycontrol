@@ -62,7 +62,7 @@ function update() {
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HLZ",
 			actionType: holder,
-			action: "LZ"
+			action: "ZL"
 		},{
 			center: {
 				w: (w/16)*2,
@@ -70,7 +70,8 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "LZ",
-			actionType: defauld
+			actionType: defauld,
+			action: "ZL"
 		},{
 			center: {
 				w: (w/16)*3,
@@ -112,7 +113,8 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "RZ",
-			actionType: defauld
+			actionType: defauld,
+			action: "ZR"
 		},{
 			center: {
 				w: w-((w/16)),
@@ -121,7 +123,7 @@ function update() {
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HRZ",
 			actionType: holder,
-			action: "RZ"
+			action: "ZR"
 		},{
 			center: {
 				w: w/4,
@@ -321,6 +323,10 @@ function update() {
 					case defauld:
 						let action = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
 						sendDefauldHold(action.toLowerCase(), selected, actionObject);
+						break;
+					case holder:
+						let actionhold = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
+						sendComandHolder(actionhold.toLowerCase(), selected, actionObject)
 						break;
 					case connecter:
 						Connection(selected, actionObject);
