@@ -331,7 +331,7 @@ function update() {
 					case connecter:
 						Connection(selected, actionObject);
 						break;
-					defauld:
+  					default:
 						solved = solved +1;
 						break;
 				}
@@ -341,7 +341,7 @@ function update() {
 						let action = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
 						sendDefauldRelease(action.toLowerCase(), selected, actionObject);
 						break;
-					defauld:
+  					default:
 						solved = solved +1;
 						break;
 				}
