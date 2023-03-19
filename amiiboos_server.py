@@ -88,7 +88,7 @@ async def comand():
 @app.route("/analog", methods=['POST'])
 async def analog():
     content = request.get_json()
-    await asyncio.gather([client_sent_line("stick "+content['line']+" v "+content['vertical']), client_sent_line("stick "+content['line']+" v "+content['horizontal'])])
+    await asyncio.gather([client_sent_line("stick "+content['key']+" v "+content['vertical']), client_sent_line("stick "+content['key']+" v "+content['horizontal'])])
     return {'message': 'Send'}
 
 
