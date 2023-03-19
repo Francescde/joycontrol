@@ -365,11 +365,12 @@ function update() {
 
 
 function analogMove(key, selected, actionObject){
-	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/actionObject[key].figure.square.lateral)*1000;
-	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/actionObject[key].figure.square.lateral)*1000;
-	x= Math.min(x,1000);
+	const maxAnalog = 2048*2;
+	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/actionObject[key].figure.square.lateral)*maxAnalog;
+	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/actionObject[key].figure.square.lateral)*maxAnalog;
+	x= Math.min(x,maxAnalog-1);
 	x= Math.max(x,0);
-	y= Math.min(y,1000);
+	y= Math.min(y,maxAnalog-1);
 	y= Math.max(y,0);
 	$.ajax({
 		url: '/analog',
