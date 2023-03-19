@@ -22,6 +22,7 @@ var h = 0;
 const holder = 2;
 const analog = 1;
 const defauld = 0;
+const connecter = 3;
 
 let figures = [];
 
@@ -31,6 +32,9 @@ var touches = [];
 var previusSelected = [];
 var previusActionObject = {};
 
+
+var solved = 0;
+var todo = [];
 
 function update() {
 	if (updateStarted) return;
@@ -55,7 +59,7 @@ function update() {
 				w: w/16,
 				h: drawTop/2
 			},
-			radius: Math.min(drawTop/2,(w/32)-2),
+			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HL2",
 			actionType: holder,
 			action: "L2"
@@ -64,7 +68,7 @@ function update() {
 				w: (w/16)*2,
 				h: drawTop/2
 			},
-			radius: Math.min(drawTop/2,(w/32)-2),
+			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "L2",
 			actionType: defauld
 		},{
@@ -72,7 +76,7 @@ function update() {
 				w: (w/16)*3,
 				h: drawTop/2
 			},
-			radius: Math.min(drawTop/2,(w/32)-2),
+			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HL",
 			actionType: holder,
 			action: "L"
@@ -81,7 +85,7 @@ function update() {
 				w: (w/16)*4,
 				h: drawTop/2
 			},
-			radius: Math.min(drawTop/2,(w/32)-2),
+			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "L",
 			actionType: defauld
 		},{
@@ -89,7 +93,7 @@ function update() {
 				w: w-((w/16)*4),
 				h: drawTop/2
 			},
-			radius: Math.min(drawTop/2,(w/32)-2),
+			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "R",
 			actionType: defauld
 		},{
@@ -97,7 +101,7 @@ function update() {
 				w: w-((w/16)*3),
 				h: drawTop/2
 			},
-			radius: Math.min(drawTop/2,(w/32)-2),
+			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HR",
 			actionType: holder,
 			action: "R"
@@ -106,7 +110,7 @@ function update() {
 				w: w-((w/16)*2),
 				h: drawTop/2
 			},
-			radius: Math.min(drawTop/2,(w/32)-2),
+			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "R2",
 			actionType: defauld
 		},{
@@ -114,7 +118,7 @@ function update() {
 				w: w-((w/16)),
 				h: drawTop/2
 			},
-			radius: Math.min(drawTop/2,(w/32)-2),
+			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HR2",
 			actionType: holder,
 			action: "R2"
@@ -224,9 +228,16 @@ function update() {
 			radius: Math.min(w,drawHeight)/12,
 			text: "H",
 			actionType: defauld
+		},{
+			center: {
+				w: w/2,
+				h: drawTop/2
+			},
+			radius: Math.min(drawTop/4,(w/32)-2),
+			text: "#",
+			actionType: connecter
 		}
 	];
-
 	let selected = [];
 	let actionObject = {};
 	figures.forEach(figure => {
@@ -275,18 +286,176 @@ function update() {
 	}*/
 	// TODO: after promises
 	if(selected.length>0 || unselected.length>0) {
-	console.log(selected);
-	console.log(unselected);
+		todo = [];
+		selected.forEach(sel=>{
+			if(previusSelected.filter(ps=>ps==sel).length>0)  {
+				if(actionObject[sel].figure.actionType==analog){
+					todo.push({
+						selected: true,
+						actionObject: actionObject[sel]
+					});
+				}
+			} else {
+				todo.push({
+					selected: true,
+					actionObject: actionObject[sel]
+				});
+			}
+		});
+		unselected.forEach(sel=>{
+			if(actionObject[sel].figure.actionType == analog || actionObject[sel].figure.actionType == defauld ){
+				todo.push({
+					selected: false,
+					actionObject: actionObject[sel]
+				});
+			}
+		});
+		solved=0;
+		todo.forEach(t=>{
+			if(t.selected){
+				switch(t.actionObject.figure.actionType){
+					case defauld:
+						sendDefauldHold(t.actionObject.figure.text);
+						break;
+					case connecter:
+						Connection();
+						break;
+					defauld:
+						solved = solved +1;
+						break;
+				}
+			} else {
+				switch(t.actionObject.figure.actionType){
+					case defauld:
+						sendDefauldRelease(t.actionObject.figure.text);
+						break;
+					defauld:
+						solved = solved +1;
+						break;
+				}
+			}
+		});
+		console.log(selected);
+		console.log(unselected);
 	}
-	previusSelected = selected;
-	previusActionObject = actionObject;
-	updateStarted = false;
+	if(solved >= todo.length){
+		previusSelected = selected;
+		previusActionObject = actionObject;
+		updateStarted = false;
+	}
 }
+
+function Connection() {
+	$.get("/connected", function (data, status) {
+		console.log("Data: " + data + "\nStatus: " + status);
+		if (data.connected) {
+			$.get("/disconnect", function (data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			});
+		} else {
+			$.get("/connect", function (data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			});
+		}
+	});
+}
+
+comands = {}
+
+function sendComandHolder(e,cmd) {
+	e.preventDefault();
+	if (!comands[cmd]) {
+		$.ajax({
+			url: '/comand',
+			type: 'post',
+			dataType: 'json',
+			contentType: 'application/json',
+			success: function (data, status) {
+				console.log("Data: " + data + "\nStatus: " + status);
+				comands[cmd] = true;
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			},
+			data: JSON.stringify({line: 'hold ' + cmd})
+		});
+	} else {
+		$.ajax({
+			url: '/comand',
+			type: 'post',
+			dataType: 'json',
+			contentType: 'application/json',
+			success: function (data, status) {
+				console.log("Data: " + data + "\nStatus: " + status);
+				comands[cmd] = false;
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			},
+			data: JSON.stringify({line: 'release ' + cmd})
+		});
+	}
+}
+
+function sendDefauldHold(cmd) {
+	$.ajax({
+		url: '/comand',
+		type: 'post',
+		dataType: 'json',
+		contentType: 'application/json',
+		success: function (data, status) {
+			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		data: JSON.stringify({line: 'hold ' + cmd})
+	});
+}
+
+function sendDefauldRelease(cmd) {
+	$.ajax({
+		url: '/comand',
+		type: 'post',
+		dataType: 'json',
+		contentType: 'application/json',
+		success: function (data, status) {
+			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		data: JSON.stringify({line: 'release ' + cmd})
+	});
+}
+
 
 function ol() {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
-	timer = setInterval(update, 500);
+	timer = setInterval(update, 50);
 
 	canvas.addEventListener('touchend', function(event) {
 	event.preventDefault();
