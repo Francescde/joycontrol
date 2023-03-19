@@ -316,10 +316,10 @@ function update() {
 			if(t.selected){
 				switch(t.actionObject.figure.actionType){
 					case defauld:
-						sendDefauldHold(t.actionObject.figure.text);
+						sendDefauldHold(t.actionObject.figure.text, selected, actionObject);
 						break;
 					case connecter:
-						Connection();
+						Connection(selected, actionObject);
 						break;
 					defauld:
 						solved = solved +1;
@@ -328,7 +328,7 @@ function update() {
 			} else {
 				switch(t.actionObject.figure.actionType){
 					case defauld:
-						sendDefauldRelease(t.actionObject.figure.text);
+						sendDefauldRelease(t.actionObject.figure.text, selected, actionObject);
 						break;
 					defauld:
 						solved = solved +1;
@@ -346,7 +346,7 @@ function update() {
 	}
 }
 
-function Connection() {
+function Connection(selected, actionObject) {
 	$.get("/connected", function (data, status) {
 		console.log("Data: " + data + "\nStatus: " + status);
 		if (data.connected) {
@@ -373,8 +373,7 @@ function Connection() {
 
 comands = {}
 
-function sendComandHolder(e,cmd) {
-	e.preventDefault();
+function sendComandHolder(cmd, selected, actionObject) {
 	if (!comands[cmd]) {
 		$.ajax({
 			url: '/comand',
@@ -414,7 +413,7 @@ function sendComandHolder(e,cmd) {
 	}
 }
 
-function sendDefauldHold(cmd) {
+function sendDefauldHold(cmd, selected, actionObject) {
 	$.ajax({
 		url: '/comand',
 		type: 'post',
@@ -433,7 +432,7 @@ function sendDefauldHold(cmd) {
 	});
 }
 
-function sendDefauldRelease(cmd) {
+function sendDefauldRelease(cmd, selected, actionObject) {
 	$.ajax({
 		url: '/comand',
 		type: 'post',
