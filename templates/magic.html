@@ -566,11 +566,13 @@ function clear(){
 			ctx.beginPath();
 			ctx.rect(fig.center.w-radius, fig.center.h-radius,
 				2*radius, 2*radius);
-			fig.square.min = {
-				x: fig.center.w-radius,
-				y: fig.center.h-radius
+			fig.square = {
+					min: {
+						x: fig.center.w-radius,
+						y: fig.center.h-radius
+					},
+				lateral: 2*radius
 			};
-			fig.square.lateral = 2*radius;
 			ctx.stroke();
 		}
 	});
