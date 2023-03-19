@@ -386,7 +386,7 @@ function analogMove(key, selected, actionObject){
 			}
 		},
 		data: JSON.stringify({
-			key: actionObject[key].figure.text.toLowerCase(),
+			key: actionObject[key].figure.analog.toLowerCase(),
 			vertical: y,
 			horizontal: x
 		})
@@ -394,7 +394,7 @@ function analogMove(key, selected, actionObject){
 }
 
 function analogRelease(key, selected, actionObject){
-	const comand = "stick "+actionObject[key].figure.text.toLowerCase()+" center";
+	const comand = "stick "+actionObject[key].figure.analog.toLowerCase()+" center";
 	$.ajax({
 		url: '/comand',
 		type: 'post',
