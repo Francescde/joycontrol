@@ -387,8 +387,8 @@ function analogMove(key, selected, actionObject){
 		},
 		data: JSON.stringify({
 			key: actionObject[key].figure.analog.toLowerCase(),
-			vertical: y,
-			horizontal: x
+			vertical: Math.round(y),
+			horizontal: Math.round(x)
 		})
 	});
 }
