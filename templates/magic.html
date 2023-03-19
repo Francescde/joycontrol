@@ -286,10 +286,10 @@ function update() {
 function ol() {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
-	timer = setInterval(update, 15);
+	timer = setInterval(update, 500);
 
-	canvas.addEventListener('touchend', function() {
-		clear();
+	canvas.addEventListener('touchend', function(event) {
+		touches = event.touches;
 	});
 
 	canvas.addEventListener('touchmove', function(event) {
@@ -299,6 +299,7 @@ function ol() {
 
 	canvas.addEventListener('touchstart', function(event) {
 	console.log('start');
+	touches = event.touches;
 	});
 };
 
