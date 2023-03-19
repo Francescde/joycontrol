@@ -235,7 +235,8 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "#",
-			actionType: connecter
+			actionType: connecter,
+			selectedColor: "#FF0000"
 		}
 	];
 	let selected = [];
@@ -480,7 +481,11 @@ function clear(){
 		ctx.beginPath();
 		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
 		if(fig.selected){
-			ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+			if(fig.selectedColor){
+				ctx.fillStyle = fig.selectedColor;
+			} else {
+				ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+			}
 			ctx.fill();
 		}
 		ctx.stroke();
