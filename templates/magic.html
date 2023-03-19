@@ -316,7 +316,7 @@ function update() {
 			if(t.selected){
 				switch(t.actionObject.figure.actionType){
 					case defauld:
-						sendDefauldHold(t.actionObject.figure.text, selected, actionObject);
+						sendDefauldHold(t.actionObject.figure.text.toLowerCase(), selected, actionObject);
 						break;
 					case connecter:
 						Connection(selected, actionObject);
@@ -328,7 +328,7 @@ function update() {
 			} else {
 				switch(t.actionObject.figure.actionType){
 					case defauld:
-						sendDefauldRelease(t.actionObject.figure.text, selected, actionObject);
+						sendDefauldRelease(t.actionObject.figure.text.toLowerCase(), selected, actionObject);
 						break;
 					defauld:
 						solved = solved +1;
