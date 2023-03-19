@@ -60,16 +60,16 @@ function update() {
 				h: drawTop/2
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
-			text: "HL2",
+			text: "HLZ",
 			actionType: holder,
-			action: "L2"
+			action: "LZ"
 		},{
 			center: {
 				w: (w/16)*2,
 				h: drawTop/2
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
-			text: "L2",
+			text: "LZ",
 			actionType: defauld
 		},{
 			center: {
@@ -111,7 +111,7 @@ function update() {
 				h: drawTop/2
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
-			text: "R2",
+			text: "RZ",
 			actionType: defauld
 		},{
 			center: {
@@ -119,9 +119,9 @@ function update() {
 				h: drawTop/2
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
-			text: "HR2",
+			text: "HRZ",
 			actionType: holder,
-			action: "R2"
+			action: "RZ"
 		},{
 			center: {
 				w: w/4,
@@ -211,7 +211,8 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "-",
-			actionType: defauld
+			actionType: defauld,
+			action: "minus"
 		},{
 			center: {
 				w: w/2+((w/2)-(w/2.5)),
@@ -219,7 +220,8 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "+",
-			actionType: defauld
+			actionType: defauld,
+			action: "plus"
 		},{
 			center: {
 				w: w/2,
@@ -227,7 +229,8 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "H",
-			actionType: defauld
+			actionType: defauld,
+			action: "home"
 		},{
 			center: {
 				w: w/2,
@@ -316,7 +319,8 @@ function update() {
 			if(t.selected){
 				switch(t.actionObject.figure.actionType){
 					case defauld:
-						sendDefauldHold(t.actionObject.figure.text.toLowerCase(), selected, actionObject);
+						let action = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
+						sendDefauldHold(action.toLowerCase(), selected, actionObject);
 						break;
 					case connecter:
 						Connection(selected, actionObject);
@@ -328,7 +332,8 @@ function update() {
 			} else {
 				switch(t.actionObject.figure.actionType){
 					case defauld:
-						sendDefauldRelease(t.actionObject.figure.text.toLowerCase(), selected, actionObject);
+						let action = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
+						sendDefauldRelease(action.toLowerCase(), selected, actionObject);
 						break;
 					defauld:
 						solved = solved +1;
@@ -336,8 +341,6 @@ function update() {
 				}
 			}
 		});
-		console.log(selected);
-		console.log(unselected);
 	}
 	if(solved >= todo.length){
 		previusSelected = selected;
