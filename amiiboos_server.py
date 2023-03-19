@@ -37,8 +37,8 @@ async def get_client_transport():
     # get a reference to the state beeing emulated.
     controller_state = protocol.get_controller_state()
     button_list = controller_state.button_state.get_available_buttons()
-    for but in button_list:
-        print(but)
+    #for but in button_list:
+    #    print(but)
     cli = ControllerCLI(controller_state)
     _register_commands_with_controller_state(controller_state, cli)
     # wait for input to be accepted
@@ -82,6 +82,13 @@ async def comand():
     content = request.get_json()
     line = content['line']
     await client_sent_line(line)
+    return {'message': 'Send'}
+
+
+@app.route("/analog", methods=['POST'])
+async def analog():
+    content = request.get_json()
+    await asyncio.gather([client_sent_line("stick "+content['line']+" v "+content['vertical']), client_sent_line("stick "+content['line']+" v "+content['horizontal'])])
     return {'message': 'Send'}
 
 

@@ -19,10 +19,12 @@ var ctx;
 var w = 0;
 var h = 0;
 
-const holder = 2;
-const analog = 1;
-const defauld = 0;
-const connecter = 3;
+const ActionType = {
+	holder: 2,
+	analog: 1,
+	defauld: 0,
+	connecter: 3
+}
 
 let figures = [];
 
@@ -61,7 +63,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HLZ",
-			actionType: holder,
+			actionType: ActionType.holder,
 			action: "ZL"
 		},{
 			center: {
@@ -70,7 +72,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "LZ",
-			actionType: defauld,
+			actionType: ActionType.defauld,
 			action: "ZL"
 		},{
 			center: {
@@ -79,7 +81,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HL",
-			actionType: holder,
+			actionType: ActionType.holder,
 			action: "L"
 		},{
 			center: {
@@ -88,7 +90,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "L",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: w-((w/16)*4),
@@ -96,7 +98,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "R",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: w-((w/16)*3),
@@ -104,7 +106,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HR",
-			actionType: holder,
+			actionType: ActionType.holder,
 			action: "R"
 		},{
 			center: {
@@ -113,7 +115,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "RZ",
-			actionType: defauld,
+			actionType: ActionType.defauld,
 			action: "ZR"
 		},{
 			center: {
@@ -122,7 +124,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "HRZ",
-			actionType: holder,
+			actionType: ActionType.holder,
 			action: "ZR"
 		},{
 			center: {
@@ -131,7 +133,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/5,
 			text: "JL",
-			actionType: analog,
+			actionType: ActionType.analog,
 			analog: "L"
 		},{
 			center: {
@@ -140,7 +142,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "X",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: (w/4)*3,
@@ -148,7 +150,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "B",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: ((w/4)*3)-Math.min(w,drawHeight)/8,
@@ -156,7 +158,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "Y",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: ((w/4)*3)+Math.min(w,drawHeight)/8,
@@ -164,7 +166,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "A",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: w/3,
@@ -172,7 +174,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "Up",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: w/3,
@@ -180,7 +182,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "Down",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: (w/3)-Math.min(w,drawHeight)/8,
@@ -188,7 +190,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "Left",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: (w/3)+Math.min(w,drawHeight)/8,
@@ -196,7 +198,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "Right",
-			actionType: defauld
+			actionType: ActionType.defauld
 		},{
 			center: {
 				w: (w/3)*2,
@@ -204,7 +206,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/5,
 			text: "JR",
-			actionType: analog,
+			actionType: ActionType.analog,
 			analog: "R"
 		},{
 			center: {
@@ -213,7 +215,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "-",
-			actionType: defauld,
+			actionType: ActionType.defauld,
 			action: "minus"
 		},{
 			center: {
@@ -222,7 +224,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "+",
-			actionType: defauld,
+			actionType: ActionType.defauld,
 			action: "plus"
 		},{
 			center: {
@@ -231,7 +233,7 @@ function update() {
 			},
 			radius: Math.min(w,drawHeight)/12,
 			text: "H",
-			actionType: defauld,
+			actionType: ActionType.defauld,
 			action: "home"
 		},{
 			center: {
@@ -240,7 +242,7 @@ function update() {
 			},
 			radius: Math.min(drawTop/4,(w/32)-2),
 			text: "#",
-			actionType: connecter,
+			actionType: ActionType.connecter,
 			selectedColor: "#FF0000"
 		}
 	];
@@ -295,7 +297,7 @@ function update() {
 		todo = [];
 		selected.forEach(sel=>{
 			if(previusSelected.filter(ps=>ps==sel).length>0)  {
-				if(actionObject[sel].figure.actionType==analog){
+				if(actionObject[sel].figure.actionType==ActionType.analog){
 					todo.push({
 						selected: true,
 						actionObject: actionObject[sel]
@@ -309,7 +311,7 @@ function update() {
 			}
 		});
 		unselected.forEach(sel=>{
-			if(actionObject[sel].figure.actionType == analog || actionObject[sel].figure.actionType == defauld ){
+			if(actionObject[sel].figure.actionType == ActionType.analog || actionObject[sel].figure.actionType == ActionType.defauld ){
 				todo.push({
 					selected: false,
 					actionObject: actionObject[sel]
@@ -320,16 +322,19 @@ function update() {
 		todo.forEach(t=>{
 			if(t.selected){
 				switch(t.actionObject.figure.actionType){
-					case defauld:
+					case ActionType.defauld:
 						let action = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
 						sendDefauldHold(action.toLowerCase(), selected, actionObject);
 						break;
-					case holder:
+					case ActionType.holder:
 						let actionhold = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
 						sendComandHolder(actionhold.toLowerCase(), selected, actionObject)
 						break;
-					case connecter:
+					case ActionType.connecter:
 						Connection(selected, actionObject);
+						break;
+					case ActionType.analog:
+						analogMove(t.actionObject.figure.text ,selected, actionObject);
 						break;
   					default:
 						solved = solved +1;
@@ -337,9 +342,12 @@ function update() {
 				}
 			} else {
 				switch(t.actionObject.figure.actionType){
-					case defauld:
+					case ActionType.defauld:
 						let action = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
 						sendDefauldRelease(action.toLowerCase(), selected, actionObject);
+						break;
+					case ActionType.analog:
+						analogRelease(t.actionObject.figure.text ,selected, actionObject);
 						break;
   					default:
 						solved = solved +1;
@@ -353,6 +361,56 @@ function update() {
 		previusActionObject = actionObject;
 		updateStarted = false;
 	}
+}
+
+
+function analogMove(key, selected, actionObject){
+	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/actionObject[key].figure.square.lateral)*1000;
+	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/actionObject[key].figure.square.lateral)*1000;
+	x= Math.min(x,1000);
+	x= Math.max(x,0);
+	y= Math.min(y,1000);
+	y= Math.max(y,0);
+	$.ajax({
+		url: '/analog',
+		type: 'post',
+		dataType: 'json',
+		contentType: 'application/json',
+		success: function (data, status) {
+			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		data: JSON.stringify({
+			key: actionObject[key].figure.text.toLowerCase(),
+			vertical: y,
+			horizontal: x
+		})
+	});
+}
+
+function analogRelease(key, selected, actionObject){
+	const comand = "stick "+actionObject[key].figure.text.toLowerCase()+" center";
+	$.ajax({
+		url: '/comand',
+		type: 'post',
+		dataType: 'json',
+		contentType: 'application/json',
+		success: function (data, status) {
+			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		data: JSON.stringify({line: comand})
+	});
 }
 
 function Connection(selected, actionObject) {
@@ -487,6 +545,7 @@ function clear(){
 	ctx.clearRect(0, 0, w, h);
 	figures.forEach(fig => {
 		ctx.beginPath();
+		ctx.strokeStyle = "#000000";
 		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
 		if(fig.selected){
 			if(fig.selectedColor){
@@ -500,7 +559,20 @@ function clear(){
 		ctx.font = "30px Comic Sans MS";
 		ctx.textAlign = "center";
 		ctx.fillStyle = "#000000";
-		ctx.fillText(fig.text, fig.center.w, fig.center.h);
+		ctx.fillText(fig.text, fig.center.w, fig.center.h+10);
+		if(fig.actionType == ActionType.analog) {
+			const radius = fig.radius /  Math.sqrt(2);
+			ctx.strokeStyle = "#00FF00";
+			ctx.beginPath();
+			ctx.rect(fig.center.w-radius, fig.center.h-radius,
+				2*radius, 2*radius);
+			fig.square.min = {
+				x: fig.center.w-radius,
+				y: fig.center.h-radius
+			};
+			fig.square.lateral = 2*radius;
+			ctx.stroke();
+		}
 	});
 }
 
