@@ -136,7 +136,7 @@ function update() {
 			actionType: ActionType.analog,
 			analog: "L",
 			reverseW: false,
-			reverseY: true,
+			reverseH: true,
 		},{
 			center: {
 				w: (w/4)*3,
@@ -215,7 +215,7 @@ function update() {
 			actionType: ActionType.analog,
 			analog: "R",
 			reverseW: false,
-			reverseY: true,
+			reverseH: true,
 		},{
 			center: {
 				w: w/2.5,
@@ -376,9 +376,15 @@ function analogMove(key, selected, actionObject){
 	const maxAnalog = 2048*2;
 	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/actionObject[key].figure.square.lateral)*maxAnalog;
 	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/actionObject[key].figure.square.lateral)*maxAnalog;
+	if(actionObject[key].figure.reverseW){
+		x = maxAnalog - x;
+	}
+	if(actionObject[key].figure.reverseH){
+		y = maxAnalog - y;
+	}
 	x= Math.min(x,maxAnalog);
 	x= Math.max(x,0);
-	y= Math.min(y,maxAnalog-1);
+	y= Math.min(y,maxAnalog);
 	y= Math.max(y,0);
 	$.ajax({
 		url: '/analog',
