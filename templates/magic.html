@@ -256,24 +256,29 @@ function update() {
 	];
 	let selected = [];
 	let actionObject = {};
-	figures.forEach(figure => {
-		figure.selected = false;
-		if(touches && touches.length>0) {
-			let i, len = touches.length;
-			for (i=0; i<len; i++) {
+	if(touches && touches.length>0) {
+		let i, len = touches.length;
+		for (i=0; i<len; i++) {
+			let minFigure = null;
+			let minDistance = Math.max(w,h);
+			figures.forEach(figure => {
 				var touch = touches[i];
 				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2));
-				if(distance < figure.radius+20){
-					figure.selected = true;
-					selected.push(figure.text);
-					actionObject[figure.text]={
-						figure: figure,
-						touch: touch
-					};
+				if(distance < figure.radius+20 && distance<minDistance){
+					minFigure = figure;
+					distance = distance;
 				}
+			});
+			if(minFigure){
+				minFigure.selected=true;
+				selected.push(minFigure.text);
+				actionObject[minFigure.text]={
+					figure: minFigure,
+					touch: touch
+				};
 			}
 		}
-	});
+	}
 	let unselected = [];
 
 	previusSelected.forEach(ps=>{
@@ -283,24 +288,6 @@ function update() {
 		}
 	});
 	clear();
-	/*var i, len = touches.length;
-	for (i=0; i<len; i++) {
-		var touch = touches[i];
-    	var px = touch.pageX;
-    	var py = touch.pageY;
-
-		ctx.beginPath();
-		ctx.arc(px, py, 20, 0, 2*Math.PI, true);
-
-		ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
-		ctx.fill();
-
-		ctx.lineWidth = 2.0;
-		ctx.strokeStyle = "rgba(0, 0, 200, 0.8)";
-		ctx.stroke();
-    	console.log('drawn circle at ' + px +',' + py);
-	}*/
-	// TODO: after promises
 	if(selected.length>0 || unselected.length>0) {
 		todo = [];
 		selected.forEach(sel=>{
@@ -591,6 +578,24 @@ function clear(){
 			ctx.stroke();
 		}
 	});
+	// draw touches
+	/*var i, len = touches.length;
+	for (i=0; i<len; i++) {
+		var touch = touches[i];
+    	var px = touch.pageX;
+    	var py = touch.pageY;
+
+		ctx.beginPath();
+		ctx.arc(px, py, 20, 0, 2*Math.PI, true);
+
+		ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+		ctx.fill();
+
+		ctx.lineWidth = 2.0;
+		ctx.strokeStyle = "rgba(0, 0, 200, 0.8)";
+		ctx.stroke();
+    	console.log('drawn circle at ' + px +',' + py);
+	}*/
 }
 
 </script>
