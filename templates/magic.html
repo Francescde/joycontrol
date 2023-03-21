@@ -264,9 +264,9 @@ function update() {
 			figures.forEach(figure => {
 				var touch = touches[i];
 				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2));
-				if(distance < figure.radius+20 && distance<minDistance){
+				if(distance < figure.radius+20 && distance-figure.radius<minDistance){
 					minFigure = figure;
-					distance = distance;
+					distance = distance-figure.radius;
 				}
 			});
 			if(minFigure){
