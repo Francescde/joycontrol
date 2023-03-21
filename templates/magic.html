@@ -259,10 +259,10 @@ function update() {
 	if(touches && touches.length>0) {
 		let i, len = touches.length;
 		for (i=0; i<len; i++) {
+			let touch = touches[i];
 			let minFigureIndex = null;
 			let minDistance = Math.max(w,h);
 			figures.forEach((figure, figureIndex) => {
-				var touch = touches[i];
 				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2));
 				if(distance < figure.radius+20 && distance-figure.radius<minDistance){
 					minFigureIndex = figureIndex;
