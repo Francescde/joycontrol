@@ -259,21 +259,21 @@ function update() {
 	if(touches && touches.length>0) {
 		let i, len = touches.length;
 		for (i=0; i<len; i++) {
-			let minFigure = null;
+			let minFigureIndex = null;
 			let minDistance = Math.max(w,h);
-			figures.forEach(figure => {
+			figures.forEach((figure, figureIndex) => {
 				var touch = touches[i];
 				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2));
 				if(distance < figure.radius+20 && distance-figure.radius<minDistance){
-					minFigure = figure;
+					minFigureIndex = figureIndex;
 					distance = distance-figure.radius;
 				}
 			});
-			if(minFigure){
-				minFigure.selected=true;
-				selected.push(minFigure.text);
-				actionObject[minFigure.text]={
-					figure: minFigure,
+			if(minFigureIndex){
+				figures[minFigureIndex].selected=true;
+				selected.push(figures[minFigureIndex].text);
+				actionObject[figures[minFigureIndex].text]={
+					figure: figures[minFigureIndex],
 					touch: touch
 				};
 			}
