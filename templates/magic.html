@@ -23,7 +23,9 @@ const ActionType = {
 	holder: 2,
 	analog: 1,
 	defauld: 0,
-	connecter: 3
+	connecter: 3,
+	link: 4,
+	script: 5
 }
 
 let figures = [];
@@ -252,6 +254,15 @@ function update() {
 			text: "#",
 			actionType: ActionType.connecter,
 			selectedColor: "#FF0000"
+		},{
+			center: {
+				w: Math.min(drawTop/4,(w/32)-2),
+				h: h-Math.min(drawTop/4,(w/32)-2)
+			},
+			radius: Math.min(drawTop/4,(w/32)-2),
+			text: "link",
+			actionType: ActionType.link,
+			link: "http://localhost:8082/controller/magic"
 		}
 	];
 	let selected = [];
@@ -331,6 +342,9 @@ function update() {
 					case ActionType.analog:
 						analogMove(t.actionObject.figure.text ,selected, actionObject);
 						break;
+					case ActionType.link:
+						goTo(t.actionObject.figure.link);
+						break;
   					default:
 						solved = solved +1;
 						break;
@@ -356,6 +370,10 @@ function update() {
 		previusActionObject = actionObject;
 		updateStarted = false;
 	}
+}
+
+function goTo(link){
+	window.location.href = link;
 }
 
 
