@@ -38,13 +38,15 @@ async def load_amiibos(script, nfc):
         f.close()
 
         async def sleep(*args):
-            print(args[0])
-            await asyncio.sleep(float(args[0]))
+            time = float(args[0]-0.00025)
+            await asyncio.sleep(time)
         cli.add_command(sleep.__name__, sleep)
 
 
         await controller_state.connect()
-        for line in lines:
+
+        for i in range(len(lines)):
+            line = lines[i]
             if '{nfc}' in line:
                 line = line.replace('{nfc}', nfc)
             print('cmd>>'+line)
