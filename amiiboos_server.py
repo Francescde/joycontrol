@@ -23,6 +23,7 @@ amiiboFolder = None
 script = None
 comandTimer = []
 lastTime = 0
+timerFlag = False
 
 async def get_client_transport():
     # the type of controller to create
@@ -49,6 +50,8 @@ async def get_client_transport():
     objectMap['cli'] = cli
     objectMap['transport'] = transport
     objectMap['active'] = True
+    timerFlag = False
+    lastTime = 0
     return cli, transport
 
 
@@ -84,8 +87,9 @@ async def comand():
     content = request.get_json()
     line = content['line']
     timePass=0
-    if lastTime>0:
+    if timerFlag:
         timePass = timer() - lastTime
+    timerFlag = True
     await client_sent_line(line)
     lastTime = timer()
     comandTimer.append({
@@ -99,8 +103,9 @@ async def comand():
 async def analog():
     content = request.get_json()
     timePass=0
-    if lastTime>0:
+    if timerFlag:
         timePass = timer() - lastTime
+    timerFlag = True
     await asyncio.gather(*[client_sent_line("stick "+content['key']+" v "+str(content['vertical'])), client_sent_line("stick "+content['key']+" h "+str(content['horizontal']))])
     lastTime = timer()
     comandTimer.append({
