@@ -132,7 +132,7 @@ async def writeScript(filename):
         lines.append(comand["comand"])
     with open(filename+".txt", "w") as file:
         # write to file
-        file.writelines(lines)
+        file.write('\n'.lines)
     return {'message': "\""+'\n'.join(lines)+"\""}
 
 
