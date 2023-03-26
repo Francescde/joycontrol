@@ -51,7 +51,7 @@ async def load_amiibos(script, nfc):
             if ';' in line:
                 arrTask = []
                 for subline in line.split(';'):
-                    arrTask.append(asyncio.create_task(subline))
+                    arrTask.append(asyncio.create_task(cli.run_line(subline)))
                 await asyncio.gather(* arrTask)
             await cli.run_line(line)
     finally:
