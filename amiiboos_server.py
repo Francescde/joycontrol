@@ -84,7 +84,7 @@ async def comand():
     content = request.get_json()
     line = content['line']
     timePass=0
-    if(lastTime):
+    if(lastTime!=None):
         timePass = timer() - lastTime
     await client_sent_line(line)
     lastTime = timer()
@@ -99,7 +99,7 @@ async def comand():
 async def analog():
     content = request.get_json()
     timePass=0
-    if(lastTime):
+    if(lastTime!=None):
         timePass = timer() - lastTime
     await asyncio.gather(*[client_sent_line("stick "+content['key']+" v "+str(content['vertical'])), client_sent_line("stick "+content['key']+" h "+str(content['horizontal']))])
     lastTime = timer()
