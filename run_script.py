@@ -48,7 +48,8 @@ async def load_amiibos(script, nfc):
             if '{nfc}' in line:
                 line = line.replace('{nfc}', nfc)
             print('cmd>>'+line)
-            await cli.run_line(line)
+            await asyncio.gather(*(line.split(';')))
+            #await cli.run_line(line)
     finally:
         await transport.close()
 
