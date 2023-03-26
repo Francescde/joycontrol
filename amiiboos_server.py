@@ -18,12 +18,12 @@ objectMap = {}
 objectMap['cli'] = None
 objectMap['transport'] = None
 objectMap['active'] = False
-
-amiiboFolder = None
-script = None
 comandTimer = []
 lastTime = 0
 timerFlag = False
+
+amiiboFolder = None
+script = None
 
 async def get_client_transport():
     # the type of controller to create
@@ -84,6 +84,7 @@ async def connected():
 
 @app.route("/comand", methods=['POST'])
 async def comand():
+    global timerFlag, lastTime, comandTimer
     content = request.get_json()
     line = content['line']
     timePass=0
@@ -101,6 +102,7 @@ async def comand():
 
 @app.route("/analog", methods=['POST'])
 async def analog():
+    global timerFlag, lastTime, comandTimer
     content = request.get_json()
     timePass=0
     if timerFlag:
@@ -117,6 +119,7 @@ async def analog():
 
 @app.route("/writeScript/<filename>", methods=['GET'])
 async def writeScript(filename):
+    global comandTimer
     '''
     comandTimer.append({
         "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
