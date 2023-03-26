@@ -55,7 +55,7 @@ async def load_amiibos(script, nfc):
                     lineTask.append(asyncio.create_task(cli.run_line(subline)))
                 #await asyncio.gather(* arrTask)
             else:
-                lineTask.append(asyncio.create_task(cli.run_line(subline)))
+                lineTask.append(asyncio.create_task(cli.run_line(line)))
             tasks.append(lineTask)
             #await cli.run_line(line)
         
