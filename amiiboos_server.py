@@ -12,6 +12,7 @@ from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
 import sys
+from timeit import default_timer as timer
 
 objectMap = {}
 objectMap['cli'] = None
@@ -20,7 +21,8 @@ objectMap['active'] = False
 
 amiiboFolder = None
 script = None
-
+comandTimer = []
+lastTime = None
 
 async def get_client_transport():
     # the type of controller to create
@@ -81,15 +83,49 @@ async def connected():
 async def comand():
     content = request.get_json()
     line = content['line']
+    timePass=0
+    if(lastTime):
+        timePass = timer() - lastTime
     await client_sent_line(line)
+    lastTime = timer()
+    comandTimer.append({
+        "comand": line,
+        "time": timePass
+    })
     return {'message': 'Send'}
 
 
 @app.route("/analog", methods=['POST'])
 async def analog():
     content = request.get_json()
+    timePass=0
+    if(lastTime):
+        timePass = timer() - lastTime
     await asyncio.gather(*[client_sent_line("stick "+content['key']+" v "+str(content['vertical'])), client_sent_line("stick "+content['key']+" h "+str(content['horizontal']))])
+    lastTime = timer()
+    comandTimer.append({
+        "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
+        "time": timePass
+    })
     return {'message': 'Send'}
+
+
+@app.route("/writeScript/<filename>", methods=['GET'])
+async def writeScript(filename):
+    '''
+    comandTimer.append({
+        "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
+        "time": timePass
+    })'''
+    lines = []
+    for comand in comandTimer:
+        if comand["time"]>0:
+            lines.append("sleep "+str(comand["time"]))
+        lines.append(comand["comand"])
+    with open(filename+".txt", "w") as file:
+        # write to file
+        file.writelines(lines)
+    return {'message': "\""+'\n'.join(lines)+"\""}
 
 
 @app.route('/disconnect')
