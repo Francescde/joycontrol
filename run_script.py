@@ -38,7 +38,7 @@ async def load_amiibos(script, nfc):
         f.close()
 
         async def sleep(*args):
-            time = float(args[0])
+            time = float(args[0])-0.015
             await asyncio.sleep(time)
         cli.add_command(sleep.__name__, sleep)
 
