@@ -303,7 +303,7 @@ function update() {
 		todo = [];
 		selected.forEach(sel=>{
 			if(previusSelected.filter(ps=>ps==sel).length>0)  {
-				const previusObj = previusActionObject[ps]
+				const previusObj = previusActionObject[sel]
 				if(actionObject[sel].figure.actionType==ActionType.analog && 
 				previusObj.touch.pageX != actionObject[sel].touch.pageX && 
 				previusObj.touch.pageY != actionObject[sel].touch.pageY){
