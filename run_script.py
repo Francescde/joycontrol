@@ -45,8 +45,7 @@ async def load_amiibos(script, nfc):
 
         await controller_state.connect()
 
-        for i in range(len(lines)):
-            line = lines[i]
+        for line in lines:
             if '{nfc}' in line:
                 line = line.replace('{nfc}', nfc)
             lineTask = []

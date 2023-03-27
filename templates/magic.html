@@ -34,6 +34,7 @@ var updateStarted = false;
 var touches = [];
 var previusSelected = [];
 var previusActionObject = {};
+var previusAnalogObject = {};
 
 
 var solved = 0;
@@ -302,7 +303,10 @@ function update() {
 		todo = [];
 		selected.forEach(sel=>{
 			if(previusSelected.filter(ps=>ps==sel).length>0)  {
-				if(actionObject[sel].figure.actionType==ActionType.analog){
+				const previusObj = previusActionObject[ps]
+				if(actionObject[sel].figure.actionType==ActionType.analog && 
+				previusObj.touch.pageX != actionObject[sel].touch.pageX && 
+				previusObj.touch.pageY != actionObject[sel].touch.pageY){
 					todo.push({
 						selected: true,
 						actionObject: actionObject[sel]
