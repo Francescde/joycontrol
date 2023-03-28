@@ -41,20 +41,26 @@ async def load_amiibos(script, nfc):
             time = float(args[0])-0.005
             await asyncio.sleep(time)
         cli.add_command(sleep.__name__, sleep)
+        tasks = []
+        for line in lines:
+            if '{nfc}' in line:
+                line = line.replace('{nfc}', nfc)
+            lineTask = []
+            if ';' in line:
+                for subline in line.split(';'):
+                    lineTask.append(subline)
+            else:
+                lineTask = [line]
+            tasks.append(lineTask)
 
 
         await controller_state.connect()
         while True:
-            for line in lines:
-                if '{nfc}' in line:
-                    line = line.replace('{nfc}', nfc)
+            for line in tasks:
                 lineTask = []
-                if ';' in line:
-                    for subline in line.split(';'):
-                        lineTask.append(asyncio.create_task(cli.run_line(subline)))
-                    await asyncio.gather(* lineTask)
-                else:
-                    await cli.run_line(line)
+                for subline in line:
+                    lineTask.append(asyncio.create_task(cli.run_line(subline)))
+                await asyncio.gather(* lineTask)
             
     finally:
         await transport.close()
