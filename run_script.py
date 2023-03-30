@@ -57,7 +57,7 @@ async def load_amiibos(script, nfc):
         keepRunning = True
         while keepRunning:
             for line in tasks:
-                if(line in 'exit'):
+                if('exit' in line):
                     keepRunning = False
                     break
                 lineTask = []
