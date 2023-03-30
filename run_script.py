@@ -9,8 +9,10 @@ import asyncio
 import os
 import sys
 
+keepRunning = True
 
 async def load_amiibos(script, nfc):
+    global keepRunning
     # the type of controller to create
     controller = Controller.PRO_CONTROLLER  # or JOYCON_L or JOYCON_R
     spi_flash = FlashMemory()
@@ -37,10 +39,20 @@ async def load_amiibos(script, nfc):
             print("An exception occurred" + str(e))
         f.close()
 
+        keepRunning = True
+
         async def sleep(*args):
             time = float(args[0])-0.005
             await asyncio.sleep(time)
+
+
+        async def exit(*args):
+            global keepRunning
+            keepRunning = False
+        
+
         cli.add_command(sleep.__name__, sleep)
+        cli.add_command(exit.__name__, exit)
         tasks = []
         for line in lines:
             if '{nfc}' in line:
@@ -55,7 +67,7 @@ async def load_amiibos(script, nfc):
 
 
         await controller_state.connect()
-        while True:
+        while keepRunning:
             for line in tasks:
                 lineTask = []
                 for subline in line:
