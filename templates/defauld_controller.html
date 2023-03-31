@@ -265,6 +265,35 @@ function update() {
 			link: window.location.origin + "/controller/magic"
 		}
 	];
+	if("{{params}}"!=""){
+		const params = {{ params | tojson }};
+		const isLargeNumber = (element) => element > 13;
+		if(params.remove){
+			const newFigures = [];
+			for (let i = 0; i < figures.length; i++) {
+				const index = params.remove.findIndex((element) => element==figures[i].text);
+				if(index<0) {
+					newFigures.push(figures[i]);
+				}
+			}
+		}
+		if(params.substitute) {
+			for (let i = 0; i < figures.length; i++) {
+				const index = params.substitute.findIndex((element) => element.text==figures[i].text);
+				if(index>-1) {
+					Object.keys(params.substitute[index]).forEach(function(key) {
+						figures[i][key] = params.substitute[index][key];
+					});
+				}
+			}
+		}
+		if(params.add){
+			params.add.forEach(function(obj){
+				figures.push(obj);
+			});
+		}
+
+	}
 	let selected = [];
 	let actionObject = {};
 	if(touches && touches.length>0) {

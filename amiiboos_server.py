@@ -142,9 +142,17 @@ async def disconnect():
     return {'message': 'Closed'}
 
 
-@app.route('/controller/<controllerName>')
+@app.route('/view/<controllerName>')
 async def send_report(controllerName):
     return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
+
+
+@app.route('/controller/<controllerName>')
+async def send_report(controllerName):
+    # Opening JSON file
+    f = open('controllers/'+controllerName+'.json')
+    data = json.load(f)
+    return await render_template('defauld_controller.html', params=json.dumps(data))
 
 
 @app.route('/files', methods=['POST'])
