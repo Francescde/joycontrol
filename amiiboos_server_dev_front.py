@@ -39,9 +39,18 @@ def disconnect():
     return {'message': 'Closed'}
 
 
-@app.route('/controller/<controllerName>')
-def send_report(controllerName):
+
+@app.route('/view/<controllerName>')
+def load_view(controllerName):
     return render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
+
+
+@app.route('/controller/<controllerName>')
+def load_controller(controllerName):
+    # Opening JSON file
+    f = open('controllers/'+controllerName+'.json')
+    data = json.load(f)
+    return render_template('defauld_controller.html', params=json.dumps(data))
 
 
 @app.route('/files', methods=['POST'])

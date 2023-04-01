@@ -254,19 +254,10 @@ function update() {
 			text: "#",
 			actionType: ActionType.connecter,
 			selectedColor: "#FF0000"
-		},{
-			center: {
-				w: Math.min(drawTop/4,(w/32)-2),
-				h: h-Math.min(drawTop/4,(w/32)-2)
-			},
-			radius: Math.min(drawTop/4,(w/32)-2),
-			text: "link",
-			actionType: ActionType.link,
-			link: window.location.origin + "/controller/magic"
 		}
 	];
 	if("{{params}}"!=""){
-		const params = {{ params | tojson }};
+		const params = JSON.parse({{ params | tojson }});
 		const isLargeNumber = (element) => element > 13;
 		if(params.remove){
 			const newFigures = [];
@@ -276,6 +267,7 @@ function update() {
 					newFigures.push(figures[i]);
 				}
 			}
+			figures = newFigures;
 		}
 		if(params.substitute) {
 			for (let i = 0; i < figures.length; i++) {

@@ -18,6 +18,7 @@ objectMap = {}
 objectMap['cli'] = None
 objectMap['transport'] = None
 objectMap['active'] = False
+objectMap['scriptRunning'] = None
 comandTimer = []
 lastTime = 0
 timerFlag = False
@@ -26,6 +27,7 @@ amiiboFolder = None
 script = None
 
 async def get_client_transport():
+    global objectMap;
     # the type of controller to create
     controller = Controller.PRO_CONTROLLER  # or JOYCON_L or JOYCON_R
     spi_flash = FlashMemory()
@@ -56,6 +58,7 @@ async def get_client_transport():
 
 
 async def close_transport():
+    global objectMap;
     if (objectMap['active']):
         await objectMap['transport'].close()
     objectMap['cli'] = None
@@ -64,8 +67,36 @@ async def close_transport():
 
 
 async def client_sent_line(line):
+    global objectMap;
     if (objectMap['active']):
         await objectMap['cli'].run_line(line)
+
+
+async def runScriptAsync(script, nfc):
+    global objectMap
+    f = open(script, 'r+')
+    lines = []
+    try:
+        lines = f.readlines()
+    except Exception as e:
+        print("An exception occurred" + str(e))
+    f.close()
+    tasks = []
+    for line in lines:
+        if '{nfc}' in line:
+            line = line.replace('{nfc}', nfc)
+        lineTask = []
+        if ';' in line:
+            for subline in line.split(';'):
+                lineTask.append(subline)
+        else:
+            lineTask = [line]
+        tasks.append(lineTask)
+        for line in tasks:
+            lineTask = []
+            for subline in line:
+                lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
+            await asyncio.gather(* lineTask)
 
 
 app = Flask(__name__, static_folder='static')
@@ -79,7 +110,35 @@ async def connect():
 
 @app.route('/connected')
 async def connected():
+    global objectMap;
     return {'connected': objectMap['active']}
+
+
+@app.route('/execute_script', methods=['POST'])
+def executeScript():
+    global objectMap;
+    content = request.get_json()
+    script = content['script']
+    nfc = content['nfc']
+    objectMap['scriptRunning'] = asyncio.create_task(runScriptAsync(script, nfc))
+    return {'message': 'Send'}
+
+
+@app.route('/script_running', methods=['GET'])
+def executeScript():
+    global objectMap;
+    scriptRunnig = False;
+    if(objectMap['scriptRunning']):
+        scriptRunnig = not objectMap['scriptRunning'].done()
+    return {'message': scriptRunnig}
+
+
+@app.route('/kill_script', methods=['GET'])
+def executeScript():
+    global objectMap;
+    if(objectMap['scriptRunning'] and not objectMap['scriptRunning'].done()):
+        objectMap['scriptRunning'].cancel()
+    return {'message': 'cancel'}
 
 
 @app.route("/comand", methods=['POST'])
@@ -97,6 +156,9 @@ async def comand():
         "comand": line,
         "time": timePass
     })
+    if(len(comandTimer)>100):
+        comandTimer.pop(0)
+        comandTimer[0]['time']=0
     return {'message': 'Send'}
 
 
@@ -114,6 +176,9 @@ async def analog():
         "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
         "time": timePass
     })
+    if(len(comandTimer)>100):
+        comandTimer.pop(0)
+        comandTimer[0]['time']=0
     return {'message': 'Send'}
 
 
