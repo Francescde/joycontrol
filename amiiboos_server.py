@@ -42,8 +42,8 @@ async def get_client_transport():
     # get a reference to the state beeing emulated.
     controller_state = protocol.get_controller_state()
     button_list = controller_state.button_state.get_available_buttons()
-    #for but in button_list:
-    #    print(but)
+    for but in button_list:
+        print(but)
     cli = ControllerCLI(controller_state)
     _register_commands_with_controller_state(controller_state, cli)
     # wait for input to be accepted
