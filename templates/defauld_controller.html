@@ -141,6 +141,15 @@ function update() {
 			reverseH: true,
 		},{
 			center: {
+				w: w/7,
+				h: (drawHeight/2.5)+drawTop+20+Math.min(w,drawHeight)/12
+			},
+			radius: Math.min(w,drawHeight)/12,
+			text: "JLP",
+			actionType: ActionType.defauld,
+			action: "l_stick"
+		},{
+			center: {
 				w: (w/4)*3.5,
 				h: (drawHeight/4)+drawTop-Math.min(w,drawHeight)/8
 			},
@@ -218,6 +227,15 @@ function update() {
 			analog: "R",
 			reverseW: false,
 			reverseH: true,
+		},{
+			center: {
+				w: ((w/6)*4)+Math.min(w,drawHeight)/5+Math.min(w,drawHeight)/12+20,
+				h: ((drawHeight/4)*3)+drawTop
+			},
+			radius: Math.min(w,drawHeight)/12,
+			text: "JRP",
+			actionType: ActionType.defauld,
+			action: "r_stick"
 		},{
 			center: {
 				w: w/2.5,
