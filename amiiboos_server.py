@@ -74,7 +74,6 @@ async def client_sent_line(line):
 
 async def runScriptAsync(script, nfc):
     global objectMap
-    print(script)
     f = open(script, 'r+')
     lines = []
     try:
