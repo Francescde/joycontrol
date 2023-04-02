@@ -1,0 +1,20 @@
+{
+    "remove": ["HLZ",  "LZ", "HL", "L", "R", "HR", "RZ", "HRZ", "JL", "JLP", "X", "B", "Y", "A", "↑", "↓", "←", "→", "JR", "JRP", "-", "+", "H"],
+    "substitute": [{
+        "text": "#",
+        "actionType": 4,
+        "link": "/view/home"
+    }],
+    "add": [
+        {
+            "center": {
+                "w": 21.90625,
+                "h": 463.09375
+            },
+            "radius": 21.90625,
+            "text": "script",
+            "actionType": 5,
+            "path": "/rjctScripts/try.txt"
+        }
+    ]
+}
