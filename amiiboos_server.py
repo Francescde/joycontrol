@@ -208,12 +208,12 @@ async def disconnect():
 
 
 @app.route('/view/<controllerName>')
-async def send_report(controllerName):
+async def display_view(controllerName):
     return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
 
 
 @app.route('/controller/<controllerName>')
-async def send_report(controllerName):
+async def display_controller(controllerName):
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
     data = json.load(f)
