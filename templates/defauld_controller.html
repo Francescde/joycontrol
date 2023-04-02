@@ -382,13 +382,13 @@ function update() {
 						Connection(selected, actionObject);
 						break;
 					case ActionType.analog:
-						analogMove(t.actionObject.figure.text ,selected, actionObject);
+						analogMove(t.actionObject.figure.text, selected, actionObject);
 						break;
 					case ActionType.link:
 						goTo(t.actionObject.figure.link);
 						break;
 					case ActionType.script:
-						executeScript(t.actionObject.figure.path);
+						executeScript(t.actionObject.figure.path, selected, actionObject);
 						break;
   					default:
 						solved = solved +1;
@@ -478,7 +478,7 @@ function analogRelease(key, selected, actionObject){
 	});
 }
 
-function executeScript(path){
+function executeScript(path, selected, actionObject){
 	$.ajax({
 		url: '/execute_script',
 		type: 'post',
