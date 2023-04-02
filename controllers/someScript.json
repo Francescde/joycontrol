@@ -1,10 +1,6 @@
 {
     "remove": ["HLZ",  "LZ", "HL", "L", "R", "HR", "RZ", "HRZ", "JL", "JLP", "X", "B", "Y", "A", "↑", "↓", "←", "→", "JR", "JRP", "-", "+", "H"],
-    "substitute": [{
-        "text": "#",
-        "actionType": 4,
-        "link": "/view/home"
-    }],
+    "substitute": [{"text": "#", "actionType": 4, "link": "/view/home"}],
     "add": [
         {
             "center": {
