@@ -11,7 +11,6 @@
         comands = {}
 
         function sendComandHold(e,cmd) {
-            e.preventDefault();
             if (!comands[cmd]) {
                 $.ajax({
                     url: '/comand',
@@ -40,7 +39,6 @@
         }
 
         function sendComand(e,cmd) {
-            e.preventDefault();
 
             $.ajax({
                 url: '/comand',
