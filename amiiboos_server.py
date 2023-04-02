@@ -125,7 +125,7 @@ def executeScript():
 
 
 @app.route('/script_running', methods=['GET'])
-def executeScript():
+def scriptRuning():
     global objectMap;
     scriptRunnig = False;
     if(objectMap['scriptRunning']):
@@ -134,7 +134,7 @@ def executeScript():
 
 
 @app.route('/kill_script', methods=['GET'])
-def executeScript():
+def killScript():
     global objectMap;
     if(objectMap['scriptRunning'] and not objectMap['scriptRunning'].done()):
         objectMap['scriptRunning'].cancel()
