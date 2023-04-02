@@ -117,7 +117,6 @@
         }
 
         function Connection(e) {
-            e.preventDefault();
             $.get("/connected", function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
                 if (data.connected) {
