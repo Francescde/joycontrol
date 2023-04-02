@@ -438,7 +438,7 @@ function analogMove(key, selected, actionObject){
 		type: 'post',
 		dataType: 'json',
 		contentType: 'application/json',
-		success: function (data, status) {
+		complete: function (data, status) {
 			console.log("Data: " + data + "\nStatus: " + status);
 			solved = solved + 1;
 			if(solved >= todo.length){
@@ -462,7 +462,7 @@ function analogRelease(key, selected, actionObject){
 		type: 'post',
 		dataType: 'json',
 		contentType: 'application/json',
-		success: function (data, status) {
+		complete: function (data, status) {
 			console.log("Data: " + data + "\nStatus: " + status);
 			solved = solved + 1;
 			if(solved >= todo.length){
@@ -519,6 +519,14 @@ function sendComandHolder(cmd, selected, actionObject) {
 					updateStarted = false;
 				}
 			},
+			error: function(data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			},
 			data: JSON.stringify({line: 'hold ' + cmd})
 		});
 	} else {
@@ -537,6 +545,14 @@ function sendComandHolder(cmd, selected, actionObject) {
 					updateStarted = false;
 				}
 			},
+			error: function(data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			},
 			data: JSON.stringify({line: 'release ' + cmd})
 		});
 	}
@@ -548,7 +564,7 @@ function sendDefauldHold(cmd, selected, actionObject) {
 		type: 'post',
 		dataType: 'json',
 		contentType: 'application/json',
-		success: function (data, status) {
+		complete: function (data, status) {
 			console.log("Data: " + data + "\nStatus: " + status);
 			solved = solved + 1;
 			if(solved >= todo.length){
@@ -567,7 +583,7 @@ function sendDefauldRelease(cmd, selected, actionObject) {
 		type: 'post',
 		dataType: 'json',
 		contentType: 'application/json',
-		success: function (data, status) {
+		complete: function (data, status) {
 			console.log("Data: " + data + "\nStatus: " + status);
 			solved = solved + 1;
 			if(solved >= todo.length){
