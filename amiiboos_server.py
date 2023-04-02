@@ -105,13 +105,13 @@ app = Flask(__name__, static_folder='static')
 @app.route('/connect')
 async def connect():
     await get_client_transport()
-    return {'message': 'Created'}
+    return jsonify({'message': 'Created'})
 
 
 @app.route('/connected')
 async def connected():
     global objectMap;
-    return {'connected': objectMap['active']}
+    return jsonify({'connected': objectMap['active']})
 
 
 @app.route('/execute_script', methods=['POST'])
@@ -121,7 +121,7 @@ def executeScript():
     script = content['script']
     nfc = content['nfc']
     objectMap['scriptRunning'] = asyncio.create_task(runScriptAsync(script, nfc))
-    return {'message': 'Send'}
+    return jsonify({'message': 'Send'})
 
 
 @app.route('/script_running', methods=['GET'])
@@ -130,7 +130,7 @@ def executeScript():
     scriptRunnig = False;
     if(objectMap['scriptRunning']):
         scriptRunnig = not objectMap['scriptRunning'].done()
-    return {'message': scriptRunnig}
+    return jsonify({'message': scriptRunnig})
 
 
 @app.route('/kill_script', methods=['GET'])
@@ -138,7 +138,7 @@ def executeScript():
     global objectMap;
     if(objectMap['scriptRunning'] and not objectMap['scriptRunning'].done()):
         objectMap['scriptRunning'].cancel()
-    return {'message': 'cancel'}
+    return jsonify({'message': 'cancel'})
 
 
 @app.route("/comand", methods=['POST'])
@@ -159,7 +159,7 @@ async def comand():
     if(len(comandTimer)>100):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
-    return {'message': 'Send'}
+    return jsonify({'message': 'Send'})
 
 
 @app.route("/analog", methods=['POST'])
@@ -179,7 +179,7 @@ async def analog():
     if(len(comandTimer)>100):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
-    return {'message': 'Send'}
+    return jsonify({'message': 'Send'})
 
 
 @app.route("/writeScript/<filename>", methods=['GET'])
@@ -198,13 +198,13 @@ async def writeScript(filename):
     with open(filename+".txt", "w") as file:
         # write to file
         file.write('\n'.join(lines))
-    return {'message': "\""+'\n'.join(lines)+"\""}
+    return jsonify({'message': "\""+'\n'.join(lines)+"\""})
 
 
 @app.route('/disconnect')
 async def disconnect():
     await close_transport()
-    return {'message': 'Closed'}
+    return jsonify({'message': 'Closed'})
 
 
 @app.route('/view/<controllerName>')
@@ -226,8 +226,73 @@ def get_files():
     print('content')
     print(content)
     folderpath = content['path']
+    if(folderpath and os.path.exists(folderpath)):
+        return jsonify(
+            [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
+    return jsonify([])
+
+@app.route('/controllers', methods=['GET'])
+def get_controllers():
+    folderpath = 'controllers'
     return jsonify(
-        [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
+        [f for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.json' in f)])
+
+
+@app.route('/controllers/<controllerName>')
+def get_controller(controllerName):
+    # Opening JSON file
+    f = open('controllers/'+controllerName+'.json')
+    data = json.load(f)
+    return jsonify({
+        'controllerName': controllerName,
+        'jsonFile': data,
+    })
+
+
+@app.route('/controllers', methods=['POST'])
+def add_controllers():
+    content = request.get_json()
+    print('content')
+    print(content)
+    folderpath = 'controllers'
+    file = content['json']
+    filename = content['filename']
+    # Directly from dictionary
+    with open(join(folderpath, filename), 'w') as outfile:
+        json.dump(file, outfile)
+    return jsonify({'message': 'Created'})
+
+
+@app.route('/scripts', methods=['GET'])
+def get_scripts():
+    folderpath = 'rjctScripts'
+    return jsonify(
+        [f for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.txt' in f)])
+
+
+@app.route('/scripts/<controllerName>')
+def get_script(controllerName):
+    # Opening JSON file
+    f = open('rjctScripts/'+controllerName+'.txt')
+    data = f.read()
+    return jsonify({
+        'controllerName': controllerName,
+        'jsonFile': data,
+    })
+
+
+@app.route('/scripts', methods=['POST'])
+def add_scripts():
+    content = request.get_json()
+    print('content')
+    print(content)
+    folderpath = 'rjctScripts'
+    file = content['data']
+    filename = content['filename']
+    # Directly from dictionary
+    with open(join(folderpath, filename), 'w') as outfile:
+        outfile.write(file)
+    return jsonify({'message': 'Created'})
 
 
 if __name__ == '__main__':
