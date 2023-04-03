@@ -22,7 +22,7 @@ release zl
 sleep 1
 hold zl
 x
-sleep 1
+sleep 1.2
 b
 sleep 1
 release zl
