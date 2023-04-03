@@ -7,8 +7,10 @@ hold up
 sleep 0.5
 stick r left
 sleep 3
+stick r center
+sleep 0.2
 stick r right
-sleep 0.5
+sleep 0.2
 stick r center
 sleep 0.5
 release up
