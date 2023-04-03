@@ -5,13 +5,32 @@ b
 sleep 0.5
 hold up
 sleep 0.5
-stick r right
+stick r left
 sleep 3
+stick r right
+sleep 0.5
 stick r center
 sleep 0.5
 release up
 sleep 0.5
 l
-sleep 5
-b
 sleep 1
+a
+sleep 1
+zr
+sleep 0.5
+b; plus;
+sleep 0.5
+a
+sleep 0.5
+a
+sleep 0.5
+a
+sleep 0.5
+a
+sleep 0.5
+plus
+sleep 0.5
+a
+sleep 0.5
+zr
