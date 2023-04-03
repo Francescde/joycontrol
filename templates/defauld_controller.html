@@ -310,7 +310,7 @@ function update() {
 		let i, len = touches.length;
 		for (i=0; i<len; i++) {
 			let touch = touches[i];
-			let minFigureIndex = null;
+			let minFigureIndex = -1;
 			let minDistance = Math.max(w,h);
 			figures.forEach((figure, figureIndex) => {
 				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2));
@@ -319,7 +319,7 @@ function update() {
 					distance = distance-figure.radius;
 				}
 			});
-			if(minFigureIndex){
+			if(minFigureIndex>=0){
 				figures[minFigureIndex].selected=true;
 				selected.push(figures[minFigureIndex].text);
 				actionObject[figures[minFigureIndex].text]={
