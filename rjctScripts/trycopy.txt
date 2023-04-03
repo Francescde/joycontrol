@@ -10,9 +10,7 @@ sleep 3
 stick r center
 sleep 0.2
 stick r right
-sleep 0.2
-stick r center
-release up
+stick r center; release up
 sleep 0.5
 l
 sleep 1
