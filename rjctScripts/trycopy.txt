@@ -13,13 +13,14 @@ stick r right
 sleep 0.5
 stick r center; release up
 sleep 1
+hold b
+sleep 1
 l
 sleep 1
 a
 sleep 1
 zr
 sleep 1
-hold b
 plus
 release b
 sleep 1
