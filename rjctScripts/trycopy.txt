@@ -21,7 +21,9 @@ a
 sleep 1
 zr
 sleep 0.5
-b; plus;
+hold b
+plus
+release b
 sleep 0.5
 a
 sleep 0.5
