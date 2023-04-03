@@ -2,36 +2,37 @@ sleep 1
 a
 sleep 1
 b
-sleep 0.5
+sleep 1
 hold up
-sleep 0.5
+sleep 1
 stick r left
 sleep 3
 stick r center
-sleep 0.2
+sleep 1
 stick r right
-stick r center; release up
 sleep 0.5
+stick r center; release up
+sleep 1
 l
 sleep 1
 a
 sleep 1
 zr
-sleep 0.5
+sleep 1
 hold b
 plus
 release b
-sleep 0.5
+sleep 1
 a
-sleep 0.5
+sleep 1
 a
-sleep 0.5
+sleep 1
 a
-sleep 0.5
+sleep 1
 a
-sleep 0.5
+sleep 1
 plus
-sleep 0.5
+sleep 1
 a
-sleep 0.5
+sleep 1
 zr
