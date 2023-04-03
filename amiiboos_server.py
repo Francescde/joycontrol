@@ -49,6 +49,10 @@ async def get_client_transport():
     # wait for input to be accepted
 
     await controller_state.connect()
+    async def sleep(*args):
+        time = float(args[0])-0.005
+        await asyncio.sleep(time)
+    cli.add_command(sleep.__name__, sleep)
     objectMap['cli'] = cli
     objectMap['transport'] = transport
     objectMap['active'] = True
