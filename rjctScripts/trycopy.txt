@@ -16,7 +16,7 @@ sleep 1
 hold zl
 sleep 1
 zr
-sleep 1
+sleep 0.5
 a
 release zl
 sleep 1
