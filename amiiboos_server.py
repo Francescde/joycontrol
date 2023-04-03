@@ -92,11 +92,11 @@ async def runScriptAsync(script, nfc):
         else:
             lineTask = [line]
         tasks.append(lineTask)
-        for line in tasks:
-            lineTask = []
-            for subline in line:
-                lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
-            await asyncio.gather(* lineTask)
+    for line in tasks:
+        lineTask = []
+        for subline in line:
+            lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
+        await asyncio.gather(* lineTask)
 
 
 app = Flask(__name__, static_folder='static')
