@@ -1,14 +1,15 @@
 hold zl
 sleep 1
 zr
-sleep 0.2
+sleep 1
 a
 release zl
 sleep 1
 hold zl
 x
-sleep 0.5
+sleep 1
 b
+sleep 1
 release zl
 plus
 a
@@ -18,5 +19,5 @@ sleep 1
 plus
 hold zr
 hold b
-stick l top
+stick l up
 sleep 600
