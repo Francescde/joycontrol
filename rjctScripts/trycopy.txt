@@ -18,11 +18,9 @@ sleep 3
 a
 sleep 3
 hold zl
-sleep 0.2
-hold zr
-hold a; release zr
-release a
-sleep 0.2
+sleep 0.05
+zr && a
+sleep 3
 release zl
 sleep 1
 hold zl

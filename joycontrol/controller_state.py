@@ -230,7 +230,7 @@ async def button_release(controller_state, *buttons):
     await controller_state.send()
 
 
-async def button_push(controller_state, *buttons, sec=0.1):
+async def button_push(controller_state, *buttons, sec=0.01):
     """
     Shortly push the given buttons. Wait until the controller state is send.
     :param controller_state:
