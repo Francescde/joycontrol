@@ -18,7 +18,8 @@ sleep 3
 a
 sleep 3
 hold zl
-hold zr; hold a;
+hold zr
+hold a
 release zr
 release a
 release zl
