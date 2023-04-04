@@ -20,17 +20,18 @@ sleep 3
 hold zl
 sleep 1
 zr
-sleep 0.5
+sleep 0.3
 a
 release zl
 sleep 1
 hold zl
 x
-sleep 1.2
+sleep 0.2
 b
-sleep 1
+sleep 0.3
 release zl
 plus
+sleep 1
 a
 sleep 2
 a
