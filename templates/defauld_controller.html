@@ -388,7 +388,7 @@ function update() {
 						goTo(t.actionObject.figure.link);
 						break;
 					case ActionType.script:
-						executeScript(t.actionObject.figure.path, selected, actionObject);
+						executeScript(t.actionObject.figure, selected, actionObject);
 						break;
   					default:
 						solved = solved +1;
@@ -478,22 +478,36 @@ function analogRelease(key, selected, actionObject){
 	});
 }
 
-function executeScript(path, selected, actionObject){
-	$.ajax({
-		url: '/execute_script',
-		type: 'post',
-		dataType: 'json',
-		contentType: 'application/json',
-		complete: function (data, status) {
-			console.log("Data: " + data + "\nStatus: " + status);
-			solved = solved + 1;
-			if(solved >= todo.length){
-				previusSelected = selected;
-				previusActionObject = actionObject;
-				updateStarted = false;
-			}
-		},
-		data: JSON.stringify({script: path, nfc:""})
+function executeScript(figure, selected, actionObject){
+	$.get("/script_running", function (data, status) {
+		console.log("Data: " + data + "\nStatus: " + status);
+		if (!data.message) {	
+			$.ajax({
+				url: '/execute_script',
+				type: 'post',
+				dataType: 'json',
+				contentType: 'application/json',
+				complete: function (data, status) {
+					console.log("Data: " + data + "\nStatus: " + status);
+					solved = solved + 1;
+					if(solved >= todo.length){
+						previusSelected = selected;
+						previusActionObject = actionObject;
+						updateStarted = false;
+					}
+				},
+				data: JSON.stringify({script: figure.path, nfc:"", repeats: figure.repeats?figure.repeats:1})
+			});
+		} else {
+			$.get("/kill_script", function (data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			});
+		}
 	});
 }
 

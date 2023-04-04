@@ -19,6 +19,7 @@ objectMap['cli'] = None
 objectMap['transport'] = None
 objectMap['active'] = False
 objectMap['scriptRunning'] = None
+objectMap['repeats'] = 0
 comandTimer = []
 lastTime = 0
 timerFlag = False
@@ -27,7 +28,7 @@ amiiboFolder = None
 script = None
 
 async def get_client_transport():
-    global objectMap;
+    global objectMap, timerFlag, lastTime;
     # the type of controller to create
     controller = Controller.PRO_CONTROLLER  # or JOYCON_L or JOYCON_R
     spi_flash = FlashMemory()
@@ -96,11 +97,14 @@ async def runScriptAsync(script, nfc):
         else:
             lineTask = [line]
         tasks.append(lineTask)
-    for line in tasks:
-        lineTask = []
-        for subline in line:
-            lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
-        await asyncio.gather(* lineTask)
+    while(objectMap['repeats']!=0):
+        for line in tasks:
+            lineTask = []
+            for subline in line:
+                lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
+            await asyncio.gather(* lineTask)
+        if objectMap['repeats']>0:
+            objectMap['repeats'] = objectMap['repeats'] - 1
 
 
 app = Flask(__name__, static_folder='static')
@@ -124,6 +128,7 @@ def executeScript():
     content = request.get_json()
     script = content['script']
     nfc = content['nfc']
+    objectMap['repeats'] = int(content['repeats'])
     objectMap['scriptRunning'] = asyncio.create_task(runScriptAsync(script, nfc))
     return jsonify({'message': 'Send'})
 
