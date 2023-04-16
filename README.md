@@ -64,7 +64,7 @@ Allows the user to edit and create, configurate and navigate to controllers.
 The controller config uses three arrays substitute, add, and remove these three arrays interact with the defauld array, adding new items to display, or removing or deleting the object that matches the text attribute
 
 example of a defauld array on an iphone mini
-'''bash
+```bash
 [{center: {w: 59.333333333333336, h: 24.333333333333332}, radius: 24.333333333333332, text: "HLZ", actionType: 2, action: "ZL"},
 {center: {w: 118.66666666666667, h: 24.333333333333332}, radius: 24.333333333333332, text: "LZ", actionType: 0, action: "ZL"},
 {center: {w: 178, h: 24.333333333333332}, radius: 24.333333333333332, text: "HL", actionType: 2, action: "L"},
@@ -89,7 +89,7 @@ example of a defauld array on an iphone mini
 {center: {w: 427.2, h: 118.1904761904762}, radius: 20.27777777777778, text: "+", actionType: 0, action: "plus"},
 {center: {w: 356, h: 89.22222222222223}, radius: 20.27777777777778, text: "H", actionType: 0, action: "home"},
 {center: {w: 356, h: 24.333333333333332}, radius: 12.166666666666666, text: "#", actionType: 4, selectedColor: "#FF0000"}]
-'''
+```
 Each element of the atribute defines the position of the button and the action it will perform. The actions are:
 
 
