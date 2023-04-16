@@ -28,6 +28,7 @@ const ActionType = {
 }
 
 let figures = [];
+let figuresCopy = [];
 
 var timer;
 var updateStarted = false;
@@ -58,251 +59,257 @@ function update() {
 
 	let drawTop = h/6;
 	let drawHeight = h-drawTop;
-	figures = [{
-			center: {
-				w: w/12,
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/2,(w/24)-2),
-			text: "HLZ",
-			actionType: ActionType.holder,
-			action: "ZL"
-		},{
-			center: {
-				w: (w/12)*2,
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/2,(w/24)-2),
-			text: "LZ",
-			actionType: ActionType.defauld,
-			action: "ZL"
-		},{
-			center: {
-				w: (w/12)*3,
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/2,(w/24)-2),
-			text: "HL",
-			actionType: ActionType.holder,
-			action: "L"
-		},{
-			center: {
-				w: (w/12)*4,
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/2,(w/24)-2),
-			text: "L",
-			actionType: ActionType.defauld
-		},{
-			center: {
-				w: w-((w/12)*4),
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/2,(w/24)-2),
-			text: "R",
-			actionType: ActionType.defauld
-		},{
-			center: {
-				w: w-((w/12)*3),
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/2,(w/24)-2),
-			text: "HR",
-			actionType: ActionType.holder,
-			action: "R"
-		},{
-			center: {
-				w: w-((w/12)*2),
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/2,(w/24)-2),
-			text: "RZ",
-			actionType: ActionType.defauld,
-			action: "ZR"
-		},{
-			center: {
-				w: w-((w/12)),
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/2,(w/24)-2),
-			text: "HRZ",
-			actionType: ActionType.holder,
-			action: "ZR"
-		},{
-			center: {
-				w: w/7,
-				h: (drawHeight/2.5)+drawTop
-			},
-			radius: Math.min(w,drawHeight)/4,
-			text: "JL",
-			actionType: ActionType.analog,
-			analog: "L",
-			reverseW: false,
-			reverseH: true,
-		},{
-			center: {
-				w: w/7,
-				h: (drawHeight/2.5)+drawTop+20+(Math.min(w,drawHeight)/12)+(Math.min(w,drawHeight)/4)
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "JLP",
-			actionType: ActionType.defauld,
-			action: "l_stick"
-		},{
-			center: {
-				w: (w/4)*3.5,
-				h: (drawHeight/4)+drawTop-Math.min(w,drawHeight)/8
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "X",
-			actionType: ActionType.defauld
-		},{
-			center: {
-				w: (w/4)*3.5,
-				h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/3
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "B",
-			actionType: ActionType.defauld
-		},{
-			center: {
-				w: ((w/4)*3.5)-Math.min(w,drawHeight)/5,
-				h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/9
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "Y",
-			actionType: ActionType.defauld
-		},{
-			center: {
-				w: ((w/4)*3.5)+Math.min(w,drawHeight)/5,
-				h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/9
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "A",
-			actionType: ActionType.defauld
-		},{
-			center: {
-				w: w/3,
-				h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/6
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "↑",
-			actionType: ActionType.defauld,
-			action: "Up"
-		},{
-			center: {
-				w: w/3,
-				h: ((drawHeight/4)*3)+drawTop+Math.min(w,drawHeight)/8
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "↓",
-			actionType: ActionType.defauld,
-			action: "Down"
-		},{
-			center: {
-				w: (w/3)-Math.min(w,drawHeight)/6,
-				h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/32
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "←",
-			actionType: ActionType.defauld,
-			action: "Left"
-		},{
-			center: {
-				w: (w/3)+Math.min(w,drawHeight)/6,
-				h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/32
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "→",
-			actionType: ActionType.defauld,
-			action: "Right"
-		},{
-			center: {
-				w: (w/6)*4,
-				h: ((drawHeight/4)*3)+drawTop
-			},
-			radius: Math.min(w,drawHeight)/5,
-			text: "JR",
-			actionType: ActionType.analog,
-			analog: "R",
-			reverseW: false,
-			reverseH: true,
-		},{
-			center: {
-				w: ((w/6)*4)+Math.min(w,drawHeight)/5+Math.min(w,drawHeight)/12+20,
-				h: ((drawHeight/4)*3)+drawTop
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "JRP",
-			actionType: ActionType.defauld,
-			action: "r_stick"
-		},{
-			center: {
-				w: w/2.5,
-				h: (drawHeight/3.5)+drawTop
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "-",
-			actionType: ActionType.defauld,
-			action: "minus"
-		},{
-			center: {
-				w: w/2+((w/2)-(w/2.5)),
-				h: (drawHeight/3.5)+drawTop
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "+",
-			actionType: ActionType.defauld,
-			action: "plus"
-		},{
-			center: {
-				w: w/2,
-				h: (drawHeight/6)+drawTop
-			},
-			radius: Math.min(w,drawHeight)/12,
-			text: "H",
-			actionType: ActionType.defauld,
-			action: "home"
-		},{
-			center: {
-				w: w/2,
-				h: drawTop/2
-			},
-			radius: Math.min(drawTop/4,(w/32)-2),
-			text: "#",
-			actionType: ActionType.connecter,
-			selectedColor: "#FF0000"
-		}
-	];
-	if("{{params}}"!=""){
-		const params = JSON.parse({{ params | tojson }});
-		const isLargeNumber = (element) => element > 13;
-		if(params.remove){
-			const newFigures = [];
-			for (let i = 0; i < figures.length; i++) {
-				const index = params.remove.findIndex((element) => element==figures[i].text);
-				if(index<0) {
-					newFigures.push(figures[i]);
+	if(figures.length==0) {
+		figures = [{
+				center: {
+					w: w/12,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HLZ",
+				actionType: ActionType.holder,
+				action: "ZL"
+			},{
+				center: {
+					w: (w/12)*2,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "LZ",
+				actionType: ActionType.defauld,
+				action: "ZL"
+			},{
+				center: {
+					w: (w/12)*3,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HL",
+				actionType: ActionType.holder,
+				action: "L"
+			},{
+				center: {
+					w: (w/12)*4,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "L",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w-((w/12)*4),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "R",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w-((w/12)*3),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HR",
+				actionType: ActionType.holder,
+				action: "R"
+			},{
+				center: {
+					w: w-((w/12)*2),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "RZ",
+				actionType: ActionType.defauld,
+				action: "ZR"
+			},{
+				center: {
+					w: w-((w/12)),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HRZ",
+				actionType: ActionType.holder,
+				action: "ZR"
+			},{
+				center: {
+					w: w/7,
+					h: (drawHeight/2.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/4,
+				text: "JL",
+				actionType: ActionType.analog,
+				analog: "L",
+				reverseW: false,
+				reverseH: true,
+			},{
+				center: {
+					w: w/7,
+					h: (drawHeight/2.5)+drawTop+20+(Math.min(w,drawHeight)/12)+(Math.min(w,drawHeight)/4)
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "JLP",
+				actionType: ActionType.defauld,
+				action: "l_stick"
+			},{
+				center: {
+					w: (w/4)*3.5,
+					h: (drawHeight/4)+drawTop-Math.min(w,drawHeight)/8
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "X",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: (w/4)*3.5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/3
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "B",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: ((w/4)*3.5)-Math.min(w,drawHeight)/5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/9
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "Y",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: ((w/4)*3.5)+Math.min(w,drawHeight)/5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/9
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "A",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w/3,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/6
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "↑",
+				actionType: ActionType.defauld,
+				action: "Up"
+			},{
+				center: {
+					w: w/3,
+					h: ((drawHeight/4)*3)+drawTop+Math.min(w,drawHeight)/8
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "↓",
+				actionType: ActionType.defauld,
+				action: "Down"
+			},{
+				center: {
+					w: (w/3)-Math.min(w,drawHeight)/6,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/32
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "←",
+				actionType: ActionType.defauld,
+				action: "Left"
+			},{
+				center: {
+					w: (w/3)+Math.min(w,drawHeight)/6,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/32
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "→",
+				actionType: ActionType.defauld,
+				action: "Right"
+			},{
+				center: {
+					w: (w/6)*4,
+					h: ((drawHeight/4)*3)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/5,
+				text: "JR",
+				actionType: ActionType.analog,
+				analog: "R",
+				reverseW: false,
+				reverseH: true,
+			},{
+				center: {
+					w: ((w/6)*4)+Math.min(w,drawHeight)/5+Math.min(w,drawHeight)/12+20,
+					h: ((drawHeight/4)*3)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "JRP",
+				actionType: ActionType.defauld,
+				action: "r_stick"
+			},{
+				center: {
+					w: w/2.5,
+					h: (drawHeight/3.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "-",
+				actionType: ActionType.defauld,
+				action: "minus"
+			},{
+				center: {
+					w: w/2+((w/2)-(w/2.5)),
+					h: (drawHeight/3.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "+",
+				actionType: ActionType.defauld,
+				action: "plus"
+			},{
+				center: {
+					w: w/2,
+					h: (drawHeight/6)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "H",
+				actionType: ActionType.defauld,
+				action: "home"
+			},{
+				center: {
+					w: w/2,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/4,(w/32)-2),
+				text: "#",
+				actionType: ActionType.connecter,
+				selectedColor: "#FF0000"
+			}
+		];
+		if("{{params}}"!=""){
+			const params = JSON.parse({{ params | tojson }});
+			const isLargeNumber = (element) => element > 13;
+			if(params.remove){
+				const newFigures = [];
+				for (let i = 0; i < figures.length; i++) {
+					const index = params.remove.findIndex((element) => element==figures[i].text);
+					if(index<0) {
+						newFigures.push(figures[i]);
+					}
+				}
+				figures = newFigures;
+			}
+			if(params.substitute) {
+				for (let i = 0; i < figures.length; i++) {
+					const index = params.substitute.findIndex((element) => element.text==figures[i].text);
+					if(index>-1) {
+						Object.keys(params.substitute[index]).forEach(function(key) {
+							figures[i][key] = params.substitute[index][key];
+						});
+					}
 				}
 			}
-			figures = newFigures;
-		}
-		if(params.substitute) {
-			for (let i = 0; i < figures.length; i++) {
-				const index = params.substitute.findIndex((element) => element.text==figures[i].text);
-				if(index>-1) {
-					Object.keys(params.substitute[index]).forEach(function(key) {
-						figures[i][key] = params.substitute[index][key];
-					});
-				}
+			if(params.add){
+				params.add.forEach(function(obj){
+					figures.push(obj);
+				});
 			}
-		}
-		if(params.add){
-			params.add.forEach(function(obj){
-				figures.push(obj);
-			});
-		}
 
+		}
+		figuresCopy = JSON.parse(JSON.stringify(figures))
+	}
+	else {
+		figures = JSON.parse(JSON.stringify(figuresCopy));
 	}
 	let selected = [];
 	let actionObject = {};
@@ -637,7 +644,7 @@ function sendDefauldRelease(cmd, selected, actionObject) {
 function ol() {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
-	timer = setInterval(update, 50);
+	timer = setInterval(update, 10);
 
 	canvas.addEventListener('touchend', function(event) {
 	event.preventDefault();
