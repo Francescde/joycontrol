@@ -481,6 +481,7 @@ function analogRelease(key, selected, actionObject){
 function executeScript(figure, selected, actionObject){
 	$.get("/script_running", function (data, status) {
 		console.log("Data: " + data + "\nStatus: " + status);
+		const script = figure.path? figure.path: "rjctScripts/"+figure.script+".txt";
 		if (!data.message) {	
 			$.ajax({
 				url: '/execute_script',
@@ -496,7 +497,7 @@ function executeScript(figure, selected, actionObject){
 						updateStarted = false;
 					}
 				},
-				data: JSON.stringify({script: figure.path, nfc:"", repeats: figure.repeats?figure.repeats:1})
+				data: JSON.stringify({script: script, nfc:"", repeats: figure.repeats?figure.repeats:1})
 			});
 		} else {
 			$.get("/kill_script", function (data, status) {
