@@ -1,4 +1,101 @@
-# about this version
+# joycontrol
+
+Branch: master->amiibo_edits
+
+Emulate Nintendo Switch Controllers over Bluetooth.
+
+Tested on Raspberry 4B Raspbian, should work on 3B+ too and anything that can do the setup.
+
+## Features
+#### Emulation of JOYCON_R, JOYCON_L and PRO_CONTROLLER. Able to send:
+- button commands
+- stick state
+- nfc for amiibo read & owner registration
+
+#### Tactile controller served over flask
+- view/home allows to create controller configs, navegate to the controller result, create scripts(executable on the controllers), and view and load amiboos stored on the raspberry
+- controller/{controllerConfigFileName}: shows the controller configurated on /view/home
+
+## Installation
+- Install dependencies  
+  Raspbian:
+```bash
+sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez
+```
+  Python: (a setup.py is present but not yet up to date)  
+  Note that pip here _has_ to be run as root, as otherwise the packages are not available to the root user.
+```bash
+sudo pip3 install aioconsole hid crc8
+sudo pip3 install aioflask
+sudo pip3 install Flask==2
+```
+ If you are unsure if the packages are properly installed, try running `sudo python3` and import each using `import package_name`.
+
+- setup bluetooth
+  - [I shouldn't have to say this, but] make sure you have a working Bluetooth adapter\
+  If you are running inside a VM, the PC might but not the VM. Check for a controller using `bluetoothctl show` or `bluetoothctl list`. Also a good indicator it the actual os reporting to not have bluetooth anymore.
+  - disable SDP [only necessary when pairing]\
+  change the `ExecStart` parameter in `/lib/systemd/system/bluetooth.service` to `ExecStart=/usr/lib/bluetooth/bluetoothd -C -P sap,input,avrcp`.\
+  This is to remove the additional reported features as the switch only looks for a controller.\
+  This also breaks all other Bluetooth gadgets, as this also disabled the needed drivers.
+  - disable input plugin [experimental alternative to above when not pairing]\
+  When not pairing, you can get away with only disabling the `input` plugin, only breaking bluetooth-input devices on your PC. Do so by changing `ExecStart` to `ExecStart=/usr/lib/bluetooth/bluetoothd -C -P input` instead.
+  - Restart bluetooth-deamon to apply the changes:
+  ```bash
+    sudo systemctl daemon-reload
+    sudo systemctl restart bluetooth.service
+  ```
+  - see [Issue #4](https://github.com/Poohl/joycontrol/issues/4) if despite that the switch doesn't connect or disconnects randomly.
+
+## joycon_server.py
+Serves web controllers ussing flask that allow you to send comands 
+
+- joycon_server: serves a webside with configurable controllers
+```bash
+sudo python3 joycon_server.py -nfc=<amiiboPath> -script=<scriptPath>
+```
+
+the main view /view/home has three parts
+
+#### Controller
+
+Allows the user to edit and create, configurate and navigate to controllers.
+
+The controller config uses three arrays substitute, add, and remove these three arrays interact with the defauld array, adding new items to display, or removing or deleting the object that matches the text attribute
+
+example of a defauld array on an iphone mini
+'''
+[{center: {w: 59.333333333333336, h: 24.333333333333332}, radius: 24.333333333333332, text: "HLZ", actionType: 2, action: "ZL"},
+{center: {w: 118.66666666666667, h: 24.333333333333332}, radius: 24.333333333333332, text: "LZ", actionType: 0, action: "ZL"},
+{center: {w: 178, h: 24.333333333333332}, radius: 24.333333333333332, text: "HL", actionType: 2, action: "L"},
+{center: {w: 237.33333333333334, h: 24.333333333333332}, radius: 24.333333333333332, text: "L", actionType: 0},
+{center: {w: 474.66666666666663, h: 24.333333333333332}, radius: 24.333333333333332, text: "R", actionType: 0},
+{center: {w: 534, h: 24.333333333333332}, radius: 24.333333333333332, text: "HR", actionType: 2, action: "R"},
+{center: {w: 593.3333333333334, h: 24.333333333333332}, radius: 24.333333333333332, text: "RZ", actionType: 0, action: "ZR"},
+{center: {w: 652.6666666666666, h: 24.333333333333332}, radius: 24.333333333333332, text: "HRZ", actionType: 2, action: "ZR"},
+{center: {w: 101.71428571428571, h: 146}, radius: 60.833333333333336, text: "JL", actionType: 1, analog: "L", reverseW: false, reverseH: true},
+{center: {w: 101.71428571428571, h: 247.11111111111111}, radius: 20.27777777777778, text: "JLP", actionType: 0, action: "l_stick"},
+{center: {w: 623, h: 79.08333333333333}, radius: 20.27777777777778, text: "X", actionType: 0},
+{center: {w: 623, h: 190.61111111111111}, radius: 20.27777777777778, text: "B", actionType: 0},
+{center: {w: 574.3333333333334, h: 136.53703703703704}, radius: 20.27777777777778, text: "Y", actionType: 0},
+{center: {w: 671.6666666666666, h: 136.53703703703704}, radius: 20.27777777777778, text: "A", actionType: 0},
+{center: {w: 237.33333333333334, h: 190.6111111111111}, radius: 20.27777777777778, text: "↑", actionType: 0, action: "Up"},
+{center: {w: 237.33333333333334, h: 261.5833333333333}, radius: 20.27777777777778, text: "↓", actionType: 0, action: "Down"},
+{center: {w: 196.77777777777777, h: 223.5625}, radius: 20.27777777777778, text: "←", actionType: 0, action: "Left"},
+{center: {w: 277.8888888888889, h: 223.5625}, radius: 20.27777777777778, text: "→", actionType: 0, action: "Right"},
+{center: {w: 474.6666666666667, h: 231.16666666666666}, radius: 48.66666666666667, text: "JR", actionType: 1, analog: "R", reverseW: false, reverseH: true},
+{center: {w: 563.6111111111112, h: 231.16666666666666}, radius: 20.27777777777778, text: "JRP", actionType: 0, action: "r_stick"},
+{center: {w: 284.8, h: 118.1904761904762}, radius: 20.27777777777778, text: "-", actionType: 0, action: "minus"},
+{center: {w: 427.2, h: 118.1904761904762}, radius: 20.27777777777778, text: "+", actionType: 0, action: "plus"},
+{center: {w: 356, h: 89.22222222222223}, radius: 20.27777777777778, text: "H", actionType: 0, action: "home"},
+{center: {w: 356, h: 24.333333333333332}, radius: 12.166666666666666, text: "#", actionType: 4, selectedColor: "#FF0000"}]
+'''
+Each element of the atribute defines the position of the button and the action it will perform. The actions are:
+
+
+
+
+## load amiibos ussing an script
 
 As it will require a diferent script for each game. The idea is to simplify the writing of the scripts and its execution. 
 
@@ -42,53 +139,7 @@ sleep 3
 b
 sleep 0.5
 ```
-# server version
 
-## installation
-sudo pip3 install aioflask
-sudo pip3 install Flask==2
-# joycontrol
-
-Branch: master->amiibo_edits
-
-Emulate Nintendo Switch Controllers over Bluetooth.
-
-Tested on Raspberry 4B Raspbian, should work on 3B+ too and anything that can do the setup.
-
-## Features
-Emulation of JOYCON_R, JOYCON_L and PRO_CONTROLLER. Able to send:
-- button commands
-- stick state
-- nfc for amiibo read & owner registration
-
-## Installation
-- Install dependencies  
-  Raspbian:
-```bash
-sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez
-```
-  Python: (a setup.py is present but not yet up to date)  
-  Note that pip here _has_ to be run as root, as otherwise the packages are not available to the root user.
-```bash
-sudo pip3 install aioconsole hid crc8
-```
- If you are unsure if the packages are properly installed, try running `sudo python3` and import each using `import package_name`.
-
-- setup bluetooth
-  - [I shouldn't have to say this, but] make sure you have a working Bluetooth adapter\
-  If you are running inside a VM, the PC might but not the VM. Check for a controller using `bluetoothctl show` or `bluetoothctl list`. Also a good indicator it the actual os reporting to not have bluetooth anymore.
-  - disable SDP [only necessary when pairing]\
-  change the `ExecStart` parameter in `/lib/systemd/system/bluetooth.service` to `ExecStart=/usr/lib/bluetooth/bluetoothd -C -P sap,input,avrcp`.\
-  This is to remove the additional reported features as the switch only looks for a controller.\
-  This also breaks all other Bluetooth gadgets, as this also disabled the needed drivers.
-  - disable input plugin [experimental alternative to above when not pairing]\
-  When not pairing, you can get away with only disabling the `input` plugin, only breaking bluetooth-input devices on your PC. Do so by changing `ExecStart` to `ExecStart=/usr/lib/bluetooth/bluetoothd -C -P input` instead.
-  - Restart bluetooth-deamon to apply the changes:
-  ```bash
-    sudo systemctl daemon-reload
-    sudo systemctl restart bluetooth.service
-  ```
-  - see [Issue #4](https://github.com/Poohl/joycontrol/issues/4) if despite that the switch doesn't connect or disconnects randomly.
 
 ## Command line interface example
 There is a simple CLI (`sudo python3 run_controller_cli.py`) provided with this app. Startup-options are:
