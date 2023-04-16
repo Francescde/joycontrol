@@ -90,10 +90,36 @@ example of a defauld array on an iphone mini
 {center: {w: 356, h: 89.22222222222223}, radius: 20.27777777777778, text: "H", actionType: 0, action: "home"},
 {center: {w: 356, h: 24.333333333333332}, radius: 12.166666666666666, text: "#", actionType: 4, selectedColor: "#FF0000"}]
 ```
-Each element of the atribute defines the position of the button and the action it will perform. The actions are:
-
-
-
+Each element of the atribute defines the position of the button and the action it will perform. The action it will perfrom is defined by actionType:
+holder: actionType value 2. On press it holds the button to release you have to press the button again. Required field action
+analog: actionType value 1. It sends an action for one of the joystics. Required field analog. Optional fields reverseW, reverseH
+defauld: actionType value 0. On press it holds the button to release you have to unpress the button like any button. Required field action
+connecter: actionType value 3. On press it will try to connect the raspberry to the nintendo swich if it fails restart the script.
+link: actionType value 4. On press it will change the view to another one. Can be ussed to link controllers or to navigate to home for example. Required field link
+```
+  {
+      "center": {
+          "w": 91.90625,
+          "h": 46.09375
+      },
+      "text": "#",
+      "actionType": 4,
+      "link": "/view/home"
+  }
+```
+script: actionType value 5. On press it execute an script To stopid you can press the button again. Required field script
+```
+ {
+      "center": {
+          "w": 21.90625,
+          "h": 112.09375
+      },
+      "radius": 21.90625,
+      "text": "script",
+      "actionType": 5,
+      "script": "try"
+  }
+```
 
 ## load amiibos ussing an script
 
@@ -103,7 +129,7 @@ To archive that this versions has two new scripts to load amiibos.
 
 - load_amiibos: load an amiibo
 ```bash
-sudo python3 load_amiibos.py -nfc=<amiiboPath> -script=<scriptPath>
+sudo python3 load_amiibos.py -nfc=<amiiboPath>
 ```
 
 - load_all_amiibos: load all amiibos from a folder (the idea is to not keep the connection alive as the picking of the amiibo at least on botw is not automatizable)
