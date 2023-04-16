@@ -107,7 +107,7 @@ link: actionType value 4. On press it will change the view to another one. Can b
       "link": "/view/home"
   }
 ```
-script: actionType value 5. On press it execute an script To stopid you can press the button again. Required field script
+script: actionType value 5. On press it execute an script repeats times(-1 forever). To stop it you can press the button again. Required field script. Optional field repeats
 ```
  {
       "center": {
@@ -117,7 +117,8 @@ script: actionType value 5. On press it execute an script To stopid you can pres
       "radius": 21.90625,
       "text": "script",
       "actionType": 5,
-      "script": "try"
+      "script": "try",
+      "repeats": -1
   }
 ```
 
