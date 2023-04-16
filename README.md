@@ -64,7 +64,7 @@ Allows the user to edit and create, configurate and navigate to controllers.
 The controller config uses three arrays substitute, add, and remove these three arrays interact with the defauld array, adding new items to display, or removing or deleting the object that matches the text attribute
 
 example of a defauld array on an iphone mini
-'''
+'''bash
 [{center: {w: 59.333333333333336, h: 24.333333333333332}, radius: 24.333333333333332, text: "HLZ", actionType: 2, action: "ZL"},
 {center: {w: 118.66666666666667, h: 24.333333333333332}, radius: 24.333333333333332, text: "LZ", actionType: 0, action: "ZL"},
 {center: {w: 178, h: 24.333333333333332}, radius: 24.333333333333332, text: "HL", actionType: 2, action: "L"},
