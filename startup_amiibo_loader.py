@@ -30,7 +30,7 @@ async def load_amiibos(script, amiiboFolder):
 
 
 async def load_server(script, amiiboFolder):
-    os.system('sudo python3 amiiboos_server.py -folder=' + amiiboFolder + ' -script=' + script)
+    os.system('sudo python3 joycon_server.py -folder=' + amiiboFolder + ' -script=' + script)
 
 
 async def load_one(script, amiiboFolder):
