@@ -20,7 +20,7 @@ Tested on Raspberry 4B Raspbian, should work on 3B+ too and anything that can do
 - Install dependencies  
   Raspbian:
 ```bash
-sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez
+sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-pip
 ```
   Python: (a setup.py is present but not yet up to date)  
   Note that pip here _has_ to be run as root, as otherwise the packages are not available to the root user.
