@@ -126,6 +126,8 @@ async def connected():
 def executeScript():
     global objectMap;
     content = request.get_json()
+    if(objectMap['scriptRunning'] and not objectMap['scriptRunning'].done()):
+        objectMap['scriptRunning'].cancel()
     script = content['script']
     nfc = content['nfc']
     objectMap['repeats'] = int(content['repeats'])
@@ -221,7 +223,7 @@ async def getRunningScript():
     lines = []
     for comand in comandTimer:
         if comand["time"]>0:
-            lines.append("sleep "+str(comand["time"]))
+            lines.append("sleep "+str(comand["time"]-0.2))
         lines.append(comand["comand"])
     return jsonify({'message': "\""+'\n'.join(lines)+"\""})
 

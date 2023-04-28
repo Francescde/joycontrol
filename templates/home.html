@@ -325,6 +325,16 @@
                     data: JSON.stringify({data: bodyVal, filename: filenameVal+".txt"})
                 });
         }
+
+        function killScript(){
+            $.get("/script_running", function (data, status) {
+                console.log("Data: " + data + "\nStatus: " + status);
+                const script = figure.path? figure.path: "rjctScripts/"+figure.script+".txt";
+                if (data.message) {	
+                    $.get("/kill_script", function (data, status) {});
+                }
+            });
+        }
     </script>
 
 </head>
@@ -440,7 +450,7 @@
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onchange="killScript()">Close</button>
           <div class="form-outline">
             <input type="number" id="repetitions" class="form-control" value="1" />
             <label class="form-label" for="repetitions">repetitions</label>
