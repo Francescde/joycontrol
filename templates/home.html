@@ -330,7 +330,7 @@
             $.get("/script_running", function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
                 const script = figure.path? figure.path: "rjctScripts/"+figure.script+".txt";
-                if (data.message) {	
+                if (!(!(data.message))) {	
                     $.get("/kill_script", function (data, status) {});
                 }
             });
