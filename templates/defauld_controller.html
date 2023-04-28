@@ -430,7 +430,7 @@ function goTo(link){
 
 
 function analogMove(key, selected, actionObject){
-	const maxAnalog = 2048*2;
+	const maxAnalog = 4096;
 	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/actionObject[key].figure.square.lateral)*maxAnalog;
 	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/actionObject[key].figure.square.lateral)*maxAnalog;
 	if(actionObject[key].figure.reverseW){
@@ -439,9 +439,9 @@ function analogMove(key, selected, actionObject){
 	if(actionObject[key].figure.reverseH){
 		y = maxAnalog - y;
 	}
-	x= Math.min(x,maxAnalog);
+	x= Math.min(x,maxAnalog-1);
 	x= Math.max(x,0);
-	y= Math.min(y,maxAnalog);
+	y= Math.min(y,maxAnalog-1);
 	y= Math.max(y,0);
 	$.ajax({
 		url: '/analog',
