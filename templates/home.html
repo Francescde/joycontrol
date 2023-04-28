@@ -191,12 +191,15 @@
                 const val2 = $("#txtBodyControllerScript").val();
                 if(isEmptyOrSpaces(val2)){
                      $('#submitScript').prop('disabled', true);
+                     $('#submitAndRun').prop('disabled', true);
                 }
                 else {
                     $('#submitScript').prop('disabled', false);
+                    $('#submitAndRun').prop('disabled', false);
                 }
             }else {
                 $('#submitScript').prop('disabled', true);
+                $('#submitAndRun').prop('disabled', true);
             }
         }
 
@@ -291,6 +294,33 @@
                     success: function (data, status) {
                         requestScripts();
                         $('#exampleModalScript').modal('toggle');
+                    },
+                    data: JSON.stringify({data: bodyVal, filename: filenameVal+".txt"})
+                });
+        }
+
+        function submitAndRun(){
+
+            const bodyVal = $("#txtBodyControllerScript").val();
+            const filenameVal = $("#filenameControllerScript").val();
+            const repetitions = $("#repetitions").val();
+            
+            $.ajax({
+                    url: '/scripts',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data, status) {
+                        $.ajax({
+                            url: '/execute_script',
+                            type: 'post',
+                            dataType: 'json',
+                            contentType: 'application/json',
+                            complete: function (data, status) {
+                                console.log("Data: " + data + "\nStatus: " + status);
+                            },
+                            data: JSON.stringify({script: "rjctScripts/"+filenameVal+".txt", nfc:"", repeats: repetitions})
+                        });
                     },
                     data: JSON.stringify({data: bodyVal, filename: filenameVal+".txt"})
                 });
@@ -411,6 +441,11 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <div class="form-outline">
+            <input type="number" id="repetitions" class="form-control" />
+            <label class="form-label" for="repetitions">repetitions</label>
+          </div>
+          <button type="button" class="btn btn-primary" id="submitAndRun" disabled onclick="submitAndRun()">Create</button>
           <button type="button" class="btn btn-primary" id="submitScript" disabled onclick="updateScript()">Create</button>
         </div>
       </div>
