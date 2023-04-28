@@ -238,6 +238,32 @@
             $("#filenameControllerScript").val("");
         }
 
+        function showCurrentScriptForm(){
+            $("#txtBodyControllerScript").val("");
+            $("#filenameControllerScript").val("");
+            $.ajax({
+                    url: '/last-actions',
+                    type: 'get',
+                    contentType: 'application/json',
+                    success: function (data, status) {
+                        $("#txtBodyControllerScript").val(data.message);
+                        $("#filenameControllerScript").val("");
+                    }
+                });
+
+        }
+        
+        function cleanCurrentScriptForm(){
+            $.ajax({
+                    url: '/reset-actions',
+                    type: 'get',
+                    contentType: 'application/json',
+                    success: function (data, status) {
+                        
+                    }
+                });
+        }
+
         function updateJsonController(){
             const bodyVal = $("#jsonBodyController").val();
             const filenameVal = $("#filenameController").val();
@@ -322,6 +348,12 @@
             <div>Scripts</div>
             <button type="button" class="btn btn-primary" onclick="requestScripts()">reload</button>
             <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" onclick="cleanCurrentScriptForm()">
+                clean current
+            </button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="showCurrentScriptForm()">
+                Current script
+            </button>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="cleanScriptsForm()">
                 Create script
             </button>

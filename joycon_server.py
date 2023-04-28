@@ -210,6 +210,32 @@ async def writeScript(filename):
     return jsonify({'message': "\""+'\n'.join(lines)+"\""})
 
 
+
+
+
+@app.route("/last-actions", methods=['GET'])
+async def getRunningScript():
+    global comandTimer
+    '''
+    comandTimer.append({
+        "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
+        "time": timePass
+    })'''
+    lines = []
+    for comand in comandTimer:
+        if comand["time"]>0:
+            lines.append("sleep "+str(comand["time"]))
+        lines.append(comand["comand"])
+    return jsonify({'message': "\""+'\n'.join(lines)+"\""})
+
+@app.route("/reset-actions", methods=['GET'])
+async def getRunningScript():
+    global comandTimer, lastTime, timerFlag
+    comandTimer = []
+    lastTime = 0
+    timerFlag = False
+    return jsonify({'message': "succes"})
+
 @app.route('/disconnect')
 async def disconnect():
     await close_transport()
@@ -308,6 +334,4 @@ if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
-        if '-script=' in arg:
-            script = str(arg).replace('-script=', '')
     app.run(host='0.0.0.0', port=8082)
