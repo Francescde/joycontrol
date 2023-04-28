@@ -210,9 +210,6 @@ async def writeScript(filename):
     return jsonify({'message': "\""+'\n'.join(lines)+"\""})
 
 
-
-
-
 @app.route("/last-actions", methods=['GET'])
 async def getRunningScript():
     global comandTimer
@@ -228,13 +225,15 @@ async def getRunningScript():
         lines.append(comand["comand"])
     return jsonify({'message': "\""+'\n'.join(lines)+"\""})
 
+
 @app.route("/reset-actions", methods=['GET'])
-async def getRunningScript():
+async def resetActions():
     global comandTimer, lastTime, timerFlag
     comandTimer = []
     lastTime = 0
     timerFlag = False
     return jsonify({'message': "succes"})
+
 
 @app.route('/disconnect')
 async def disconnect():
