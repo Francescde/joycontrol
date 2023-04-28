@@ -225,7 +225,7 @@ async def getRunningScript():
         if comand["time"]>0:
             lines.append("sleep "+str(comand["time"]-0.05))
         lines.append(comand["comand"])
-    return jsonify({'message': "\""+'\n'.join(lines)+"\""})
+    return jsonify({'message': '\n'.join(lines)})
 
 
 @app.route("/reset-actions", methods=['GET'])
