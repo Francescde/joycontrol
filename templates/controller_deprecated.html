@@ -10,7 +10,6 @@
         comands = {}
 
         function sendComandHold(e,cmd) {
-            e.preventDefault();
             if (!comands[cmd]) {
                 $.ajax({
                     url: '/comand',
@@ -39,7 +38,6 @@
         }
 
         function sendComand(e,cmd) {
-            e.preventDefault();
 
             $.ajax({
                 url: '/comand',
@@ -77,7 +75,6 @@
         }
 
         function Connection(e) {
-            e.preventDefault();
             $.get("/connected", function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
                 if (data.connected) {
