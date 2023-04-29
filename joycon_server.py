@@ -102,10 +102,13 @@ async def runScriptAsync(script, nfc):
         tasks.append(lineTask)
     while(objectMap['repeats']!=0):
         for line in tasks:
+            sleep = False
             lineTask = []
             for subline in line:
+                sleep = sleep or ('sleep' in subline)
                 lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
-            await asyncio.gather(* lineTask)
+            if(sleep):
+                await asyncio.gather(* lineTask)
         if objectMap['repeats']>0:
             objectMap['repeats'] = objectMap['repeats'] - 1
 
@@ -164,8 +167,8 @@ async def comand():
     if timerFlag:
         timePass = timer() - lastTime
     timerFlag = True
-    await client_sent_line(line)
     lastTime = timer()
+    await client_sent_line(line)
     comandTimer.append({
         "comand": line,
         "time": timePass
