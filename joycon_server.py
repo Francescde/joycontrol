@@ -24,6 +24,8 @@ comandTimer = []
 lastTime = 0
 timerFlag = False
 timeOutScript = 0.00
+maxComandLines = 200
+readInterval = 10
 
 amiiboFolder = None
 script = None
@@ -155,7 +157,7 @@ def killScript():
 
 @app.route("/comand", methods=['POST'])
 async def comand():
-    global timerFlag, lastTime, comandTimer
+    global timerFlag, lastTime, comandTimer, maxComandLines
     content = request.get_json()
     line = content['line']
     timePass=0
@@ -168,7 +170,7 @@ async def comand():
         "comand": line,
         "time": timePass
     })
-    if(len(comandTimer)>100):
+    if(len(comandTimer)>maxComandLines):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
     return jsonify({'message': 'Send'})
@@ -251,9 +253,11 @@ async def display_view(controllerName):
 
 @app.route('/controller/<controllerName>')
 async def display_controller(controllerName):
+    global readInterval
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
     data = json.load(f)
+    data['readInterval'] = readInterval
     return await render_template('defauld_controller.html', params=json.dumps(data))
 
 

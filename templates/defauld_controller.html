@@ -644,7 +644,13 @@ function sendDefauldRelease(cmd, selected, actionObject) {
 function ol() {
 	canvas = document.getElementById('canvas');
 	ctx = canvas.getContext('2d');
-	timer = setInterval(update, 10);
+	let interval = 10;
+	if("{{params}}"!=""){
+			const params = JSON.parse({{ params | tojson }});
+			interval = params.readInterval != null ? params.readInterval : 10;
+	}
+
+	timer = setInterval(update, interval);
 
 	canvas.addEventListener('touchend', function(event) {
 	event.preventDefault();
