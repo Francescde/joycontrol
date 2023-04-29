@@ -90,9 +90,11 @@ async def runScriptAsync(script, nfc):
         print("An exception occurred" + str(e))
     f.close()
     tasks = []
+    sleeps = []
     for line in lines:
         if '{nfc}' in line:
             line = line.replace('{nfc}', nfc)
+        sleeps.append(('sleep' in line))
         lineTask = []
         if ';' in line:
             for subline in line.split(';'):
@@ -101,14 +103,14 @@ async def runScriptAsync(script, nfc):
             lineTask = [line]
         tasks.append(lineTask)
     while(objectMap['repeats']!=0):
+        lineIndex = 0
         for line in tasks:
-            sleep = False
             lineTask = []
             for subline in line:
-                sleep = sleep or ('sleep' in subline)
                 lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
-            if(sleep):
+            if(sleeps[lineIndex]):
                 await asyncio.gather(* lineTask)
+            lineIndex +=1
         if objectMap['repeats']>0:
             objectMap['repeats'] = objectMap['repeats'] - 1
 
