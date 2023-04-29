@@ -23,6 +23,7 @@ objectMap['repeats'] = 0
 comandTimer = []
 lastTime = 0
 timerFlag = False
+timeOutScript = 0.00
 
 amiiboFolder = None
 script = None
@@ -214,7 +215,7 @@ async def writeScript(filename):
 
 @app.route("/last-actions", methods=['GET'])
 async def getRunningScript():
-    global comandTimer
+    global comandTimer, timeOutScript
     '''
     comandTimer.append({
         "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
@@ -223,7 +224,7 @@ async def getRunningScript():
     lines = []
     for comand in comandTimer:
         if comand["time"]>0:
-            lines.append("sleep "+str(comand["time"]-0.02))
+            lines.append("sleep "+str(comand["time"]-timeOutScript))
         lines.append(comand["comand"])
     return jsonify({'message': '\n'.join(lines)})
 
