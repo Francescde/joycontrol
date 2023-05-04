@@ -674,9 +674,21 @@ function clear(){
 	if("{{params}}"!=""){
 		const params = JSON.parse({{ params | tojson }});
 		if(params.backgroundImage) {
-		var background = new Image();
-		background.src = params.backgroundImage;
-		ctx.drawImage(background,0,0);   
+			var background = new Image();
+			background.src = params.backgroundImage;
+			ctx.drawImage(background,0,0);   
+		}
+		if(params.images) {
+			params.images.forEach(img => {
+				var imgCan = new Image();
+				imgCan.src = img.url;
+				if(img.width!=null && img.height!=null){
+					ctx.drawImage(imgCan,img.pos.x,img.pos.y, img.width, img.height);
+				}
+				else {
+					ctx.drawImage(imgCan,img.pos.x,img.pos.y);
+				}
+			});  
 		}
 	}
 	figures.forEach(fig => {
