@@ -671,6 +671,7 @@ function ol() {
 
 function clear(){
 	ctx.clearRect(0, 0, w, h);
+	let figBorderColor = "#000000";
 	if("{{params}}"!=""){
 		const params = JSON.parse({{ params | tojson }});
 		if(params.backgroundImage) {
@@ -690,10 +691,16 @@ function clear(){
 				}
 			});  
 		}
+		if(params.figBorderColor){
+			figBorderColor = params.figBorderColor;
+		}
 	}
 	figures.forEach(fig => {
 		ctx.beginPath();
-		ctx.strokeStyle = "#000000";
+		ctx.strokeStyle = figBorderColor;
+		if (fig.borderColor){
+			ctx.strokeStyle = fig.borderColor;
+		}
 		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
 		if(fig.selected){
 			if(fig.selectedColor){
