@@ -671,6 +671,14 @@ function ol() {
 
 function clear(){
 	ctx.clearRect(0, 0, w, h);
+	if("{{params}}"!=""){
+		const params = JSON.parse({{ params | tojson }});
+		if(params.backgroundImage) {
+		var background = new Image();
+		background.src = params.backgroundImage;
+		ctx.drawImage(background,0,0);   
+		}
+	}
 	figures.forEach(fig => {
 		ctx.beginPath();
 		ctx.strokeStyle = "#000000";

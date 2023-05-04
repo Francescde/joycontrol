@@ -1,26 +1,26 @@
-{center: {w: 59.333333333333336, h: 24.333333333333332}, radius: 24.333333333333332, text: "HLZ", actionType: 2, action: "ZL"}
-1 {center: {w: 118.66666666666667, h: 24.333333333333332}, radius: 24.333333333333332, text: "LZ", actionType: 0, action: "ZL"}
-2 {center: {w: 178, h: 24.333333333333332}, radius: 24.333333333333332, text: "HL", actionType: 2, action: "L"}
-3 {center: {w: 237.33333333333334, h: 24.333333333333332}, radius: 24.333333333333332, text: "L", actionType: 0}
-4 {center: {w: 474.66666666666663, h: 24.333333333333332}, radius: 24.333333333333332, text: "R", actionType: 0}
-5 {center: {w: 534, h: 24.333333333333332}, radius: 24.333333333333332, text: "HR", actionType: 2, action: "R"}
-6 {center: {w: 593.3333333333334, h: 24.333333333333332}, radius: 24.333333333333332, text: "RZ", actionType: 0, action: "ZR"}
-7 {center: {w: 652.6666666666666, h: 24.333333333333332}, radius: 24.333333333333332, text: "HRZ", actionType: 2, action: "ZR"}
-8 {center: {w: 101.71428571428571, h: 146}, radius: 60.833333333333336, text: "JL", actionType: 1, analog: "L", …}
-9 {center: {w: 101.71428571428571, h: 247.11111111111111}, radius: 20.27777777777778, text: "JLP", actionType: 0, action: "l_stick"}
-10 {center: {w: 623, h: 79.08333333333333}, radius: 20.27777777777778, text: "X", actionType: 0}
-11 {center: {w: 623, h: 190.61111111111111}, radius: 20.27777777777778, text: "B", actionType: 0}
-12 {center: {w: 574.3333333333334, h: 136.53703703703704}, radius: 20.27777777777778, text: "Y", actionType: 0}
-13 {center: {w: 671.6666666666666, h: 136.53703703703704}, radius: 20.27777777777778, text: "A", actionType: 0}
-14 {center: {w: 237.33333333333334, h: 190.6111111111111}, radius: 20.27777777777778, text: "↑", actionType: 0, action: "Up"}
-15 {center: {w: 237.33333333333334, h: 261.5833333333333}, radius: 20.27777777777778, text: "↓", actionType: 0, action: "Down"}
-16 {center: {w: 196.77777777777777, h: 223.5625}, radius: 20.27777777777778, text: "←", actionType: 0, action: "Left"}
-17 {center: {w: 277.8888888888889, h: 223.5625}, radius: 20.27777777777778, text: "→", actionType: 0, action: "Right"}
-18 {center: {w: 474.6666666666667, h: 231.16666666666666}, radius: 48.66666666666667, text: "JR", actionType: 1, analog: "R", …}
-19 {center: {w: 563.6111111111112, h: 231.16666666666666}, radius: 20.27777777777778, text: "JRP", actionType: 0, action: "r_stick"}
-20 {center: {w: 284.8, h: 118.1904761904762}, radius: 20.27777777777778, text: "-", actionType: 0, action: "minus"}
-21 {center: {w: 427.2, h: 118.1904761904762}, radius: 20.27777777777778, text: "+", actionType: 0, action: "plus"}
-22 {center: {w: 356, h: 89.22222222222223}, radius: 20.27777777777778, text: "H", actionType: 0, action: "home"}
-23 {center: {w: 356, h: 24.333333333333332}, radius: 12.166666666666666, text: "#", actionType: 4, selectedColor: "#FF0000", …}
+[{center: {w: 59.333333333333336, h: 24.333333333333332}, radius: 24.333333333333332, text: "HLZ", actionType: 2, action: "ZL"},
+{center: {w: 118.66666666666667, h: 24.333333333333332}, radius: 24.333333333333332, text: "LZ", actionType: 0, action: "ZL"},
+{center: {w: 178, h: 24.333333333333332}, radius: 24.333333333333332, text: "HL", actionType: 2, action: "L"},
+{center: {w: 237.33333333333334, h: 24.333333333333332}, radius: 24.333333333333332, text: "L", actionType: 0},
+{center: {w: 474.66666666666663, h: 24.333333333333332}, radius: 24.333333333333332, text: "R", actionType: 0},
+{center: {w: 534, h: 24.333333333333332}, radius: 24.333333333333332, text: "HR", actionType: 2, action: "R"},
+{center: {w: 593.3333333333334, h: 24.333333333333332}, radius: 24.333333333333332, text: "RZ", actionType: 0, action: "ZR"},
+{center: {w: 652.6666666666666, h: 24.333333333333332}, radius: 24.333333333333332, text: "HRZ", actionType: 2, action: "ZR"},
+{center: {w: 101.71428571428571, h: 146}, radius: 60.833333333333336, text: "JL", actionType: 1, analog: "L", reverseW: false, reverseH: true},
+{center: {w: 101.71428571428571, h: 247.11111111111111}, radius: 20.27777777777778, text: "JLP", actionType: 0, action: "l_stick"},
+{center: {w: 623, h: 79.08333333333333}, radius: 20.27777777777778, text: "X", actionType: 0},
+{center: {w: 623, h: 190.61111111111111}, radius: 20.27777777777778, text: "B", actionType: 0},
+{center: {w: 574.3333333333334, h: 136.53703703703704}, radius: 20.27777777777778, text: "Y", actionType: 0},
+{center: {w: 671.6666666666666, h: 136.53703703703704}, radius: 20.27777777777778, text: "A", actionType: 0},
+{center: {w: 237.33333333333334, h: 190.6111111111111}, radius: 20.27777777777778, text: "↑", actionType: 0, action: "Up"},
+{center: {w: 237.33333333333334, h: 261.5833333333333}, radius: 20.27777777777778, text: "↓", actionType: 0, action: "Down"},
+{center: {w: 196.77777777777777, h: 223.5625}, radius: 20.27777777777778, text: "←", actionType: 0, action: "Left"},
+{center: {w: 277.8888888888889, h: 223.5625}, radius: 20.27777777777778, text: "→", actionType: 0, action: "Right"},
+{center: {w: 474.6666666666667, h: 231.16666666666666}, radius: 48.66666666666667, text: "JR", actionType: 1, analog: "R", reverseW: false, reverseH: true},
+{center: {w: 563.6111111111112, h: 231.16666666666666}, radius: 20.27777777777778, text: "JRP", actionType: 0, action: "r_stick"},
+{center: {w: 284.8, h: 118.1904761904762}, radius: 20.27777777777778, text: "-", actionType: 0, action: "minus"},
+{center: {w: 427.2, h: 118.1904761904762}, radius: 20.27777777777778, text: "+", actionType: 0, action: "plus"},
+{center: {w: 356, h: 89.22222222222223}, radius: 20.27777777777778, text: "H", actionType: 0, action: "home"},
+{center: {w: 356, h: 24.333333333333332}, radius: 12.166666666666666, text: "#", actionType: 4, selectedColor: "#FF0000"}]
 
 "HLZ",  "LZ", "HL", "L", "R", "HR", "RZ", "HRZ", "JL", "JLP", "X", "B", "Y", "A", "↑", "↓", "←", "→", "JR", "JRP", "-", "+", "H", "#"
