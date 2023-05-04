@@ -717,6 +717,7 @@ function clear(){
 			ctx.fillStyle = fig.fillColor;
 		}
 		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
+		ctx.fill();
 		if(fig.selected){
 			if(fig.selectedColor){
 				ctx.fillStyle = fig.selectedColor;
