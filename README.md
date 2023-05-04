@@ -4,7 +4,9 @@ Branch: master->amiibo_edits
 
 Emulate Nintendo Switch Controllers over Bluetooth.
 
-Tested on Raspberry 4B Raspbian, should work on 3B+ too and anything that can do the setup.
+Tested on Raspberry Zero w, Raspberry 4B Raspbian, should work on 3B+ too and anything that can do the setup.
+
+Chack out https://www.youtube.com/channel/UCE3sSyM4Ng1SrWQdWBFw-nA where we will explain the project in detail
 
 ## Features
 #### Emulation of JOYCON_R, JOYCON_L and PRO_CONTROLLER. Able to send:
@@ -62,6 +64,8 @@ the main view /view/home has three parts
 Allows the user to edit and create, configurate and navigate to controllers.
 
 The controller config uses three arrays substitute, add, and remove these three arrays interact with the defauld array, adding new items to display, or removing or deleting the object that matches the text attribute
+
+It also allow to set a background Image(backgroundImage), set some images and resize them(images), the color to draw the items(drawColor), the background Color(backgroundColor), the items Fill Color(itemsFillColor) and the analog Limits Color(analogLimitsColor)
 
 example of a defauld array on an iphone mini
 ```bash

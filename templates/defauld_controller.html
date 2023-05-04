@@ -671,9 +671,20 @@ function ol() {
 
 function clear(){
 	ctx.clearRect(0, 0, w, h);
-	let figBorderColor = "#000000";
+	let drawColor = "#000000";
+	let analogLimitsColor = "#00FF00";
+	let itemsFillColor = "#FFFFFF";
 	if("{{params}}"!=""){
 		const params = JSON.parse({{ params | tojson }});
+		if(params.analogLimitsColor){
+			analogLimitsColor = params.analogLimitsColor;
+		}
+		if(params.itemsFillColor){
+			itemsFillColor = params.itemsFillColor;
+		}
+		if(params.backgroundColor){
+			canvas.style.backgroundColor = params.backgroundColor;
+		}
 		if(params.backgroundImage) {
 			var background = new Image();
 			background.src = params.backgroundImage;
@@ -691,13 +702,13 @@ function clear(){
 				}
 			});  
 		}
-		if(params.figBorderColor){
-			figBorderColor = params.figBorderColor;
+		if(params.drawColor){
+			drawColor = params.drawColor;
 		}
 	}
 	figures.forEach(fig => {
 		ctx.beginPath();
-		ctx.strokeStyle = figBorderColor;
+		ctx.strokeStyle = drawColor;
 		if (fig.borderColor){
 			ctx.strokeStyle = fig.borderColor;
 		}
@@ -713,11 +724,14 @@ function clear(){
 		ctx.stroke();
 		ctx.font = "30px Comic Sans MS";
 		ctx.textAlign = "center";
-		ctx.fillStyle = "#000000";
+		ctx.fillStyle = itemsFillColor;
+		if (fig.writeColor) {
+			ctx.fillStyle = fig.writeColor;
+		}
 		ctx.fillText(fig.text, fig.center.w, fig.center.h+10);
 		if(fig.actionType == ActionType.analog) {
 			const radius = fig.radius /  Math.sqrt(2);
-			ctx.strokeStyle = "#00FF00";
+			ctx.strokeStyle = analogLimitsColor;
 			ctx.beginPath();
 			ctx.rect(fig.center.w-radius, fig.center.h-radius,
 				2*radius, 2*radius);
