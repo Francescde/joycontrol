@@ -712,6 +712,10 @@ function clear(){
 		if (fig.borderColor){
 			ctx.strokeStyle = fig.borderColor;
 		}
+		ctx.fillStyle = itemsFillColor;
+		if (fig.fillColor){
+			ctx.fillStyle = fig.fillColor;
+		}
 		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
 		if(fig.selected){
 			if(fig.selectedColor){
@@ -724,7 +728,7 @@ function clear(){
 		ctx.stroke();
 		ctx.font = "30px Comic Sans MS";
 		ctx.textAlign = "center";
-		ctx.fillStyle = itemsFillColor;
+		ctx.fillStyle = drawColor;
 		if (fig.writeColor) {
 			ctx.fillStyle = fig.writeColor;
 		}
