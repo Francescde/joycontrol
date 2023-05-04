@@ -683,7 +683,7 @@ function clear(){
 				var imgCan = new Image();
 				imgCan.src = img.url;
 				if(img.width!=null && img.height!=null){
-					ctx.drawImage(imgCan,img.pos.x,img.pos.y, img.width, img.height);
+					ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
 				}
 				else {
 					ctx.drawImage(imgCan,img.pos.x,img.pos.y);
