@@ -91,7 +91,7 @@ function getCursorPosition(event) {
                     success: function (data, status) {
 	                    window.location.href = '/view/home';
                     },
-                    data: JSON.stringify({json: JSON.parse(newParams), filename: params.filename+".json"})
+                    data: JSON.stringify({json: newParams, filename: params.filename+".json"})
                 });
         }
     showAlert();
