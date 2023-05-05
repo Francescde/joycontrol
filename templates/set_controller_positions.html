@@ -70,7 +70,7 @@ function getCursorPosition(event) {
         }
     }
     inerindex = inerindex -  figures.length; 
-    if(inerindex>=0) {
+    if(inerindex>=0 && newParams.add!=null) {
         if(newParams.add.length>inerindex){
             newParams.add[inerindex].center = {
                 w: x,
@@ -78,7 +78,11 @@ function getCursorPosition(event) {
             }
             drawfig(newParams.add[inerindex]);
         }
-        if(newParams.add.length==inerindex){
+    }
+    ++index;
+
+    if((newParams.add!=null?newParams.add.length:0)+figures.length+ 
+    (newParams.images!=null?newParams.images.length:0)==index){
             $.ajax({
                     url: '/controllers',
                     type: 'post',
@@ -90,8 +94,6 @@ function getCursorPosition(event) {
                     data: JSON.stringify({json: JSON.parse(newParams), filename: params.filename+".json"})
                 });
         }
-    }
-    ++index;
     showAlert();
 }
 
