@@ -737,6 +737,9 @@ function clear(){
 		if(fig.actionType == ActionType.analog) {
 			const radius = fig.radius /  Math.sqrt(2);
 			ctx.strokeStyle = analogLimitsColor;
+			if(fig.analogLimitsColor){
+				ctx.strokeStyle = fig.analogLimitsColor;
+			}
 			ctx.beginPath();
 			ctx.rect(fig.center.w-radius, fig.center.h-radius,
 				2*radius, 2*radius);
