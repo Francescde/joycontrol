@@ -175,12 +175,15 @@
                 const val2 = $("#filenameController").val();
                 if(isEmptyOrSpaces(val2)){
                      $('#submitController').prop('disabled', true);
+                     $('#positionController').prop('disabled', true);
                 }
                 else {
                     $('#submitController').prop('disabled', false);
+                     $('#positionController').prop('disabled', false);
                 }
             }else {
                 $('#submitController').prop('disabled', true);
+                $('#positionController').prop('disabled', true);
             }
         }
 
@@ -265,6 +268,21 @@
                     success: function (data, status) {
                         
                     }
+                });
+        }
+
+        function positionObjects(){
+            const bodyVal = $("#jsonBodyController").val();
+            const filenameVal = $("#filenameController").val();
+            $.ajax({
+                    url: '/controllers',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data, status) {
+	                    window.location.href = '/position_objects/'+filenameVal;
+                    },
+                    data: JSON.stringify({json: JSON.parse(bodyVal), filename: filenameVal+".json"})
                 });
         }
 
@@ -420,6 +438,7 @@
             </div>
         </div>
         <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="positionController"  data-dismiss="modal" disabled onclick="positionObjects()">positionate</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-primary" id="submitController" disabled onclick="updateJsonController()">Create</button>
         </div>

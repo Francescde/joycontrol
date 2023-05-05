@@ -259,6 +259,16 @@ async def display_view(controllerName):
     return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
 
 
+@app.route('/position_objects/<controllerName>')
+async def set_controller_objects(controllerName):
+    # Opening JSON file
+    f = open('controllers/'+controllerName+'.json')
+    data = json.load(f)
+    data['readInterval'] = readInterval
+    data['filename'] = controllerName
+    return await render_template('set_controller_positions.html', params=json.dumps(data))
+
+
 @app.route('/controller/<controllerName>')
 async def display_controller(controllerName):
     global readInterval

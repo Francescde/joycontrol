@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+<style type="text/css">
+	*{
+		touch-action: manipulation;
+	}
+body { margin: 0px; overflow: hidden; }
+canvas { border: 1px solid black; }
+</style>
+<title>controller</title>
+<script src="/static/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+var canvas;
+var ctx;
+var w = 0;
+var h = 0;
+
+const ActionType = {
+	holder: 2,
+	analog: 1,
+	defauld: 0,
+	connecter: 3,
+	link: 4,
+	script: 5
+}
+let figures = [];
+
+let drawColor = "#000000";
+let analogLimitsColor = "#00FF00";
+let itemsFillColor = "#FFFFFF";
+let params = JSON.parse({{ params | tojson }});
+let newParams = JSON.parse({{ params | tojson }});
+let index = 0;
+
+function getCursorPosition(event) {
+    const rect = canvas.getBoundingClientRect();
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+    let inerindex= index;
+    if(newParams.images) {
+        if(newParams.images.length>inerindex){
+            newParams.images[inerindex].pos = {
+                w: x,
+                h: y
+            };
+            let img = newParams.images[inerindex];
+            var imgCan = new Image();
+            imgCan.src = img.url;
+            if(img.width!=null && img.height!=null){
+                ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
+            }
+            else {
+                ctx.drawImage(imgCan,img.pos.w,img.pos.h);
+            }
+        }
+        inerindex = inerindex -  newParams.images.length; 
+    }
+    if(inerindex>=0){
+        if(figures.length>inerindex){
+            fig = figures[inerindex];
+            fig.center = {
+                w: x,
+                h: y
+            }
+            drawfig(fig);
+            newParams.substitute.push(img);
+        }
+    }
+    inerindex = inerindex -  figures.length; 
+    if(inerindex>=0) {
+        if(newParams.add.length>inerindex){
+            newParams.add[inerindex].center = {
+                w: x,
+                h: y
+            }
+            drawfig(newParams.add[inerindex]);
+        }
+        if(newParams.add.length==inerindex){
+            $.ajax({
+                    url: '/controllers',
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    success: function (data, status) {
+	                    window.location.href = '/view/home';
+                    },
+                    data: JSON.stringify({json: JSON.parse(newParams), filename: params.filename+".json"})
+                });
+        }
+    }
+    ++index;
+    showAlert();
+}
+
+function showAlert() {
+    let inerindex = index;
+    if(newParams.images) {
+        if(newParams.images.length>inerindex){
+            alert(newParams.images[inerindex].text!=null?newParams.images[inerindex].text:"image "+inerindex);
+        }
+        inerindex = inerindex -  newParams.images.length; 
+    }
+    if(inerindex>=0){
+        if(figures.length>inerindex){
+            fig = figures[inerindex];
+            alert(fig.text);
+        }
+    }
+    inerindex = inerindex -  figures.length; 
+    if(inerindex>=0) {
+        if(newParams.add.length>inerindex){
+            alert(newParams.add[inerindex].text);
+        }
+    }
+}
+
+function drawfig(fig){
+
+    ctx.beginPath();
+    ctx.strokeStyle = drawColor;
+    if (fig.borderColor){
+        ctx.strokeStyle = fig.borderColor;
+    }
+    ctx.fillStyle = itemsFillColor;
+    if (fig.fillColor){
+        ctx.fillStyle = fig.fillColor;
+    }
+    ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
+    ctx.fill();
+    if(fig.selected){
+        if(fig.selectedColor){
+            ctx.fillStyle = fig.selectedColor;
+        } else {
+            ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+        }
+        ctx.fill();
+    }
+    ctx.stroke();
+    ctx.font = "30px Comic Sans MS";
+    ctx.textAlign = "center";
+    ctx.fillStyle = drawColor;
+    if (fig.writeColor) {
+        ctx.fillStyle = fig.writeColor;
+    }
+    ctx.fillText(fig.text, fig.center.w, fig.center.h+10);
+    if(fig.actionType == ActionType.analog) {
+        const radius = fig.radius /  Math.sqrt(2);
+        ctx.strokeStyle = analogLimitsColor;
+        if(fig.analogLimitsColor){
+            ctx.strokeStyle = fig.analogLimitsColor;
+        }
+        ctx.beginPath();
+        ctx.rect(fig.center.w-radius, fig.center.h-radius,
+            2*radius, 2*radius);
+        ctx.stroke();
+    }  
+}
+
+function setPositions(){
+	canvas = document.getElementById('canvas');
+	ctx = canvas.getContext('2d');
+    var nw = window.innerWidth;
+	var nh = window.innerHeight;
+    newParams.substitute =[];
+	if ((w != nw) || (h != nh)) {
+		w = nw;
+		h = nh;
+		canvas.style.width = w+'px';
+		canvas.style.height = h+'px';
+		canvas.width = w;
+		canvas.height = h;
+	}
+
+	let drawTop = h/6;
+	let drawHeight = h-drawTop;
+    figures = [{
+				center: {
+					w: w/12,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HLZ",
+				actionType: ActionType.holder,
+				action: "ZL"
+			},{
+				center: {
+					w: (w/12)*2,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "LZ",
+				actionType: ActionType.defauld,
+				action: "ZL"
+			},{
+				center: {
+					w: (w/12)*3,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HL",
+				actionType: ActionType.holder,
+				action: "L"
+			},{
+				center: {
+					w: (w/12)*4,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "L",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w-((w/12)*4),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "R",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w-((w/12)*3),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HR",
+				actionType: ActionType.holder,
+				action: "R"
+			},{
+				center: {
+					w: w-((w/12)*2),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "RZ",
+				actionType: ActionType.defauld,
+				action: "ZR"
+			},{
+				center: {
+					w: w-((w/12)),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HRZ",
+				actionType: ActionType.holder,
+				action: "ZR"
+			},{
+				center: {
+					w: w/7,
+					h: (drawHeight/2.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/4,
+				text: "JL",
+				actionType: ActionType.analog,
+				analog: "L",
+				reverseW: false,
+				reverseH: true,
+			},{
+				center: {
+					w: w/7,
+					h: (drawHeight/2.5)+drawTop+20+(Math.min(w,drawHeight)/12)+(Math.min(w,drawHeight)/4)
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "JLP",
+				actionType: ActionType.defauld,
+				action: "l_stick"
+			},{
+				center: {
+					w: (w/4)*3.5,
+					h: (drawHeight/4)+drawTop-Math.min(w,drawHeight)/8
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "X",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: (w/4)*3.5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/3
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "B",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: ((w/4)*3.5)-Math.min(w,drawHeight)/5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/9
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "Y",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: ((w/4)*3.5)+Math.min(w,drawHeight)/5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/9
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "A",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w/3,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/6
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "↑",
+				actionType: ActionType.defauld,
+				action: "Up"
+			},{
+				center: {
+					w: w/3,
+					h: ((drawHeight/4)*3)+drawTop+Math.min(w,drawHeight)/8
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "↓",
+				actionType: ActionType.defauld,
+				action: "Down"
+			},{
+				center: {
+					w: (w/3)-Math.min(w,drawHeight)/6,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/32
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "←",
+				actionType: ActionType.defauld,
+				action: "Left"
+			},{
+				center: {
+					w: (w/3)+Math.min(w,drawHeight)/6,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/32
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "→",
+				actionType: ActionType.defauld,
+				action: "Right"
+			},{
+				center: {
+					w: (w/6)*4,
+					h: ((drawHeight/4)*3)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/5,
+				text: "JR",
+				actionType: ActionType.analog,
+				analog: "R",
+				reverseW: false,
+				reverseH: true,
+			},{
+				center: {
+					w: ((w/6)*4)+Math.min(w,drawHeight)/5+Math.min(w,drawHeight)/12+20,
+					h: ((drawHeight/4)*3)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "JRP",
+				actionType: ActionType.defauld,
+				action: "r_stick"
+			},{
+				center: {
+					w: w/2.5,
+					h: (drawHeight/3.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "-",
+				actionType: ActionType.defauld,
+				action: "minus"
+			},{
+				center: {
+					w: w/2+((w/2)-(w/2.5)),
+					h: (drawHeight/3.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "+",
+				actionType: ActionType.defauld,
+				action: "plus"
+			},{
+				center: {
+					w: w/2,
+					h: (drawHeight/6)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "H",
+				actionType: ActionType.defauld,
+				action: "home"
+			},{
+				center: {
+					w: w/2,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/4,(w/32)-2),
+				text: "#",
+				actionType: ActionType.connecter,
+				selectedColor: "#FF0000"
+			}
+		];
+    if(params.analogLimitsColor){
+        analogLimitsColor = params.analogLimitsColor;
+    }
+    if(params.itemsFillColor){
+        itemsFillColor = params.itemsFillColor;
+    }
+    if(params.backgroundColor){
+        canvas.style.backgroundColor = params.backgroundColor;
+    }
+    if(params.backgroundImage) {
+        var background = new Image();
+        background.src = params.backgroundImage;
+        ctx.drawImage(background,0,0);   
+    }
+    if(params.drawColor){
+        drawColor = params.drawColor;
+    }
+	ctx.clearRect(0, 0, w, h);
+    if(params.remove){
+        const newFigures = [];
+        for (let i = 0; i < figures.length; i++) {
+            const index = params.remove.findIndex((element) => element==figures[i].text);
+            if(index<0) {
+                newFigures.push(figures[i]);
+            }
+        }
+        figures = newFigures;
+    }
+    if(params.substitute) {
+        for (let i = 0; i < figures.length; i++) {
+            const index = params.substitute.findIndex((element) => element.text==figures[i].text);
+            if(index>-1) {
+                Object.keys(params.substitute[index]).forEach(function(key) {
+                    figures[i][key] = params.substitute[index][key];
+                });
+            }
+        }
+    }
+    canvas.addEventListener('mousedown', function(e) {
+        getCursorPosition(canvas, e)
+    });
+    showAlert();
+}
+
+</script>
+</head>
+<body onload="setPositions()">
+	
+<canvas id="canvas" width="100%" height="100%" style="top:0px; left:0px;"></canvas>
+
+</body>
+</html>
