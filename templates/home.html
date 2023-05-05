@@ -216,6 +216,7 @@
                         $("#jsonBodyController").val(JSON.stringify(data.jsonFile,null, 3));
                         $("#filenameController").val(data.controllerName);
                         $('#exampleModal').modal('toggle');
+                        checkControllerJsonValid();
                     }
                 });
         }
