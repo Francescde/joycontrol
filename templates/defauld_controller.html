@@ -685,6 +685,9 @@ function clear(){
 		if(params.backgroundColor){
 			canvas.style.backgroundColor = params.backgroundColor;
 		}
+		if(params.drawColor){
+			drawColor = params.drawColor;
+		}
 		if(params.backgroundImage) {
 			var background = new Image();
 			background.src = params.backgroundImage;
@@ -709,9 +712,6 @@ function clear(){
 					ctx.drawImage(imgCan,img.pos.w,img.pos.h);
 				}
 			});  
-		}
-		if(params.drawColor){
-			drawColor = params.drawColor;
 		}
 	}
 	figures.forEach(fig => {
