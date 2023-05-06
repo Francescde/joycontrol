@@ -119,7 +119,7 @@ function showAlert() {
         }
         inerindex = inerindex -  newParams.texts.length; 
     }
-    if(newParams.images) {
+    if(newParams.images && inerindex>0) {
         if(newParams.images.length>inerindex){
             alert(newParams.images[inerindex].name!=null?newParams.images[inerindex].name:"image "+inerindex);
         }
