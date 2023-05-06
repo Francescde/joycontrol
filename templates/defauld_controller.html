@@ -695,7 +695,7 @@ function clear(){
 				ctx.font = txt.font!=null?txt.font:"30px Comic Sans MS";
 				ctx.textAlign = "center";
 				ctx.fillStyle = txt.writeColor!=null?txt.writeColor:drawColor
-				ctx.fillText(fig.text, fig.center.w, fig.center.h);
+				ctx.fillText(txt.text, txt.pos.w, txt.pos.h);
 			});  
 		}
 		if(params.images) {
