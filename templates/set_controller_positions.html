@@ -50,7 +50,7 @@ function getCursorPosition(event) {
             ctx.textAlign = "center";
             ctx.fillStyle = newParams.texts[inerindex].writeColor!=null?newParams.texts[inerindex].writeColor:drawColor;
 
-            ctx.fillText(fig.text, fig.center.w, fig.center.h);
+            ctx.fillText(newParams.texts[inerindex].text, newParams.texts[inerindex].pos.w, newParams.texts[inerindex].pos.h);
         }
         inerindex = inerindex -  newParams.texts.length; 
     }
