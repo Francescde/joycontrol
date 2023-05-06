@@ -40,6 +40,20 @@ function getCursorPosition(event) {
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
     let inerindex= index;
+    if(newParams.texts) {
+        if(newParams.texts.length>inerindex){
+            newParams.texts[inerindex].pos = {
+                w: x,
+                h: y
+            };
+            ctx.font = newParams.texts[inerindex].font!=null?newParams.texts[inerindex].font:"30px Comic Sans MS";
+            ctx.textAlign = "center";
+            ctx.fillStyle = newParams.texts[inerindex].writeColor!=null?newParams.texts[inerindex].writeColor:drawColor;
+
+            ctx.fillText(fig.text, fig.center.w, fig.center.h);
+        }
+        inerindex = inerindex -  newParams.texts.length; 
+    }
     if(newParams.images) {
         if(newParams.images.length>inerindex){
             newParams.images[inerindex].pos = {
@@ -82,7 +96,7 @@ function getCursorPosition(event) {
     ++index;
 
     if((newParams.add!=null?newParams.add.length:0)+figures.length+ 
-    (newParams.images!=null?newParams.images.length:0)==index){
+    (newParams.images!=null?newParams.images.length:0)+(newParams.texts!=null?newParams.texts.length:0)==index){
             $.ajax({
                     url: '/controllers',
                     type: 'post',
@@ -99,9 +113,15 @@ function getCursorPosition(event) {
 
 function showAlert() {
     let inerindex = index;
+    if(newParams.texts) {
+        if(newParams.texts.length>inerindex){
+            alert(newParams.texts[inerindex].text!=null?newParams.texts[inerindex].text:"text "+inerindex);
+        }
+        inerindex = inerindex -  newParams.texts.length; 
+    }
     if(newParams.images) {
         if(newParams.images.length>inerindex){
-            alert(newParams.images[inerindex].text!=null?newParams.images[inerindex].text:"image "+inerindex);
+            alert(newParams.images[inerindex].name!=null?newParams.images[inerindex].name:"image "+inerindex);
         }
         inerindex = inerindex -  newParams.images.length; 
     }
