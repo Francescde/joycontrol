@@ -54,7 +54,7 @@ function getCursorPosition(event) {
         }
         inerindex = inerindex -  newParams.texts.length; 
     }
-    if(newParams.images) {
+    if(newParams.images && inerindex>0) {
         if(newParams.images.length>inerindex){
             newParams.images[inerindex].pos = {
                 w: x,
