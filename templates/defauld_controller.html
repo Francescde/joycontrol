@@ -693,14 +693,6 @@ function clear(){
 			background.src = params.backgroundImage;
 			ctx.drawImage(background,0,0);   
 		}
-		if(params.texts) {
-			params.texts.forEach(txt => {
-				ctx.font = txt.font!=null?txt.font:"30px Comic Sans MS";
-				ctx.textAlign = "center";
-				ctx.fillStyle = txt.writeColor!=null?txt.writeColor:drawColor
-				ctx.fillText(txt.text, txt.pos.w, txt.pos.h);
-			});  
-		}
 		if(params.images) {
 			params.images.forEach(img => {
 				var imgCan = new Image();
@@ -711,6 +703,14 @@ function clear(){
 				else {
 					ctx.drawImage(imgCan,img.pos.w,img.pos.h);
 				}
+			});  
+		}
+		if(params.texts) {
+			params.texts.forEach(txt => {
+				ctx.font = txt.font!=null?txt.font:"30px Comic Sans MS";
+				ctx.textAlign = "center";
+				ctx.fillStyle = txt.writeColor!=null?txt.writeColor:drawColor
+				ctx.fillText(txt.text, txt.pos.w, txt.pos.h);
 			});  
 		}
 	}
