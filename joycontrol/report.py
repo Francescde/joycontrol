@@ -111,6 +111,24 @@ class InputReport:
         # HACK: Set all 0 for now
         for i in range(14, 50):
             self.data[i] = 0x00
+        #accelerator x
+        self.data[31] = 0x00
+        self.data[32] = 0x00
+        #accelerator y
+        self.data[33] = 0x00
+        self.data[34] = 0x00
+        #accelerator z
+        self.data[35] = 0x00
+        self.data[36] = 0x00
+        #gyro x
+        self.data[37] = 0x00
+        self.data[38] = 0x00
+        #gyro y
+        self.data[39] = 0x00
+        self.data[40] = 0x00
+        #gyro z
+        self.data[41] = 0x00
+        self.data[42] = 0x00
 
     def set_ir_nfc_data(self, data):
         if len(data) > 313:
