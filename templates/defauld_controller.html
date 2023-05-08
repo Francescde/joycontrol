@@ -659,7 +659,7 @@ function ol() {
 
     canvas.addEventListener('mousedown', function(e) {
 		event.preventDefault();
-        getCursorPosition(e)
+		touches = event.touches;
     });
 
 	canvas.addEventListener('touchmove', function(event) {
