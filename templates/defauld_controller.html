@@ -669,6 +669,9 @@ function ol() {
 	});
 };
 
+let images = [];
+let blackgroundImage = null;
+
 function clear(){
 	ctx.clearRect(0, 0, w, h);
 	let drawColor = "#000000";
@@ -693,25 +696,44 @@ function clear(){
 			drawColor = params.drawColor;
 		}
 		if(params.backgroundImage) {
-			var background = new Image();
-			background.onload=function(){
-				ctx.drawImage(background,0,0);
-			} 
-			background.src = params.backgroundImage;
+			if(blackgroundImage==null) {
+				blackgroundImage = new Image();
+				blackgroundImage.onload=function(){
+					ctx.drawImage(blackgroundImage,0,0);
+				} 
+				blackgroundImage.src = params.backgroundImage;
+			}
+			else {
+				ctx.drawImage(blackgroundImage,0,0);
+			}
 		}
 		if(params.images) {
-			params.images.forEach(img => {
-				var imgCan = new Image();
-				imgCan.onload = function() {
+			if(images.length==0) {
+				params.images.forEach(img => {
+					var imgCan = new Image();
+					imgCan.onload = function() {
+						if(img.width!=null && img.height!=null){
+							ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
+						}
+						else {
+							ctx.drawImage(imgCan,img.pos.w,img.pos.h);
+						}
+					}
+					imgCan.src = img.url;
+					images.push(imgCan);
+				});
+			}
+			else {
+				for(let imgIn=0; imgIn<params.images.length;++imgIn){
+					let img = params.images[imgIn];
 					if(img.width!=null && img.height!=null){
-						ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
+						ctx.drawImage(images[imgIn],img.pos.w,img.pos.h, img.width, img.height);
 					}
 					else {
-						ctx.drawImage(imgCan,img.pos.w,img.pos.h);
+						ctx.drawImage(images[imgIn],img.pos.w,img.pos.h);
 					}
 				}
-				imgCan.src = img.url;
-			});
+			}
 		}
 		if(params.texts) {
 			params.texts.forEach(txt => {
