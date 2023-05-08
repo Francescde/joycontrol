@@ -49,13 +49,15 @@ function getCursorPosition(event) {
             };
             let img = newParams.images[inerindex];
             var imgCan = new Image();
+			imgCan.onload = function() {
+				if(img.width!=null && img.height!=null){
+					ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
+				}
+				else {
+					ctx.drawImage(imgCan,img.pos.w,img.pos.h);
+				}
+			}
             imgCan.src = img.url;
-            if(img.width!=null && img.height!=null){
-                ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
-            }
-            else {
-                ctx.drawImage(imgCan,img.pos.w,img.pos.h);
-            }
         }
         inerindex = inerindex -  newParams.images.length; 
     }
@@ -429,8 +431,10 @@ function setPositions(){
     }
     if(params.backgroundImage) {
         var background = new Image();
+		background.onload=function(){
+			ctx.drawImage(background,0,0);
+		} 
         background.src = params.backgroundImage;
-        ctx.drawImage(background,0,0);   
     }
     if(params.drawColor){
         drawColor = params.drawColor;

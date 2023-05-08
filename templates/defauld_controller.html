@@ -694,19 +694,23 @@ function clear(){
 		}
 		if(params.backgroundImage) {
 			var background = new Image();
+			background.onload=function(){
+				ctx.drawImage(background,0,0);
+			} 
 			background.src = params.backgroundImage;
-			ctx.drawImage(background,0,0);   
 		}
 		if(params.images) {
 			params.images.forEach(img => {
 				var imgCan = new Image();
+				imgCan.onload = function() {
+					if(img.width!=null && img.height!=null){
+						ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
+					}
+					else {
+						ctx.drawImage(imgCan,img.pos.w,img.pos.h);
+					}
+				}
 				imgCan.src = img.url;
-				if(img.width!=null && img.height!=null){
-					ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
-				}
-				else {
-					ctx.drawImage(imgCan,img.pos.w,img.pos.h);
-				}
 			});  
 		}
 		if(params.texts) {
