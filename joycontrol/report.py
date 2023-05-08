@@ -111,24 +111,63 @@ class InputReport:
         # HACK: Set all 0 for now
         for i in range(14, 50):
             self.data[i] = 0x00
+        #https://github.com/dekuNukem/Nintendo_Switch_Reverse_Engineering/blob/master/imu_sensor_notes.md
         #accelerator x
+        self.data[13] = 0x00
+        self.data[14] = 0x00
+        #accelerator y
+        self.data[15] = 0x00
+        self.data[16] = 0x00
+        #accelerator z
+        self.data[17] = 0x00
+        self.data[18] = 0x00
+        #gyro x
+        self.data[19] = 0x00
+        self.data[20] = 0x00
+        #gyro y
+        self.data[21] = 0x00
+        self.data[22] = 0x00
+        #gyro z
+        self.data[23] = 0x00
+        self.data[24] = 0x00
+        #5ms later
+        #accelerator x
+        self.data[25] = 0x00
+        self.data[26] = 0x00
+        #accelerator y
+        self.data[27] = 0x00
+        self.data[28] = 0x00
+        #accelerator z
+        self.data[29] = 0x00
+        self.data[30] = 0x00
+        #gyro x
         self.data[31] = 0x00
         self.data[32] = 0x00
-        #accelerator y
+        #gyro y
         self.data[33] = 0x00
         self.data[34] = 0x00
-        #accelerator z
+        #gyro z
         self.data[35] = 0x00
         self.data[36] = 0x00
-        #gyro x
+        #5ms later
+        #accelerator x
         self.data[37] = 0x00
         self.data[38] = 0x00
-        #gyro y
+        #accelerator y
         self.data[39] = 0x00
         self.data[40] = 0x00
-        #gyro z
+        #accelerator z
         self.data[41] = 0x00
         self.data[42] = 0x00
+        #gyro x
+        self.data[43] = 0x00
+        self.data[44] = 0x00
+        #gyro y
+        self.data[45] = 0x00
+        self.data[46] = 0x00
+        #gyro z
+        self.data[47] = 0x00
+        self.data[48] = 0x00
 
     def set_ir_nfc_data(self, data):
         if len(data) > 313:
