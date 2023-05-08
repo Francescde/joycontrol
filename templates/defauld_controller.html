@@ -657,6 +657,11 @@ function ol() {
 		touches = event.touches;
 	});
 
+    canvas.addEventListener('mousedown', function(e) {
+		event.preventDefault();
+        getCursorPosition(e)
+    });
+
 	canvas.addEventListener('touchmove', function(event) {
 	event.preventDefault();
 	touches = event.touches;
@@ -739,10 +744,7 @@ function clear(){
 			ctx.fill();
 		}
 		ctx.stroke();
-		ctx.font = textFont;
-		if (fig.textFont) {
-			ctx.font = fig.textFont;
-		}
+		ctx.font = fig.textFont!=null? fig.textFont : textFont;
 		ctx.textAlign = "center";
 		ctx.fillStyle = drawColor;
 		if (fig.writeColor) {
