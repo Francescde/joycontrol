@@ -30,6 +30,7 @@ let figures = [];
 
 let drawColor = "#000000";
 let analogLimitsColor = "#00FF00";
+let textFont = "30px Comic Sans MS";
 let itemsFillColor = "#FFFFFF";
 let params = JSON.parse({{ params | tojson }});
 let newParams = JSON.parse({{ params | tojson }});
@@ -64,7 +65,7 @@ function getCursorPosition(event) {
                 w: x,
                 h: y
             };
-            ctx.font = newParams.texts[inerindex].font!=null?newParams.texts[inerindex].font:"30px Comic Sans MS";
+            ctx.font = newParams.texts[inerindex].font!=null?newParams.texts[inerindex].font:textFont;
             ctx.textAlign = "center";
             ctx.fillStyle = newParams.texts[inerindex].writeColor!=null?newParams.texts[inerindex].writeColor:drawColor;
 
@@ -161,7 +162,7 @@ function drawfig(fig){
         ctx.fill();
     }
     ctx.stroke();
-    ctx.font = "30px Comic Sans MS";
+	ctx.font = fig.textFont!=null? fig.textFont : textFont;
     ctx.textAlign = "center";
     ctx.fillStyle = drawColor;
     if (fig.writeColor) {
@@ -416,6 +417,9 @@ function setPositions(){
 		];
     if(params.analogLimitsColor){
         analogLimitsColor = params.analogLimitsColor;
+    }
+    if(params.textFont){
+        textFont = params.textFont;
     }
     if(params.itemsFillColor){
         itemsFillColor = params.itemsFillColor;

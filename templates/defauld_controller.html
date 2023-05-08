@@ -674,10 +674,14 @@ function clear(){
 	let drawColor = "#000000";
 	let analogLimitsColor = "#00FF00";
 	let itemsFillColor = "#FFFFFF";
+	let textFont = "30px Comic Sans MS";
 	if("{{params}}"!=""){
 		const params = JSON.parse({{ params | tojson }});
 		if(params.analogLimitsColor){
 			analogLimitsColor = params.analogLimitsColor;
+		}
+		if(params.textFont){
+			textFont = params.textFont;
 		}
 		if(params.itemsFillColor){
 			itemsFillColor = params.itemsFillColor;
@@ -707,7 +711,7 @@ function clear(){
 		}
 		if(params.texts) {
 			params.texts.forEach(txt => {
-				ctx.font = txt.font!=null?txt.font:"30px Comic Sans MS";
+				ctx.font = txt.font!=null?txt.font:textFont;
 				ctx.textAlign = "center";
 				ctx.fillStyle = txt.writeColor!=null?txt.writeColor:drawColor
 				ctx.fillText(txt.text, txt.pos.w, txt.pos.h);
@@ -735,7 +739,10 @@ function clear(){
 			ctx.fill();
 		}
 		ctx.stroke();
-		ctx.font = "30px Comic Sans MS";
+		ctx.font = textFont;
+		if (fig.textFont) {
+			ctx.font = fig.textFont;
+		}
 		ctx.textAlign = "center";
 		ctx.fillStyle = drawColor;
 		if (fig.writeColor) {
