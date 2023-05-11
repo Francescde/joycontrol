@@ -430,7 +430,7 @@ function goTo(link){
 
 
 function analogMove(key, selected, actionObject){
-	const maxAnalog = 4096;
+	const maxAnalog = 4096/ (actionObject[key].figure.dividePrecisionBy?actionObject[key].figure.dividePrecisionBy:1);
 	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/actionObject[key].figure.square.lateral)*maxAnalog;
 	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/actionObject[key].figure.square.lateral)*maxAnalog;
 	if(actionObject[key].figure.reverseW){
@@ -534,14 +534,16 @@ function executeScript(figure, selected, actionObject){
    				timeout: 500
 			});
 		} else {
-			$.get("/kill_script", function (data, status) {
-				solved = solved + 1;
-				if(solved >= todo.length){
-					previusSelected = selected;
-					previusActionObject = actionObject;
-					updateStarted = false;
-				}
-			});
+			if(!figure.unstopable){
+				$.get("/kill_script", function (data, status) {
+					solved = solved + 1;
+					if(solved >= todo.length){
+						previusSelected = selected;
+						previusActionObject = actionObject;
+						updateStarted = false;
+					}
+				});
+			}
 		}
 	});
 }

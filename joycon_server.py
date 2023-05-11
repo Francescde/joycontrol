@@ -308,6 +308,15 @@ def get_controller(controllerName):
     })
 
 
+@app.route('/delete_controller/<controllerName>')
+def delete_controller(controllerName):
+    path = os.path.join('controllers', controllerName+'.json')  
+    os.remove(path)
+    return jsonify({
+        'controllerName': controllerName
+    })
+
+
 @app.route('/controllers', methods=['POST'])
 def add_controllers():
     content = request.get_json()
@@ -352,6 +361,15 @@ def add_scripts():
     with open(join(folderpath, filename), 'w') as outfile:
         outfile.write(file)
     return jsonify({'message': 'Created'})
+
+
+@app.route('/delete_script/<controllerName>')
+def delete_script(controllerName):
+    path = os.path.join('rjctScripts', controllerName+'.txt')  
+    os.remove(path)
+    return jsonify({
+        'controllerName': controllerName
+    })
 
 
 if __name__ == '__main__':
