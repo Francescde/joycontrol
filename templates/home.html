@@ -80,9 +80,10 @@
                     for (let i = 0; i < data.length; i++) {
                         let stringControllerDiv = "<div class='d-flex justify-content-between'>";
                         stringControllerDiv +="<a href='/controller/" + data[i].replace('.json','') + "'>" + data[i] + "</a>";
+                        stringControllerDiv +="<div>"
                         stringControllerDiv +="<button type=\"button\" class=\"btn btn-danger\" onclick='deleteController(\"" + data[i].replace('.json','') + "\")'>delete</button>";
                         stringControllerDiv +="<button type=\"button\" class=\"btn btn-primary\" onclick='editController(\"" + data[i].replace('.json','') + "\")'>edit</button>";
-                        stringControllerDiv +="</div>"
+                        stringControllerDiv +="</div></div>"
                         $("#controllerList").append(stringControllerDiv);
                     }
                 }
@@ -100,8 +101,8 @@
                     console.log("Data: " + data + "\nStatus: " + status);
                     for (let i = 0; i < data.length; i++) {
                         let stringControllerDiv = "<div class='d-flex justify-content-between'>";
-                        stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-primary\" onclick='editScript(\"" + data[i].replace('.txt','') + "\")'>"+data[i]+"</button>";
-                        stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-danger\" onclick='deleteScript(\"" + data[i].replace('.txt','') + "\")'>"+data[i]+"</button>";
+                        stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-primary\" onclick='editScript(\"" + data[i].replace('.txt','') + "\")'>edit:"+data[i]+"</button>";
+                        stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-danger\" onclick='deleteScript(\"" + data[i].replace('.txt','') + "\")'>delete:"+data[i]+"</button>";
                         stringControllerDiv +="</div>"
                         $("#scripList").append(stringControllerDiv);
                     }
