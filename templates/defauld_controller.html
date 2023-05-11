@@ -470,7 +470,7 @@ function analogMove(key, selected, actionObject){
 			vertical: Math.round(y),
 			horizontal: Math.round(x)
 		}),
-   		timeout: 50
+   		timeout: 500
 	});
 }
 
@@ -499,7 +499,7 @@ function analogRelease(key, selected, actionObject){
 			}
 		},
 		data: JSON.stringify({line: comand}),
-   		timeout: 50
+   		timeout: 500
 	});
 }
 
@@ -531,7 +531,7 @@ function executeScript(figure, selected, actionObject){
 					}
 				},
 				data: JSON.stringify({script: script, nfc:"", repeats: figure.repeats?figure.repeats:1}),
-   				timeout: 50
+   				timeout: 500
 			});
 		} else {
 			$.get("/kill_script", function (data, status) {
@@ -599,7 +599,7 @@ function sendComandHolder(cmd, selected, actionObject) {
 				}
 			},
 			data: JSON.stringify({line: 'hold ' + cmd}),
-   		timeout: 50
+   		timeout: 500
 		});
 	} else {
 		$.ajax({
@@ -626,7 +626,7 @@ function sendComandHolder(cmd, selected, actionObject) {
 				}
 			},
 			data: JSON.stringify({line: 'release ' + cmd}),
-   		timeout: 50
+   		timeout: 500
 		});
 	}
 }
@@ -655,7 +655,7 @@ function sendDefauldHold(cmd, selected, actionObject) {
 			}
 		},
 		data: JSON.stringify({line: 'hold ' + cmd}),
-   		timeout: 50
+   		timeout: 500
 	});
 }
 
@@ -683,7 +683,7 @@ function sendDefauldRelease(cmd, selected, actionObject) {
 			}
 		},
 		data: JSON.stringify({line: 'release ' + cmd}),
-   		timeout: 50
+   		timeout: 500
 	});
 }
 
