@@ -457,6 +457,14 @@ function analogMove(key, selected, actionObject){
 				updateStarted = false;
 			}
 		},
+		error: function(data, status) {
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
 		data: JSON.stringify({
 			key: actionObject[key].figure.analog.toLowerCase(),
 			vertical: Math.round(y),
@@ -475,6 +483,14 @@ function analogRelease(key, selected, actionObject){
 		contentType: 'application/json',
 		complete: function (data, status) {
 			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		error: function(data, status) {
 			solved = solved + 1;
 			if(solved >= todo.length){
 				previusSelected = selected;
@@ -506,8 +522,16 @@ function executeScript(figure, selected, actionObject){
 						updateStarted = false;
 					}
 				},
+				error: function(data, status) {
+					solved = solved + 1;
+					if(solved >= todo.length){
+						previusSelected = selected;
+						previusActionObject = actionObject;
+						updateStarted = false;
+					}
+				},
 				data: JSON.stringify({script: script, nfc:"", repeats: figure.repeats?figure.repeats:1}),
-   		timeout: 50
+   				timeout: 50
 			});
 		} else {
 			$.get("/kill_script", function (data, status) {
@@ -622,6 +646,14 @@ function sendDefauldHold(cmd, selected, actionObject) {
 				updateStarted = false;
 			}
 		},
+		error: function(data, status) {
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
 		data: JSON.stringify({line: 'hold ' + cmd}),
    		timeout: 50
 	});
@@ -635,6 +667,14 @@ function sendDefauldRelease(cmd, selected, actionObject) {
 		contentType: 'application/json',
 		complete: function (data, status) {
 			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		error: function(data, status) {
 			solved = solved + 1;
 			if(solved >= todo.length){
 				previusSelected = selected;
