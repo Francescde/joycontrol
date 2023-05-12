@@ -833,9 +833,6 @@ function clear(){
 			if(fig.analogLimitsColor){
 				ctx.strokeStyle = fig.analogLimitsColor;
 			}
-			ctx.beginPath();
-			ctx.rect(fig.center.w-radius, fig.center.h-radius,
-				2*radius, 2*radius);
 			fig.dividePrecisionBy = fig.dividePrecisionBy!=null?fig.dividePrecisionBy:1; 
 			fig.square = {
 					min: {
@@ -844,6 +841,9 @@ function clear(){
 					},
 				lateral: 2*radius*fig.dividePrecisionBy
 			};
+			ctx.beginPath();
+			ctx.rect(fig.square.min.x, fig.square.min.y,
+				fig.square.lateral, fig.square.lateral);
 			ctx.stroke();
 		}
 	});
