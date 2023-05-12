@@ -429,9 +429,10 @@ function goTo(link){
 
 
 function analogMove(key, selected, actionObject){
-	const maxAnalog = 4096/ (actionObject[key].figure.dividePrecisionBy?actionObject[key].figure.dividePrecisionBy:1);
-	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/actionObject[key].figure.square.lateral)*maxAnalog;
-	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/actionObject[key].figure.square.lateral)*maxAnalog;
+	const maxAnalog = 4096;
+	const precission = (actionObject[key].figure.dividePrecisionBy?actionObject[key].figure.dividePrecisionBy:1)
+	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/(actionObject[key].figure.square.lateral))*maxAnalog;
+	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/(actionObject[key].figure.square.lateral))*maxAnalog;
 	if(actionObject[key].figure.reverseW){
 		x = maxAnalog - x;
 	}
@@ -542,6 +543,13 @@ function executeScript(figure, selected, actionObject){
 						updateStarted = false;
 					}
 				});
+			} else {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
 			}
 		}
 	});
