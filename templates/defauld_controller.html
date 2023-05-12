@@ -430,7 +430,6 @@ function goTo(link){
 
 function analogMove(key, selected, actionObject){
 	const maxAnalog = 4096;
-	const precission = (actionObject[key].figure.dividePrecisionBy?actionObject[key].figure.dividePrecisionBy:1)
 	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/(actionObject[key].figure.square.lateral))*maxAnalog;
 	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/(actionObject[key].figure.square.lateral))*maxAnalog;
 	if(actionObject[key].figure.reverseW){
@@ -837,10 +836,11 @@ function clear(){
 			ctx.beginPath();
 			ctx.rect(fig.center.w-radius, fig.center.h-radius,
 				2*radius, 2*radius);
+			fig.dividePrecisionBy = fig.dividePrecisionBy!=null?fig.dividePrecisionBy:1; 
 			fig.square = {
 					min: {
-						x: fig.center.w-radius,
-						y: fig.center.h-radius
+						x: fig.center.w-(radius*fig.dividePrecisionBy),
+						y: fig.center.h-(radius*fig.dividePrecisionBy)
 					},
 				lateral: 2*radius
 			};
