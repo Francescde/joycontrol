@@ -67,8 +67,148 @@ The controller config uses three arrays substitute, add, and remove these three 
 
 It also allow to set a background Image(backgroundImage), set some images and resize them(images), the color to draw the items(drawColor), the background Color(backgroundColor), the items Fill Color(itemsFillColor) and the analog Limits Color(analogLimitsColor)
 
+example of controller
+```json
+{
+   "add": [
+      {
+         "actionType": 5,
+         "borderColor": "#FF0000",
+         "center": {
+            "h": 85,
+            "w": 84
+         },
+         "fillColor": "#000000",
+         "radius": 21.90625,
+         "repeats": -1,
+         "script": "snow 2",
+         "selectedColor": "#FFFFFF",
+         "text": "script",
+         "textFont": "32px Brush Script MT",
+         "writeColor": "#00FF00"
+      }
+   ],
+   "analogLimitsColor": "#4CDA64",
+   "backgroundColor": "#DDE4EC",
+   "drawColor": "#007AFF",
+   "filename": "someScript2",
+   "images": [
+      {
+         "height": 102.4,
+         "name": "raspberry",
+         "pos": {
+            "h": 47,
+            "w": 281
+         },
+         "url": "/static/raspberry.png",
+         "width": 68.2
+      },
+      {
+         "height": 76.4,
+         "name": "joy con left",
+         "pos": {
+            "h": 83,
+            "w": 173
+         },
+         "url": "/static/joy-con-left.png",
+         "width": 102.4
+      },
+      {
+         "height": 76.4,
+         "name": "joy con right",
+         "pos": {
+            "h": 71,
+            "w": 490
+         },
+         "url": "/static/joy-con-right.png",
+         "width": 76.4
+      },
+      {
+         "height": 40,
+         "name": "trol",
+         "pos": {
+            "h": 189,
+            "w": 308
+         },
+         "url": "/static/trol.png",
+         "width": 33
+      }
+   ],
+   "itemsFillColor": "#E3EDE5",
+   "readInterval": 10,
+   "remove": [
+      "HLZ",
+      "LZ",
+      "HL",
+      "L",
+      "R",
+      "HR",
+      "RZ",
+      "HRZ",
+      "JL",
+      "JLP",
+      "X",
+      "B",
+      "Y",
+      "A",
+      "↑",
+      "↓",
+      "←",
+      "→",
+      "JR",
+      "JRP",
+      "-",
+      "+",
+      "H"
+   ],
+   "substitute": [
+      {
+         "actionType": 4,
+         "center": {
+            "h": 67,
+            "w": 301
+         },
+         "link": "/view/home",
+         "radius": 18.4375,
+         "selectedColor": "#FF0000",
+         "text": "#"
+      }
+   ],
+   "texts": [
+      {
+         "font": "32px Brush Script MT",
+         "pos": {
+            "h": 44,
+            "w": 297
+         },
+         "text": "Raspi"
+      },
+      {
+         "pos": {
+            "h": 81,
+            "w": 223
+         },
+         "text": "Joy"
+      },
+      {
+         "pos": {
+            "h": 79,
+            "w": 361
+         },
+         "text": "Con"
+      },
+      {
+         "pos": {
+            "h": 108,
+            "w": 289
+         },
+         "text": "Trol"
+      }
+   ]
+}
+```
 example of a defauld array on an iphone mini
-```bash
+```json
 [{center: {w: 59.333333333333336, h: 24.333333333333332}, radius: 24.333333333333332, text: "HLZ", actionType: 2, action: "ZL"},
 {center: {w: 118.66666666666667, h: 24.333333333333332}, radius: 24.333333333333332, text: "LZ", actionType: 0, action: "ZL"},
 {center: {w: 178, h: 24.333333333333332}, radius: 24.333333333333332, text: "HL", actionType: 2, action: "L"},
@@ -95,12 +235,62 @@ example of a defauld array on an iphone mini
 {center: {w: 356, h: 24.333333333333332}, radius: 12.166666666666666, text: "#", actionType: 4, selectedColor: "#FF0000"}]
 ```
 Each element of the atribute defines the position of the button and the action it will perform. The action it will perfrom is defined by actionType:
-holder: actionType value 2. On press it holds the button to release you have to press the button again. Required field action
-analog: actionType value 1. It sends an action for one of the joystics. Required field analog. Optional fields reverseW, reverseH
-defauld: actionType value 0. On press it holds the button to release you have to unpress the button like any button. Required field action
-connecter: actionType value 3. On press it will try to connect the raspberry to the nintendo swich if it fails restart the script.
-link: actionType value 4. On press it will change the view to another one. Can be ussed to link controllers or to navigate to home for example. Required field link
+- holder: actionType value 2. On press it holds the button to release you have to press the button again. Required field action
+```json
+{
+  "center": {
+    "w": 59.333333333333336,
+    "h": 24.333333333333332
+  },
+  "radius": 24.333333333333332,
+  "text": "HLZ",
+  "actionType": 2,
+  "action": "ZL"
+}
 ```
+- analog: actionType value 1. It sends an action for one of the joystics. Required field analog. Optional fields reverseW, reverseH, scalePrecisionSquare
+```json
+{
+  "center": {
+    "w": 474.6666666666667,
+    "h": 231.16666666666666
+  },
+  "radius": 48.66666666666667,
+  "text": "JR",
+  "actionType": 1,
+  "analog": "R",
+  "reverseW": false,
+  "reverseH": true
+}
+```
+- defauld: actionType value 0. On press it holds the button to release you have to unpress the button like any button. Required field action
+```json
+{
+  "center":{
+    "w": 563.6111111111112,
+    "h": 231.16666666666666
+  },
+  "radius": 20.27777777777778,
+  "text": "JRP",
+  "actionType": 0,
+  "action": "r_stick"
+}
+```
+- connecter: actionType value 3. On press it will try to connect the raspberry to the nintendo swich if it fails restart the script.
+```json
+{
+  "center": {
+    "w": 356,
+    "h": 24.333333333333332
+  },
+  "radius": 12.166666666666666,
+  "text": "#",
+  "actionType": 4,
+  "selectedColor": "#FF0000"
+}
+```
+- link: actionType value 4. On press it will change the view to another one. Can be ussed to link controllers or to navigate to home for example. Required field link
+```json
   {
       "center": {
           "w": 91.90625,
@@ -112,7 +302,7 @@ link: actionType value 4. On press it will change the view to another one. Can b
   }
 ```
 script: actionType value 5. On press it execute an script repeats times(-1 forever). To stop it you can press the button again. Required field script. Optional field repeats
-```
+```json
  {
       "center": {
           "w": 21.90625,
