@@ -833,13 +833,13 @@ function clear(){
 			if(fig.analogLimitsColor){
 				ctx.strokeStyle = fig.analogLimitsColor;
 			}
-			fig.dividePrecisionBy = fig.dividePrecisionBy!=null?fig.dividePrecisionBy:1; 
+			fig.scalePrecisionSquare = fig.scalePrecisionSquare!=null?fig.scalePrecisionSquare:1; 
 			fig.square = {
 					min: {
-						x: fig.center.w-(radius*fig.dividePrecisionBy),
-						y: fig.center.h-(radius*fig.dividePrecisionBy)
+						x: fig.center.w-(radius*fig.scalePrecisionSquare),
+						y: fig.center.h-(radius*fig.scalePrecisionSquare)
 					},
-				lateral: 2*radius*fig.dividePrecisionBy
+				lateral: 2*radius*fig.scalePrecisionSquare
 			};
 			ctx.beginPath();
 			ctx.rect(fig.square.min.x, fig.square.min.y,
