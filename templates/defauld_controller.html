@@ -469,7 +469,7 @@ function analogMove(key, selected, actionObject){
 			vertical: Math.round(y),
 			horizontal: Math.round(x)
 		}),
-   		timeout: 500
+   		timeout: timeout
 	});
 }
 
@@ -498,7 +498,7 @@ function analogRelease(key, selected, actionObject){
 			}
 		},
 		data: JSON.stringify({line: comand}),
-   		timeout: 500
+   		timeout: timeout
 	});
 }
 
@@ -530,7 +530,7 @@ function executeScript(figure, selected, actionObject){
 					}
 				},
 				data: JSON.stringify({script: script, nfc:"", repeats: figure.repeats?figure.repeats:1}),
-   				timeout: 500
+   				timeout: timeout
 			});
 		} else {
 			if(!figure.unstopable){
@@ -607,7 +607,7 @@ function sendComandHolder(cmd, selected, actionObject) {
 				}
 			},
 			data: JSON.stringify({line: 'hold ' + cmd}),
-   		timeout: 500
+   		timeout: timeout
 		});
 	} else {
 		$.ajax({
@@ -634,7 +634,7 @@ function sendComandHolder(cmd, selected, actionObject) {
 				}
 			},
 			data: JSON.stringify({line: 'release ' + cmd}),
-   		timeout: 500
+   		timeout: timeout
 		});
 	}
 }
@@ -663,7 +663,7 @@ function sendDefauldHold(cmd, selected, actionObject) {
 			}
 		},
 		data: JSON.stringify({line: 'hold ' + cmd}),
-   		timeout: 500
+   		timeout: timeout
 	});
 }
 
@@ -691,10 +691,11 @@ function sendDefauldRelease(cmd, selected, actionObject) {
 			}
 		},
 		data: JSON.stringify({line: 'release ' + cmd}),
-   		timeout: 500
+   		timeout: timeout
 	});
 }
 
+var timeout = 500;
 
 function ol() {
 	canvas = document.getElementById('canvas');
@@ -703,6 +704,7 @@ function ol() {
 	if("{{params}}"!=""){
 			const params = JSON.parse({{ params | tojson }});
 			interval = params.readInterval != null ? params.readInterval : 10;
+			timeout = params.timeout !=null ? params.timeout: 500;
 	}
 
 	timer = setInterval(update, interval);

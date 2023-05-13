@@ -264,7 +264,8 @@ async def set_controller_objects(controllerName):
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
     data = json.load(f)
-    data['readInterval'] = readInterval
+    if 'readInterval' not in data.keys():
+        data['readInterval'] = readInterval
     data['filename'] = controllerName
     return await render_template('set_controller_positions.html', params=json.dumps(data))
 
@@ -275,7 +276,8 @@ async def display_controller(controllerName):
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
     data = json.load(f)
-    data['readInterval'] = readInterval
+    if 'readInterval' not in data.keys():
+        data['readInterval'] = readInterval
     return await render_template('defauld_controller.html', params=json.dumps(data))
 
 
