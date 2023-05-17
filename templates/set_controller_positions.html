@@ -118,26 +118,26 @@ function showAlert() {
     let inerindex = index;
     if(newParams.images && inerindex>=0) {
         if(newParams.images.length>inerindex){
-            alert(newParams.images[inerindex].name!=null?newParams.images[inerindex].name:"image "+inerindex);
+            alert("image:" + newParams.images[inerindex].name!=null?newParams.images[inerindex].name:"image "+inerindex);
         }
         inerindex = inerindex -  newParams.images.length; 
     }
     if(newParams.texts && inerindex>=0) {
         if(newParams.texts.length>inerindex){
-            alert(newParams.texts[inerindex].text!=null?newParams.texts[inerindex].text:"text "+inerindex);
+            alert("text:" + newParams.texts[inerindex].text!=null?newParams.texts[inerindex].text:"text "+inerindex);
         }
         inerindex = inerindex -  newParams.texts.length; 
     }
     if(inerindex>=0){
         if(figures.length>inerindex){
             fig = figures[inerindex];
-            alert(fig.text);
+            alert("default button:" + fig.text);
         }
     }
     inerindex = inerindex -  figures.length; 
     if(inerindex>=0) {
         if(newParams.add.length>inerindex){
-            alert(newParams.add[inerindex].text);
+            alert("new button::" + newParams.add[inerindex].text);
         }
     }
 }
