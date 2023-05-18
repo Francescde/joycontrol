@@ -695,7 +695,7 @@ function sendDefauldRelease(cmd, selected, actionObject) {
 	});
 }
 
-var timeout = 500;
+var timeout = 5000;
 
 function ol() {
 	canvas = document.getElementById('canvas');
@@ -704,7 +704,7 @@ function ol() {
 	if("{{params}}"!=""){
 			const params = JSON.parse({{ params | tojson }});
 			interval = params.readInterval != null ? params.readInterval : 10;
-			timeout = params.timeout !=null ? params.timeout: 500;
+			timeout = params.timeout !=null ? params.timeout: timeout;
 	}
 
 	timer = setInterval(update, interval);
