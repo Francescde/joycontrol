@@ -1,0 +1,24 @@
+{
+    "remove": ["JL"],
+    "substitute": [{
+        "center": {
+            "w": 91.90625,
+            "h": 46.09375
+        },
+        "text": "#",
+        "actionType": 4,
+        "link": "/view/home"
+    }],
+    "add": [
+        {
+            "center": {
+                "w": 21.90625,
+                "h": 863.09375
+            },
+            "radius": 21.90625,
+            "text": "link",
+            "actionType": 4,
+            "link": "/view/home"
+        }
+    ]
+}

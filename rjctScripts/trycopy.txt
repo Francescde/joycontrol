@@ -1,0 +1,42 @@
+sleep 1
+a
+sleep 1
+b
+sleep 1
+hold up
+sleep 1
+stick r left
+sleep 3.5
+stick r center
+sleep 1
+stick r right
+sleep 0.2
+stick r center; release up
+sleep 1
+l
+sleep 3
+a
+sleep 3
+hold zl
+sleep 0.05
+zr && a
+sleep 3
+release zl
+sleep 1
+hold zl
+x
+sleep 0.2
+b
+sleep 0.3
+release zl
+plus
+sleep 1
+a
+sleep 2
+a
+sleep 1
+plus
+hold zr
+hold b
+stick l up
+sleep 600

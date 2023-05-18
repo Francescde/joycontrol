@@ -1,0 +1,3 @@
+ stick l h 0 && stick r v 1200
+ r
+ sleep 10

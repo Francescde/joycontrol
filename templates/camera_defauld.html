@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+<title>controller</title>
+<script src="/static/jquery.min.js" type="text/javascript"></script>
+</head>
+<body>
+  <video id="video"></video>
+  <canvas id="canvas"></canvas>
+    <script type="text/javascript">
+      // This will copy the contents of video element to a canvas element
+        var canvasEl = document.getElementById('canvas');
+        console.log(canvasEl);
+        var context = canvasEl.getContext('2d');
+        var videoEl = document.getElementById('video');
+      
+      
+      function updateCanvas() {
+        context.drawImage(videoEl, 0, 0, canvasEl.width, canvasEl.height);
+        
+        window.requestAnimationFrame(updateCanvas);
+      }
+      
+        (navigator.mediaDevices?navigator.mediaDevices:navigator).getUserMedia(
+          { video: true }, // Ask for video
+          (stream) => {
+            videoEl.srcObject = stream;
+            videoEl.play();
+            
+            window.requestAnimationFrame(updateCanvas);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
+      </script>
+</body>
+</html>

@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+<style type="text/css">
+	*{
+		touch-action: manipulation;
+	}
+body { margin: 0px; overflow: hidden; }
+canvas { border: 1px solid black; }
+</style>
+<title>controller</title>
+<script src="/static/jquery.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+var canvas;
+var ctx;
+var w = 0;
+var h = 0;
+
+const ActionType = {
+	holder: 2,
+	analog: 1,
+	defauld: 0,
+	connecter: 3,
+	link: 4,
+	script: 5
+}
+
+let figures = [];
+let figuresCopy = [];
+
+var timer;
+var updateStarted = false;
+var touches = [];
+var previusSelected = [];
+var previusActionObject = {};
+var previusAnalogObject = {};
+
+
+var solved = 0;
+var todo = [];
+
+function update() {
+	if (updateStarted) return;
+	updateStarted = true;
+
+	var nw = window.innerWidth;
+	var nh = window.innerHeight;
+
+	if ((w != nw) || (h != nh)) {
+		w = nw;
+		h = nh;
+		canvas.style.width = w+'px';
+		canvas.style.height = h+'px';
+		canvas.width = w;
+		canvas.height = h;
+	}
+
+	let drawTop = h/6;
+	let drawHeight = h-drawTop;
+	if(figures.length==0) {
+		figures = [{
+				center: {
+					w: w/12,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HLZ",
+				actionType: ActionType.holder,
+				action: "ZL"
+			},{
+				center: {
+					w: (w/12)*2,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "LZ",
+				actionType: ActionType.defauld,
+				action: "ZL"
+			},{
+				center: {
+					w: (w/12)*3,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HL",
+				actionType: ActionType.holder,
+				action: "L"
+			},{
+				center: {
+					w: (w/12)*4,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "L",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w-((w/12)*4),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "R",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w-((w/12)*3),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HR",
+				actionType: ActionType.holder,
+				action: "R"
+			},{
+				center: {
+					w: w-((w/12)*2),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "RZ",
+				actionType: ActionType.defauld,
+				action: "ZR"
+			},{
+				center: {
+					w: w-((w/12)),
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/2,(w/24)-2),
+				text: "HRZ",
+				actionType: ActionType.holder,
+				action: "ZR"
+			},{
+				center: {
+					w: w/7,
+					h: (drawHeight/2.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/4,
+				text: "JL",
+				actionType: ActionType.analog,
+				analog: "L",
+				reverseW: false,
+				reverseH: true,
+			},{
+				center: {
+					w: w/7,
+					h: (drawHeight/2.5)+drawTop+20+(Math.min(w,drawHeight)/12)+(Math.min(w,drawHeight)/4)
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "JLP",
+				actionType: ActionType.defauld,
+				action: "l_stick"
+			},{
+				center: {
+					w: (w/4)*3.5,
+					h: (drawHeight/4)+drawTop-Math.min(w,drawHeight)/8
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "X",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: (w/4)*3.5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/3
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "B",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: ((w/4)*3.5)-Math.min(w,drawHeight)/5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/9
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "Y",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: ((w/4)*3.5)+Math.min(w,drawHeight)/5,
+					h: (drawHeight/4)+drawTop+Math.min(w,drawHeight)/9
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "A",
+				actionType: ActionType.defauld
+			},{
+				center: {
+					w: w/3,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/6
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "↑",
+				actionType: ActionType.defauld,
+				action: "Up"
+			},{
+				center: {
+					w: w/3,
+					h: ((drawHeight/4)*3)+drawTop+Math.min(w,drawHeight)/8
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "↓",
+				actionType: ActionType.defauld,
+				action: "Down"
+			},{
+				center: {
+					w: (w/3)-Math.min(w,drawHeight)/6,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/32
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "←",
+				actionType: ActionType.defauld,
+				action: "Left"
+			},{
+				center: {
+					w: (w/3)+Math.min(w,drawHeight)/6,
+					h: ((drawHeight/4)*3)+drawTop-Math.min(w,drawHeight)/32
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "→",
+				actionType: ActionType.defauld,
+				action: "Right"
+			},{
+				center: {
+					w: (w/6)*4,
+					h: ((drawHeight/4)*3)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/5,
+				text: "JR",
+				actionType: ActionType.analog,
+				analog: "R",
+				reverseW: false,
+				reverseH: true,
+			},{
+				center: {
+					w: ((w/6)*4)+Math.min(w,drawHeight)/5+Math.min(w,drawHeight)/12+20,
+					h: ((drawHeight/4)*3)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "JRP",
+				actionType: ActionType.defauld,
+				action: "r_stick"
+			},{
+				center: {
+					w: w/2.5,
+					h: (drawHeight/3.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "-",
+				actionType: ActionType.defauld,
+				action: "minus"
+			},{
+				center: {
+					w: w/2+((w/2)-(w/2.5)),
+					h: (drawHeight/3.5)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "+",
+				actionType: ActionType.defauld,
+				action: "plus"
+			},{
+				center: {
+					w: w/2,
+					h: (drawHeight/6)+drawTop
+				},
+				radius: Math.min(w,drawHeight)/12,
+				text: "H",
+				actionType: ActionType.defauld,
+				action: "home"
+			},{
+				center: {
+					w: w/2,
+					h: drawTop/2
+				},
+				radius: Math.min(drawTop/4,(w/32)-2),
+				text: "#",
+				actionType: ActionType.connecter,
+				selectedColor: "#FF0000"
+			}
+		];
+		if("{{params}}"!=""){
+			const params = JSON.parse({{ params | tojson }});
+			const isLargeNumber = (element) => element > 13;
+			if(params.remove){
+				const newFigures = [];
+				for (let i = 0; i < figures.length; i++) {
+					const index = params.remove.findIndex((element) => element==figures[i].text);
+					if(index<0) {
+						newFigures.push(figures[i]);
+					}
+				}
+				figures = newFigures;
+			}
+			if(params.substitute) {
+				for (let i = 0; i < figures.length; i++) {
+					const index = params.substitute.findIndex((element) => element.text==figures[i].text);
+					if(index>-1) {
+						Object.keys(params.substitute[index]).forEach(function(key) {
+							figures[i][key] = params.substitute[index][key];
+						});
+					}
+				}
+			}
+			if(params.add){
+				params.add.forEach(function(obj){
+					figures.push(obj);
+				});
+			}
+
+		}
+		figuresCopy = JSON.parse(JSON.stringify(figures))
+	} else {
+		figures = JSON.parse(JSON.stringify(figuresCopy));
+	}
+	let selected = [];
+	let actionObject = {};
+	if(touches && touches.length>0) {
+		let i, len = touches.length;
+		for (i=0; i<len; i++) {
+			let touch = touches[i];
+			let minFigureIndex = -1;
+			let minDistance = Math.max(w,h);
+			figures.forEach((figure, figureIndex) => {
+				let distance = Math.sqrt(Math.pow(touch.pageX - figure.center.w, 2) + Math.pow(touch.pageY - figure.center.h, 2));
+				if(distance < figure.radius+20 && distance-figure.radius<minDistance){
+					minFigureIndex = figureIndex;
+					distance = distance-figure.radius;
+				}
+			});
+			if(minFigureIndex>=0){
+				figures[minFigureIndex].selected=true;
+				selected.push(figures[minFigureIndex].text);
+				actionObject[figures[minFigureIndex].text]={
+					figure: figures[minFigureIndex],
+					touch: touch
+				};
+			}
+		}
+	}
+	let unselected = [];
+
+	previusSelected.forEach(ps=>{
+		if(selected.filter(s=>s==ps).length==0){
+			unselected.push(ps);
+			actionObject[ps]=previusActionObject[ps];
+		}
+	});
+	clear();
+	if(selected.length>0 || unselected.length>0) {
+		todo = [];
+		selected.forEach(sel=>{
+			if(previusSelected.filter(ps=>ps==sel).length>0)  {
+				const previusObj = previusActionObject[sel]
+				if(actionObject[sel].figure.actionType==ActionType.analog && 
+				previusObj.touch.pageX != actionObject[sel].touch.pageX && 
+				previusObj.touch.pageY != actionObject[sel].touch.pageY){
+					todo.push({
+						selected: true,
+						actionObject: actionObject[sel]
+					});
+				}
+			} else {
+				todo.push({
+					selected: true,
+					actionObject: actionObject[sel]
+				});
+			}
+		});
+		unselected.forEach(sel=>{
+			if(actionObject[sel].figure.actionType == ActionType.analog || actionObject[sel].figure.actionType == ActionType.defauld ){
+				todo.push({
+					selected: false,
+					actionObject: actionObject[sel]
+				});
+			}
+		});
+		solved=0;
+		todo.forEach(t=>{
+			if(t.selected){
+				switch(t.actionObject.figure.actionType){
+					case ActionType.defauld:
+						let action = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
+						sendDefauldHold(action.toLowerCase(), selected, actionObject);
+						break;
+					case ActionType.holder:
+						let actionhold = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
+						sendComandHolder(actionhold.toLowerCase(), selected, actionObject)
+						break;
+					case ActionType.connecter:
+						Connection(selected, actionObject);
+						break;
+					case ActionType.analog:
+						analogMove(t.actionObject.figure.text, selected, actionObject);
+						break;
+					case ActionType.link:
+						goTo(t.actionObject.figure.link);
+						break;
+					case ActionType.script:
+						executeScript(t.actionObject.figure, selected, actionObject);
+						break;
+  					default:
+						solved = solved +1;
+						break;
+				}
+			} else {
+				switch(t.actionObject.figure.actionType){
+					case ActionType.defauld:
+						let action = t.actionObject.figure.action?t.actionObject.figure.action:t.actionObject.figure.text;
+						sendDefauldRelease(action.toLowerCase(), selected, actionObject);
+						break;
+					case ActionType.analog:
+						analogRelease(t.actionObject.figure.text ,selected, actionObject);
+						break;
+  					default:
+						solved = solved +1;
+						break;
+				}
+			}
+		});
+	}
+	if(solved >= todo.length){
+		previusSelected = selected;
+		previusActionObject = actionObject;
+		updateStarted = false;
+	}
+}
+
+function goTo(link){
+	window.location.href = link;
+}
+
+
+function analogMove(key, selected, actionObject){
+	const maxAnalog = 4096;
+	let x = ((actionObject[key].touch.pageX - actionObject[key].figure.square.min.x)/(actionObject[key].figure.square.lateral))*maxAnalog;
+	let y = ((actionObject[key].touch.pageY - actionObject[key].figure.square.min.y)/(actionObject[key].figure.square.lateral))*maxAnalog;
+	if(actionObject[key].figure.reverseW){
+		x = maxAnalog - x;
+	}
+	if(actionObject[key].figure.reverseH){
+		y = maxAnalog - y;
+	}
+	x= Math.min(x,maxAnalog-1);
+	x= Math.max(x,0);
+	y= Math.min(y,maxAnalog-1);
+	y= Math.max(y,0);
+	$.ajax({
+		url: '/analog',
+		type: 'post',
+		dataType: 'json',
+		contentType: 'application/json',
+		complete: function (data, status) {
+			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		error: function(data, status) {
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		data: JSON.stringify({
+			key: actionObject[key].figure.analog.toLowerCase(),
+			vertical: Math.round(y),
+			horizontal: Math.round(x)
+		}),
+   		timeout: timeout
+	});
+}
+
+function analogRelease(key, selected, actionObject){
+	const comand = "stick "+actionObject[key].figure.analog.toLowerCase()+" center";
+	$.ajax({
+		url: '/comand',
+		type: 'post',
+		dataType: 'json',
+		contentType: 'application/json',
+		complete: function (data, status) {
+			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		error: function(data, status) {
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		data: JSON.stringify({line: comand}),
+   		timeout: timeout
+	});
+}
+
+function executeScript(figure, selected, actionObject){
+	$.get("/script_running", function (data, status) {
+		console.log("Data: " + data + "\nStatus: " + status);
+		const script = figure.path? figure.path: "rjctScripts/"+figure.script+".txt";
+		if (!data.message) {	
+			$.ajax({
+				url: '/execute_script',
+				type: 'post',
+				dataType: 'json',
+				contentType: 'application/json',
+				complete: function (data, status) {
+					console.log("Data: " + data + "\nStatus: " + status);
+					solved = solved + 1;
+					if(solved >= todo.length){
+						previusSelected = selected;
+						previusActionObject = actionObject;
+						updateStarted = false;
+					}
+				},
+				error: function(data, status) {
+					solved = solved + 1;
+					if(solved >= todo.length){
+						previusSelected = selected;
+						previusActionObject = actionObject;
+						updateStarted = false;
+					}
+				},
+				data: JSON.stringify({script: script, nfc:"", repeats: figure.repeats?figure.repeats:1}),
+   				timeout: timeout
+			});
+		} else {
+			if(!figure.unstopable){
+				$.get("/kill_script", function (data, status) {
+					solved = solved + 1;
+					if(solved >= todo.length){
+						previusSelected = selected;
+						previusActionObject = actionObject;
+						updateStarted = false;
+					}
+				});
+			} else {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			}
+		}
+	});
+}
+
+function Connection(selected, actionObject) {
+	$.get("/connected", function (data, status) {
+		console.log("Data: " + data + "\nStatus: " + status);
+		if (data.connected) {
+			$.get("/disconnect", function (data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			});
+		} else {
+			$.get("/connect", function (data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			});
+		}
+	});
+}
+
+comands = {}
+
+function sendComandHolder(cmd, selected, actionObject) {
+	if (!comands[cmd]) {
+		$.ajax({
+			url: '/comand',
+			type: 'post',
+			dataType: 'json',
+			contentType: 'application/json',
+			success: function (data, status) {
+				console.log("Data: " + data + "\nStatus: " + status);
+				comands[cmd] = true;
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			},
+			error: function(data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			},
+			data: JSON.stringify({line: 'hold ' + cmd}),
+   		timeout: timeout
+		});
+	} else {
+		$.ajax({
+			url: '/comand',
+			type: 'post',
+			dataType: 'json',
+			contentType: 'application/json',
+			success: function (data, status) {
+				console.log("Data: " + data + "\nStatus: " + status);
+				comands[cmd] = false;
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			},
+			error: function(data, status) {
+				solved = solved + 1;
+				if(solved >= todo.length){
+					previusSelected = selected;
+					previusActionObject = actionObject;
+					updateStarted = false;
+				}
+			},
+			data: JSON.stringify({line: 'release ' + cmd}),
+   		timeout: timeout
+		});
+	}
+}
+
+function sendDefauldHold(cmd, selected, actionObject) {
+	$.ajax({
+		url: '/comand',
+		type: 'post',
+		dataType: 'json',
+		contentType: 'application/json',
+		complete: function (data, status) {
+			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		error: function(data, status) {
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		data: JSON.stringify({line: 'hold ' + cmd}),
+   		timeout: timeout
+	});
+}
+
+function sendDefauldRelease(cmd, selected, actionObject) {
+	$.ajax({
+		url: '/comand',
+		type: 'post',
+		dataType: 'json',
+		contentType: 'application/json',
+		complete: function (data, status) {
+			console.log("Data: " + data + "\nStatus: " + status);
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		error: function(data, status) {
+			solved = solved + 1;
+			if(solved >= todo.length){
+				previusSelected = selected;
+				previusActionObject = actionObject;
+				updateStarted = false;
+			}
+		},
+		data: JSON.stringify({line: 'release ' + cmd}),
+   		timeout: timeout
+	});
+}
+
+var timeout = 5000;
+
+function ol() {
+	canvas = document.getElementById('canvas');
+	ctx = canvas.getContext('2d');
+	let interval = 10;
+	if("{{params}}"!=""){
+			const params = JSON.parse({{ params | tojson }});
+			interval = params.readInterval != null ? params.readInterval : 10;
+			timeout = params.timeout !=null ? params.timeout: timeout;
+	}
+
+	timer = setInterval(update, interval);
+
+	canvas.addEventListener('touchend', function(event) {
+	event.preventDefault();
+		touches = event.touches;
+	});
+
+	canvas.addEventListener('touchmove', function(event) {
+	event.preventDefault();
+	touches = event.touches;
+	});
+
+	canvas.addEventListener('touchstart', function(event) {
+	event.preventDefault();
+	console.log('start');
+	touches = event.touches;
+	});
+};
+
+let images = [];
+let blackgroundImage = null;
+
+function clear(){
+	ctx.clearRect(0, 0, w, h);
+	let drawColor = "#000000";
+	let analogLimitsColor = "#00FF00";
+	let itemsFillColor = "#FFFFFF";
+	let textFont = "30px Comic Sans MS";
+	if("{{params}}"!=""){
+		const params = JSON.parse({{ params | tojson }});
+		if(params.analogLimitsColor){
+			analogLimitsColor = params.analogLimitsColor;
+		}
+		if(params.textFont){
+			textFont = params.textFont;
+		}
+		if(params.itemsFillColor){
+			itemsFillColor = params.itemsFillColor;
+		}
+		if(params.backgroundColor){
+			canvas.style.backgroundColor = params.backgroundColor;
+		}
+		if(params.drawColor){
+			drawColor = params.drawColor;
+		}
+		if(params.backgroundImage) {
+			if(blackgroundImage==null) {
+				blackgroundImage = new Image();
+				blackgroundImage.onload=function(){
+					ctx.drawImage(blackgroundImage,0,0);
+				} 
+				blackgroundImage.src = params.backgroundImage;
+			}
+			else {
+				ctx.drawImage(blackgroundImage,0,0);
+			}
+		}
+		if(params.images) {
+			if(images.length==0) {
+				params.images.forEach(img => {
+					var imgCan = new Image();
+					imgCan.onload = function() {
+						if(img.width!=null && img.height!=null){
+							ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
+						}
+						else {
+							ctx.drawImage(imgCan,img.pos.w,img.pos.h);
+						}
+					}
+					imgCan.src = img.url;
+					images.push(imgCan);
+				});
+			}
+			else {
+				for(let imgIn=0; imgIn<params.images.length;++imgIn){
+					let img = params.images[imgIn];
+					if(img.width!=null && img.height!=null){
+						ctx.drawImage(images[imgIn],img.pos.w,img.pos.h, img.width, img.height);
+					}
+					else {
+						ctx.drawImage(images[imgIn],img.pos.w,img.pos.h);
+					}
+				}
+			}
+		}
+		if(params.texts) {
+			params.texts.forEach(txt => {
+				ctx.font = txt.font!=null?txt.font:textFont;
+				ctx.textAlign = "center";
+				ctx.fillStyle = txt.writeColor!=null?txt.writeColor:drawColor
+				ctx.fillText(txt.text, txt.pos.w, txt.pos.h);
+			});  
+		}
+	}
+	figures.forEach(fig => {
+		ctx.beginPath();
+		ctx.strokeStyle = drawColor;
+		if (fig.borderColor){
+			ctx.strokeStyle = fig.borderColor;
+		}
+		ctx.fillStyle = itemsFillColor;
+		if (fig.fillColor){
+			ctx.fillStyle = fig.fillColor;
+		}
+		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
+		ctx.fill();
+		if(fig.selected){
+			if(fig.selectedColor){
+				ctx.fillStyle = fig.selectedColor;
+			} else {
+				ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+			}
+			ctx.fill();
+		}
+		ctx.stroke();
+		ctx.font = fig.textFont!=null? fig.textFont : textFont;
+		ctx.textAlign = "center";
+		ctx.fillStyle = drawColor;
+		if (fig.writeColor) {
+			ctx.fillStyle = fig.writeColor;
+		}
+		ctx.fillText(fig.text, fig.center.w, fig.center.h+10);
+		if(fig.actionType == ActionType.analog) {
+			const radius = fig.radius /  Math.sqrt(2);
+			ctx.strokeStyle = analogLimitsColor;
+			if(fig.analogLimitsColor){
+				ctx.strokeStyle = fig.analogLimitsColor;
+			}
+			fig.scalePrecisionSquare = fig.scalePrecisionSquare!=null?fig.scalePrecisionSquare:1; 
+			fig.square = {
+					min: {
+						x: fig.center.w-(radius*fig.scalePrecisionSquare),
+						y: fig.center.h-(radius*fig.scalePrecisionSquare)
+					},
+				lateral: 2*radius*fig.scalePrecisionSquare
+			};
+			ctx.beginPath();
+			ctx.rect(fig.square.min.x, fig.square.min.y,
+				fig.square.lateral, fig.square.lateral);
+			ctx.stroke();
+		}
+	});
+	// draw touches
+	var i, len = touches.length;
+	for (i=0; i<len; i++) {
+		var touch = touches[i];
+    	var px = touch.pageX;
+    	var py = touch.pageY;
+
+		ctx.beginPath();
+		ctx.arc(px, py, 20, 0, 2*Math.PI, true);
+
+		ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+		ctx.fill();
+
+		ctx.lineWidth = 2.0;
+		ctx.strokeStyle = "rgba(0, 0, 200, 0.8)";
+		ctx.stroke();
+    	console.log('drawn circle at ' + px +',' + py);
+	}
+}
+
+</script>
+</head>
+<body onload="ol()" width="100%" height="100%">
+	
+<canvas id="canvas" width="100%" height="100%" style="top:0px; left:0px;"></canvas>
+
+</body>
+</html>

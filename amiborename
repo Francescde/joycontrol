@@ -1,0 +1,73 @@
+
+nfc /home/pi/joycontrol/Zelda/BOTW_Link_Archer.bin
+
+mv '20 Heart Wolf Link.bin' 20_Heart_Wolf_Link.bin
+mv '30th 8-Bit Link.bin' 30th_8-Bit_Link.bin
+mv '30th OOT Link.bin' 30th_OOT_Link.bin
+mv '30th WW Link.bin' 30th_WW_Link.bin
+mv '30th WW Zelda.bin' 30th_WW_Zelda.bin
+mv 'BOTW Bokoblin.bin' BOTW_Bokoblin.bin
+mv 'BOTW Guardian.bin' BOTW_Guardian.bin
+mv 'BOTW Link Rider.bin' BOTW_Link_Rider.bin
+mv 'BOTW Zelda.bin' BOTW_Zelda.bin
+mv 'Champion Daruk.bin' Champion_Daruk.bin
+mv 'Champion Mipha.bin' Champion_Mipha.bin
+mv 'Champion Rivali.bin' Champion_Rivali.bin
+mv 'Champion Urbosa.bin' Champion_Urbosa.bin
+mv 'June MM Link.bin' June_MM_Link.bin
+mv 'June SS Link.bin' June_SS_Link.bin
+mv 'June TP Link.bin' June_TP_Link.bin
+mv 'SSB Ganondorf.bin' SSB_Ganondorf.bin
+mv 'SSB Link.bin' SSB_Link.bin
+mv 'SSB Shiek.bin' SSB_Shiek.bin
+mv 'SSB Toon Link.bin' SSB_Toon_Link.bin
+mv 'SSB Zelda.bin' SSB_Zelda.bin
+
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/20_Heart_Wolf_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/30th_8-Bit_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/30th_OOT_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/30th_WW_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/30th_WW_Zelda.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/BOTW_Bokoblin.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/BOTW_Guardian.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/BOTW_Link_Archer.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/BOTW_Link_Rider.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/BOTW_Zelda.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/Champion_Daruk.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/Champion_Mipha.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/Champion_Rivali.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/Champion_Urbosa.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/June_MM_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/June_SS_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/June_TP_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/SSB_Ganondorf.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/SSB_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/SSB_Shiek.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/SSB_Toon_Link.bin
+
+sudo python3 load_amiibos.py PRO_CONTROLLER --nfc /home/pi/joycontrol/Zelda/SSB_Zelda.bin
+
+cd /home/pi/joycontrol
+sudo python3 load_all_amiibos.py -folder=Zelda -script=joycontrolScripts/botw_amiibo.txt
+
