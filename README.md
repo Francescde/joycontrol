@@ -54,7 +54,7 @@ Serves web controllers ussing flask that allow you to send comands
 
 - joycon_server: serves a webside with configurable controllers
 ```bash
-sudo python3 joycon_server.py -nfc=<amiiboPath> -script=<scriptPath>
+sudo python3 joycon_server.py --folder=<amiiboFolderPath>
 ```
 
 the main view /view/home has three parts
@@ -66,6 +66,8 @@ Allows the user to edit and create, configurate and navigate to controllers.
 The controller config uses three arrays substitute, add, and remove these three arrays interact with the defauld array, adding new items to display, or removing or deleting the object that matches the text attribute
 
 It also allow to set a background Image(backgroundImage), set some images and resize them(images), the color to draw the items(drawColor), the background Color(backgroundColor), the items Fill Color(itemsFillColor) and the analog Limits Color(analogLimitsColor)
+
+You can also change the frequency with the comands are send (readInterval), and the max time a call can take (readInterval), use this two parameters if you find performance issues.
 
 example of controller
 ```json

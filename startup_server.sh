@@ -1,2 +1,2 @@
-git pull origin server || true
+git pull || true
 sudo python3 joycon_server.py

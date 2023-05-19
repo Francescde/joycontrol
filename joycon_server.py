@@ -278,7 +278,7 @@ async def display_controller(controllerName):
     data = json.load(f)
     if 'readInterval' not in data.keys():
         data['readInterval'] = readInterval
-    return await render_template('defauld_controller.html', params=json.dumps(data))
+    return await render_template('default_controller.html', params=json.dumps(data))
 
 
 @app.route('/files', methods=['POST'])
