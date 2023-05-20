@@ -41,10 +41,10 @@ def main():
                 if not uinput_button:
                     continue
                 if v:
-                    print('hold')
+                    print('hold '+uinput_button)
                 else:
                     #uinput_dev.emit(uinput_button, 0)
-                    print('release')
+                    print('release '+uinput_button)
         buttons_prev = buttons
         # print('l_stick')
         # print(l_stick[0])
