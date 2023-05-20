@@ -3,8 +3,7 @@
 import sys
 
 import procon
-import websockets
-import asyncio
+import socketio
 import json
 
 def panic(msg):
@@ -15,7 +14,7 @@ def are_close_values(val, com, err):
     return val+err>com and val-err<com
 
 
-async def main(websocket):
+def main(websocket):
     uinput_buttons_map = {
         procon.ProCon.Button.A: "a",
         procon.ProCon.Button.B: "b",
@@ -93,11 +92,10 @@ async def main(websocket):
         panic('IO failed. Did you just unplugged the controller?')
 
 if __name__ == '__main__':
-    async def connect():
-        async with websockets.connect('ws://localhost:8082') as websocket:# Send a dictionary as JSON payload
-            message = {'key': 'value'}
-            await websocket.send(json.dumps(message))
-            # Send a dictionary as JSON payload
-            await main(websocket)
-
-    asyncio.get_event_loop().run_until_complete(connect())
+    sio = socketio.Client()
+    @sio.on('connect')
+    def handle_connect():
+        print('Connected to the server')
+        sio.emit('message', 'Hello, server!')
+        main(sio)
+    sio.connect('http://localhost:8082')
