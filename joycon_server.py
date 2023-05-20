@@ -8,6 +8,7 @@ from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
 from aioflask import Flask, send_from_directory, jsonify, render_template, request
+import daphne
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
@@ -390,4 +391,5 @@ if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
-    app.run(host='0.0.0.0', port=8082)
+    #app.run(host='0.0.0.0', port=8082)
+    daphne.server(app, host="0.0.0.0", port=8082)
