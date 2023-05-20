@@ -58,11 +58,11 @@ def main():
                     #uinput_dev.emit(uinput_button, 0)
                     print('release '+uinput_button)
         buttons_prev = buttons
-        if((not are_close_values(l_stick_values['v'], l_stick[0], 100)) or (not are_close_values(l_stick_values['h'], -l_stick[1], 100))):
+        if((not are_close_values(l_stick_values['v'], l_stick[0], 1000)) or (not are_close_values(l_stick_values['h'], -l_stick[1], 1000))):
             print('l_stick ' + str(l_stick[0]) +", "+ str(-l_stick[1]))
             l_stick_values['v']=l_stick[0]
             l_stick_values['h']=-l_stick[1]
-        if((not are_close_values(r_stick_values['v'], r_stick[0], 100)) or (not are_close_values(r_stick_values['h'], -r_stick[1], 100))):
+        if((not are_close_values(r_stick_values['v'], r_stick[0], 1000)) or (not are_close_values(r_stick_values['h'], -r_stick[1], 1000))):
             print('l_stick ' + str(r_stick[0]) +", "+ str(-r_stick[1]))
             r_stick_values['v']=r_stick[0]
             r_stick_values['h']=-r_stick[1]
