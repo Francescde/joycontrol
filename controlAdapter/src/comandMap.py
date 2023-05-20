@@ -30,10 +30,16 @@ def main():
         procon.ProCon.Button.RS: "r_stick"
     }
     buttons_prev = {}
-    l_stick_values = {}
-    l_stick_values = {}
+    l_stick_values = {
+        "v": 759,
+        "h": 933
+    }
+    r_stick_values = {
+        "v": -1909,
+        "h": -208
+    }
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
-        nonlocal buttons_prev
+        nonlocal buttons_prev, l_stick_values, r_stick_values
         if not buttons_prev:
             buttons_prev = buttons
             return
@@ -48,7 +54,15 @@ def main():
                     #uinput_dev.emit(uinput_button, 0)
                     print('release '+uinput_button)
         buttons_prev = buttons
-        print('l_stick ' + str(l_stick[0]) +", "+ str(-l_stick[1]))
+        if(l_stick_values['v']!=l_stick[0] and l_stick_values['h']!=-l_stick[1]):
+            print('l_stick ' + str(l_stick[0]) +", "+ str(-l_stick[1]))
+            l_stick_values['v']=l_stick[0]
+            l_stick_values['h']=-l_stick[1]
+        if(r_stick_values['v']!=r_stick[0] and r_stick_values['h']!=-r_stick[1]):
+            print('l_stick ' + str(r_stick[0]) +", "+ str(-r_stick[1]))
+            r_stick_values['v']=r_stick[0]
+            r_stick_values['h']=-r_stick[1]
+            
         print('r_stick ' + str(r_stick[0]) +", "+ str(-r_stick[1]))
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
