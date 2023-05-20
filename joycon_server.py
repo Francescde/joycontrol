@@ -384,3 +384,4 @@ if __name__ == '__main__':
     start_server = websockets.serve(websocket_server, "localhost", 8765)
     asyncio.get_event_loop().run_until_complete(start_server)
     app.run(host='0.0.0.0', port=8082)
+    asyncio.get_event_loop().run_forever()
