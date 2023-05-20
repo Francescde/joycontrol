@@ -46,12 +46,12 @@ def main():
                     #uinput_dev.emit(uinput_button, 0)
                     print('release')
         buttons_prev = buttons
-        print('l_stick')
-        print(l_stick[0])
-        print(-l_stick[1])
-        print('r_stick')
-        print(r_stick[0])
-        print(-r_stick[1])
+        # print('l_stick')
+        # print(l_stick[0])
+        # print(-l_stick[1])
+        # print('r_stick')
+        # print(r_stick[0])
+        # print(-r_stick[1])
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
         con = procon.ProCon()
