@@ -94,7 +94,7 @@ async def main(websocket):
 
 if __name__ == '__main__':
     async def connect():
-        async with websockets.connect('ws://localhost:5000') as websocket:
+        async with websockets.connect('ws://localhost:8082') as websocket:
             # Send a dictionary as JSON payload
             main(websocket)
 
