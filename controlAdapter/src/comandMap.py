@@ -94,8 +94,10 @@ async def main(websocket):
 
 if __name__ == '__main__':
     async def connect():
-        async with websockets.connect('ws://0.0.0.0:8082') as websocket:
+        async with websockets.connect('ws://localhost:8082') as websocket:# Send a dictionary as JSON payload
+            message = {'key': 'value'}
+            await websocket.send(json.dumps(message))
             # Send a dictionary as JSON payload
-            main(websocket)
+            await main(websocket)
 
     asyncio.get_event_loop().run_until_complete(connect())
