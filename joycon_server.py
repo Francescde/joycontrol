@@ -8,13 +8,11 @@ from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
 from aioflask import Flask, send_from_directory, jsonify, render_template, request
-import daphne
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
 import sys
-from flask_socketio import SocketIO, emit
-import eventlet
+import websockets
 from timeit import default_timer as timer
 
 objectMap = {}
@@ -377,19 +375,14 @@ def delete_script(controllerName):
         'controllerName': controllerName
     })
 
-@socketio.on('connect')
-def handle_socket_connect():
-    print('A client has connected')
-
-@socketio.on('message')
-def handle_socket_message(data):
-    print('Received message:', data)
-    emit('response', 'This is the server response')
-
+async def websocket_server(websocket, path):
+    async for message in websocket:
+        await websocket.send(message)
 
 if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
-    #app.run(host='0.0.0.0', port=8082)
-    daphne.server(app, host="0.0.0.0", port=8082)
+    start_server = websockets.serve(websocket_server, "localhost", 8765)
+    asyncio.get_event_loop().run_until_complete(start_server)
+    app.run(host='0.0.0.0', port=8082)
