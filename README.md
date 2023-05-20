@@ -30,6 +30,9 @@ sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-p
 sudo pip3 install aioconsole hid crc8
 sudo pip3 install aioflask
 sudo pip3 install Flask==2
+sudo pip3 install eventlet
+sudo pip3 install flask_socketio
+sudo pip3 install websockets
 ```
  If you are unsure if the packages are properly installed, try running `sudo python3` and import each using `import package_name`.
 

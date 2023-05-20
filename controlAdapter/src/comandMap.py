@@ -15,7 +15,7 @@ def are_close_values(val, com, err):
     return val+err>com and val-err<com
 
 
-def main(websocket):
+async def main(websocket):
     uinput_buttons_map = {
         procon.ProCon.Button.A: "a",
         procon.ProCon.Button.B: "b",
