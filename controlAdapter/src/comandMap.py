@@ -20,7 +20,7 @@ def main():
         procon.ProCon.Button.RIGHT: "right",
         procon.ProCon.Button.MINUS: "minus",
         procon.ProCon.Button.PLUS: "plus",
-        procon.ProCon.Button.SCREENSHOT: None,
+        procon.ProCon.Button.SCREENSHOT: "capture",
         procon.ProCon.Button.HOME: "home",
         procon.ProCon.Button.L: "l",
         procon.ProCon.Button.ZL: "zl",
@@ -30,6 +30,8 @@ def main():
         procon.ProCon.Button.RS: "r_stick"
     }
     buttons_prev = {}
+    l_stick_values = {}
+    l_stick_values = {}
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev
         if not buttons_prev:
@@ -46,12 +48,8 @@ def main():
                     #uinput_dev.emit(uinput_button, 0)
                     print('release '+uinput_button)
         buttons_prev = buttons
-        # print('l_stick')
-        # print(l_stick[0])
-        # print(-l_stick[1])
-        # print('r_stick')
-        # print(r_stick[0])
-        # print(-r_stick[1])
+        print('l_stick ' + l_stick[0] +", "+ -l_stick[1])
+        print('r_stick ' + r_stick[0] +", "+ -r_stick[1])
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
         con = procon.ProCon()
