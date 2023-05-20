@@ -388,5 +388,5 @@ if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
-    asyncio.run(main())
     app.run(host='0.0.0.0', port=8082)
+    asyncio.run(main())
