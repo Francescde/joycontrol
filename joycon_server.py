@@ -374,11 +374,10 @@ def delete_script(controllerName):
         'controllerName': controllerName
     })
 
-async def websocket_server(websocket, path):
-    async for message in websocket:
-        await websocket.send(message)
-
 if __name__ == '__main__':
+    async def websocket_server(websocket, path):
+        async for message in websocket:
+            await websocket.send(message)
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
