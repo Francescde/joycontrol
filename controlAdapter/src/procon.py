@@ -65,7 +65,7 @@ class ProCon:
 
     def __init__(self):
         self.subcommand_counter = 0
-        self.dev = hid.device()
+        self.dev = hid.Device
         self.dev.open(ProCon.VENDOR_ID, ProCon.PRODUCT_ID)
         self.handshake()
         self.high_speed()
