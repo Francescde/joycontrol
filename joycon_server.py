@@ -118,7 +118,6 @@ async def runScriptAsync(script, nfc):
 
 
 app = Flask(__name__, static_folder='static')
-socketio = SocketIO(app)
 
 
 @app.route('/connect')
