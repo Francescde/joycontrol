@@ -134,7 +134,7 @@ async def connected():
 
 
 @app.route('/execute_script', methods=['POST'])
-async def executeScript():
+def executeScript():
     global objectMap;
     content = request.get_json()
     if(objectMap['scriptRunning'] and not objectMap['scriptRunning'].done()):
@@ -147,7 +147,7 @@ async def executeScript():
 
 
 @app.route('/script_running', methods=['GET'])
-async def scriptRuning():
+def scriptRuning():
     global objectMap;
     scriptRunnig = False;
     if(objectMap['scriptRunning']):
@@ -156,7 +156,7 @@ async def scriptRuning():
 
 
 @app.route('/kill_script', methods=['GET'])
-async def killScript():
+def killScript():
     global objectMap;
     if(objectMap['scriptRunning'] and not objectMap['scriptRunning'].done()):
         objectMap['scriptRunning'].cancel()
@@ -260,12 +260,12 @@ async def disconnect():
 
 
 @app.route('/view/<controllerName>')
-async def display_view(controllerName):
+def display_view(controllerName):
     return render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
 
 
 @app.route('/position_objects/<controllerName>')
-async def set_controller_objects(controllerName):
+def set_controller_objects(controllerName):
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
     data = json.load(f)
@@ -276,7 +276,7 @@ async def set_controller_objects(controllerName):
 
 
 @app.route('/controller/<controllerName>')
-async def display_controller(controllerName):
+def display_controller(controllerName):
     global readInterval
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
@@ -287,7 +287,7 @@ async def display_controller(controllerName):
 
 
 @app.route('/files', methods=['POST'])
-async def get_files():
+def get_files():
     content = request.get_json()
     print('content')
     print(content)
@@ -298,14 +298,14 @@ async def get_files():
     return jsonify([])
 
 @app.route('/controllers', methods=['GET'])
-async def get_controllers():
+def get_controllers():
     folderpath = 'controllers'
     return jsonify(
         [f for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.json' in f)])
 
 
 @app.route('/controllers/<controllerName>')
-async def get_controller(controllerName):
+def get_controller(controllerName):
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
     data = json.load(f)
@@ -316,7 +316,7 @@ async def get_controller(controllerName):
 
 
 @app.route('/delete_controller/<controllerName>')
-async def delete_controller(controllerName):
+def delete_controller(controllerName):
     path = os.path.join('controllers', controllerName+'.json')  
     os.remove(path)
     return jsonify({
@@ -325,7 +325,7 @@ async def delete_controller(controllerName):
 
 
 @app.route('/controllers', methods=['POST'])
-async def add_controllers():
+def add_controllers():
     content = request.get_json()
     print('content')
     print(content)
@@ -339,14 +339,14 @@ async def add_controllers():
 
 
 @app.route('/scripts', methods=['GET'])
-async def get_scripts():
+def get_scripts():
     folderpath = 'rjctScripts'
     return jsonify(
         [f for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.txt' in f)])
 
 
 @app.route('/scripts/<controllerName>')
-async def get_script(controllerName):
+def get_script(controllerName):
     # Opening JSON file
     f = open('rjctScripts/'+controllerName+'.txt')
     data = f.read()
@@ -357,7 +357,7 @@ async def get_script(controllerName):
 
 
 @app.route('/scripts', methods=['POST'])
-async def add_scripts():
+def add_scripts():
     content = request.get_json()
     print('content')
     print(content)
@@ -371,7 +371,7 @@ async def add_scripts():
 
 
 @app.route('/delete_script/<controllerName>')
-async def delete_script(controllerName):
+def delete_script(controllerName):
     path = os.path.join('rjctScripts', controllerName+'.txt')  
     os.remove(path)
     return jsonify({
@@ -380,7 +380,7 @@ async def delete_script(controllerName):
 
 # SocketIO event handler for WebSocket connections
 @socketio.on('connect')
-async def handle_connect():
+def handle_connect():
     print('Client connected')
 
 @socketio.on('message')
@@ -392,7 +392,7 @@ async def handle_message(message):
     # Process the message or send a response back to the client
 
 @socketio.on('disconnect')
-async def handle_disconnect():
+def handle_disconnect():
     print('Client disconnected')
 
 if __name__ == '__main__':
