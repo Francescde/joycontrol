@@ -162,11 +162,8 @@ def killScript():
     return jsonify({'message': 'cancel'})
 
 
-@app.route("/comand", methods=['POST'])
-async def comand():
+async def execute_comand_line(line):
     global timerFlag, lastTime, comandTimer, maxComandLines
-    content = request.get_json()
-    line = content['line']
     timePass=0
     if timerFlag:
         timePass = timer() - lastTime
@@ -182,6 +179,12 @@ async def comand():
     if(len(comandTimer)>maxComandLines):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
+
+@app.route("/comand", methods=['POST'])
+async def comand():
+    content = request.get_json()
+    line = content['line']
+    await execute_comand_line(line)
     return jsonify({'message': 'Send'})
 
 
@@ -377,7 +380,9 @@ def delete_script(controllerName):
 async def run_socket_server():
     async def websocket_server(websocket, path):
         async for message in websocket:
-            print(message)
+            data = json.load(message)
+            if data['type']=='comand':
+                await execute_comand_line(data['comand'])
             await websocket.send(message)
     async with websockets.serve(websocket_server, "localhost", '8765'):
         print('websocket is serving')
