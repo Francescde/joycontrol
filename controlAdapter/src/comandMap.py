@@ -40,12 +40,12 @@ async def main(websocket):
     l_stick_values = {
         "v": 0,
         "h": 0,
-        "precision": 100
+        "precision": 1000
     }
     r_stick_values = {
         "v": 0,
         "h": 0,
-        "precision": 100
+        "precision": 1000
     }
 
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
