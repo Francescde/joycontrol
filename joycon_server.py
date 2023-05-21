@@ -7,7 +7,7 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask import Flask, send_from_directory, jsonify, render_template, request
+from Flask import Flask, send_from_directory, jsonify, render_template, request
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
@@ -118,7 +118,7 @@ async def runScriptAsync(script, nfc):
 
 
 app = Flask(__name__, static_folder='static')
-socketio = SocketIO(app)
+socketio = SocketIO(app, async_mode='eventlet')
 
 
 @app.route('/connect')

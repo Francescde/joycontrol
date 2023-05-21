@@ -29,7 +29,7 @@ source server/bin/activate
   Python: (a setup.py is present but not yet up to date)  
   Note that pip here _has_ to be run as root, as otherwise the packages are not available to the root user.
 ```bash
-sudo pip install aioconsole hid crc8 aioflask Flask==2 websockets
+sudo pip3 install aioconsole hid crc8 aioflask Flask flask[async] Flask-SocketIO eventlet
 ```
  If you are unsure if the packages are properly installed, try running `sudo python3` and import each using `import package_name`.
 
