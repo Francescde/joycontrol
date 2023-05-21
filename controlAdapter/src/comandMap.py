@@ -47,7 +47,7 @@ async def main(websocket):
         "h": 0,
         "precision": 100
     }
-    async def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
+    async def send_to_controller_async(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev, l_stick_values, r_stick_values, websocket
         if not buttons_prev:
             buttons_prev = buttons
@@ -79,6 +79,11 @@ async def main(websocket):
             r_stick_values['v']=r_stick[0]
             r_stick_values['h']=-r_stick[1]
             #emit event on websocket
+    
+    async def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
+        loop = asyncio.get_event_loop()
+        result = loop.run_until_complete(send_to_controller_async(buttons, l_stick, r_stick, _, __, ___))
+        loop.close()
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
         con = procon.ProCon()
