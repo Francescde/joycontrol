@@ -3,7 +3,7 @@
 import sys
 
 import procon
-import websockets
+import requests
 import asyncio
 import json
 
@@ -15,7 +15,7 @@ def are_close_values(val, com, err):
     return val+err>com and val-err<com
 
 
-def main(websocket):
+def main():
     uinput_buttons_map = {
         procon.ProCon.Button.A: "a",
         procon.ProCon.Button.B: "b",
@@ -48,7 +48,7 @@ def main(websocket):
         "precision": 100
     }
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
-        nonlocal buttons_prev, l_stick_values, r_stick_values, websocket
+        nonlocal buttons_prev, l_stick_values, r_stick_values
         if not buttons_prev:
             buttons_prev = buttons
             return
@@ -60,13 +60,12 @@ def main(websocket):
                 if v:
                     #emit event on webdocket
                     #print('hold '+uinput_button)
-                    message = {'type': 'comand', 'comand': 'hold '+uinput_button}
-                    websocket.send(json.dumps(message))
+                    response = requests.post('http://0.0.0.0:8082/comand', data = {'line':'hold '+uinput_button})
                 else:
                     #emit event on websocket
                     #print('release '+uinput_button)
-                    message = {'type': 'comand', 'comand': 'release '+uinput_button}
-                    websocket.send(json.dumps(message))
+                    response = requests.post('http://0.0.0.0:8082/comand', data = {'line':'release '+uinput_button})
+
         buttons_prev = buttons
         analog_max_abs_value = 32767
         if((not are_close_values(l_stick_values['v'], l_stick[0], l_stick_values['precision'])) or (not are_close_values(l_stick_values['h'], -l_stick[1], l_stick_values['precision']))):
@@ -93,9 +92,4 @@ def main(websocket):
         panic('IO failed. Did you just unplugged the controller?')
 
 if __name__ == '__main__':
-    async def connect():
-        async with websockets.connect('ws://localhost:5000') as websocket:
-            # Send a dictionary as JSON payload
-            main(websocket)
-
-    asyncio.get_event_loop().run_until_complete(connect())
+    main()

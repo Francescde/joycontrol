@@ -12,8 +12,6 @@ from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
 import sys
-from flask_socketio import SocketIO, emit
-import eventlet
 from timeit import default_timer as timer
 
 objectMap = {}
@@ -119,7 +117,6 @@ async def runScriptAsync(script, nfc):
 
 
 app = Flask(__name__, static_folder='static')
-socketio = SocketIO(app)
 
 
 @app.route('/connect')
@@ -375,15 +372,6 @@ def delete_script(controllerName):
     return jsonify({
         'controllerName': controllerName
     })
-
-@socketio.on('connect')
-def handle_socket_connect():
-    print('A client has connected')
-
-@socketio.on('message')
-def handle_socket_message(data):
-    print('Received message:', data)
-    emit('response', 'This is the server response')
 
 
 if __name__ == '__main__':

@@ -22,7 +22,7 @@ Chack out https://www.youtube.com/channel/UCE3sSyM4Ng1SrWQdWBFw-nA where we will
 - Install dependencies  
   Raspbian:
 ```bash
-sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-pip
+sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-pip python3-venv
 ```
   Python: (a setup.py is present but not yet up to date)  
   Note that pip here _has_ to be run as root, as otherwise the packages are not available to the root user.
@@ -30,6 +30,10 @@ sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-p
 sudo pip3 install aioconsole hid crc8
 sudo pip3 install aioflask
 sudo pip3 install Flask==2
+```
+```bash
+python3 -m venv server
+sudo pip install aioconsole hid crc8 aioflask Flask==2
 ```
  If you are unsure if the packages are properly installed, try running `sudo python3` and import each using `import package_name`.
 
@@ -48,6 +52,11 @@ sudo pip3 install Flask==2
     sudo systemctl restart bluetooth.service
   ```
   - see [Issue #4](https://github.com/Poohl/joycontrol/issues/4) if despite that the switch doesn't connect or disconnects randomly.
+
+```bash
+python3 -m venv clientCtr
+sudo pip install hidapi==0.7.99.post21 requests
+```
 
 ## joycon_server.py
 Serves web controllers ussing flask that allow you to send comands 
