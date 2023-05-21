@@ -389,4 +389,4 @@ if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
-    asyncio.run(main(app))
+    asyncio.run(main_async(app))
