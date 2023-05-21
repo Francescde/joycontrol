@@ -118,7 +118,7 @@ async def runScriptAsync(script, nfc):
 
 
 app = Flask(__name__, static_folder='static')
-socketio = SocketIO(app, async_mode='eventlet')
+socketio = SocketIO(app, async_mode='eventlet', logger=True, engineio_logger=True)
 
 
 @app.route('/connect')
