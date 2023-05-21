@@ -80,7 +80,7 @@ class ProCon:
         self.enable_imu(True)
         self.set_imu_sensitivity(ProCon.DEFAULT_IMU_SENSITIVITY)
 
-    async def start(self, callback):
+    def start(self, callback):
         while True:
             state = self.recv()
             if state[0] != ProCon.InputReportID.CONTROLLER_STATE:
@@ -120,7 +120,7 @@ class ProCon:
             accel = tuple(map(to_int16, accel))
             gyro = tuple(map(to_int16, gyro))
             battery = (state[2] & 0xF0) >> 4
-            await callback(buttons, l_stick, r_stick, accel, gyro, battery)
+            callback(buttons, l_stick, r_stick, accel, gyro, battery)
             if self.rumble_expire and int(time.time() * 1000) >= self.rumble_expire:
                 self.send_rumble(False, False, 0)
 

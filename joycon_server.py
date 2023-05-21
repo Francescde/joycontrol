@@ -12,7 +12,7 @@ from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
 import sys
-import websockets
+from flask_socketio import SocketIO
 from timeit import default_timer as timer
 
 objectMap = {}
@@ -118,6 +118,7 @@ async def runScriptAsync(script, nfc):
 
 
 app = Flask(__name__, static_folder='static')
+socketio = SocketIO(app)
 
 
 @app.route('/connect')
@@ -388,15 +389,25 @@ async def run_socket_server():
         print('websocket is serving')
         await asyncio.Future()  # run forever
 
+# SocketIO event handler for WebSocket connections
+@socketio.on('connect')
+def handle_connect():
+    print('Client connected')
+
+@socketio.on('message')
+async def handle_message(message):
+    data = json.loads(message)
+    if data['type']=='comand':
+            await execute_comand_line(data['comand'])
+    #await socketio.emit('response', 'done')
+    # Process the message or send a response back to the client
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print('Client disconnected')
 
 if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
-    # Start both Flask and WebSocket servers concurrently
-    loop = asyncio.get_event_loop()
-    flask_task = loop.run_in_executor(None, app.run, '0.0.0.0', 8082)
-    socket_task = run_socket_server()  # Get the coroutine object
-    # Run the socket_task on the event loop using asyncio.run_coroutine_threadsafe()
-    socket_task_safe = asyncio.run_coroutine_threadsafe(socket_task, loop)
-    loop.run_until_complete(asyncio.gather(flask_task, socket_task_safe))
+    socketio.run(app, host='0.0.0.0',  port=8082)
