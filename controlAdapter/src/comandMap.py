@@ -47,7 +47,11 @@ async def main(websocket):
         "h": 0,
         "precision": 100
     }
-    async def send_to_controller_async(buttons, l_stick, r_stick, _, __, ___):
+
+    async def send_message(message):
+        await websocket.send(json.dumps(message))
+
+    def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev, l_stick_values, r_stick_values, websocket
         if not buttons_prev:
             buttons_prev = buttons
@@ -61,12 +65,12 @@ async def main(websocket):
                     #emit event on webdocket
                     #print('hold '+uinput_button)
                     message = {'type': 'comand', 'comand': 'hold '+uinput_button}
-                    await websocket.send(json.dumps(message))
+                    asyncio.create_task(send_message(message))
                 else:
                     #emit event on websocket
                     #print('release '+uinput_button)
                     message = {'type': 'comand', 'comand': 'release '+uinput_button}
-                    await websocket.send(json.dumps(message))
+                    asyncio.create_task(send_message(message))
         buttons_prev = buttons
         analog_max_abs_value = 32767
         if((not are_close_values(l_stick_values['v'], l_stick[0], l_stick_values['precision'])) or (not are_close_values(l_stick_values['h'], -l_stick[1], l_stick_values['precision']))):
@@ -80,9 +84,7 @@ async def main(websocket):
             r_stick_values['h']=-r_stick[1]
             #emit event on websocket
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
-        loop2 = asyncio.get_event_loop()
-        result = loop2.run_until_complete(send_to_controller_async(buttons, l_stick, r_stick, _, __, ___))
-        loop2.close()
+        result = asyncio.create_task(send_to_controller_async(buttons, l_stick, r_stick, _, __, ___))
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
         con = procon.ProCon()
