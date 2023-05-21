@@ -382,7 +382,7 @@ async def run_socket_server():
         async for message in websocket:
             data = json.loads(message)
             if data['type']=='comand':
-                await execute_comand_line(data['comand'])
+                execute_comand_line(data['comand'])
             await websocket.send(message)
     async with websockets.serve(websocket_server, "localhost", 8765):
         print('websocket is serving')
