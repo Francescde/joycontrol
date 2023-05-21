@@ -381,10 +381,10 @@ async def run_socket_server():
     async def websocket_server(websocket, path):
         async for message in websocket:
             data = json.load(message)
-            if data['type'] and data['type']=='comand':
+            if data['type']=='comand':
                 await execute_comand_line(data['comand'])
             await websocket.send(message)
-    async with websockets.serve(websocket_server, "localhost", '8765'):
+    async with websockets.serve(websocket_server, "localhost", 8765):
         print('websocket is serving')
         await asyncio.Future()  # run forever
 
