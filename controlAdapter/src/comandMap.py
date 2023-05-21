@@ -83,8 +83,6 @@ async def main(websocket):
             r_stick_values['v']=r_stick[0]
             r_stick_values['h']=-r_stick[1]
             #emit event on websocket
-    def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
-        result = asyncio.create_task(send_to_controller_async(buttons, l_stick, r_stick, _, __, ___))
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
         con = procon.ProCon()
