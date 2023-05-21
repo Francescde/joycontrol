@@ -48,9 +48,6 @@ async def main(websocket):
         "precision": 100
     }
 
-    async def send_message(message):
-        await websocket.send(json.dumps(message))
-
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev, l_stick_values, r_stick_values, websocket
         if not buttons_prev:
@@ -65,12 +62,12 @@ async def main(websocket):
                     #emit event on webdocket
                     #print('hold '+uinput_button)
                     message = {'type': 'comand', 'comand': 'hold '+uinput_button}
-                    asyncio.create_task(send_message(message))
+                    asyncio.ensure_future(websocket.send(json.dumps(message)))
                 else:
                     #emit event on websocket
                     #print('release '+uinput_button)
                     message = {'type': 'comand', 'comand': 'release '+uinput_button}
-                    asyncio.create_task(send_message(message))
+                    asyncio.ensure_future(websocket.send(json.dumps(message)))
         buttons_prev = buttons
         analog_max_abs_value = 32767
         if((not are_close_values(l_stick_values['v'], l_stick[0], l_stick_values['precision'])) or (not are_close_values(l_stick_values['h'], -l_stick[1], l_stick_values['precision']))):
