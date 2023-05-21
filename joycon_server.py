@@ -122,9 +122,8 @@ socketio = SocketIO(app, async_mode='eventlet', logger=True, engineio_logger=Tru
 
 
 @app.route('/connect')
-async def connect():
-    await get_client_transport()
-    print('returned')
+def connect():
+    asyncio.create_task(get_client_transport())
     return jsonify({'message': 'Created'})
 
 
