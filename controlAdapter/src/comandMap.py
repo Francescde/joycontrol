@@ -4,7 +4,6 @@ import sys
 
 import procon
 import socketio
-import asyncio
 import json
 
 def panic(msg):
@@ -48,7 +47,7 @@ def main(sio):
         "precision": 1000
     }
 
-    async def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
+    def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev, l_stick_values, r_stick_values, sio
         if not buttons_prev:
             buttons_prev = buttons
