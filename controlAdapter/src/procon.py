@@ -120,7 +120,7 @@ class ProCon:
             accel = tuple(map(to_int16, accel))
             gyro = tuple(map(to_int16, gyro))
             battery = (state[2] & 0xF0) >> 4
-            await callback(buttons, l_stick, r_stick, accel, gyro, battery)
+            callback(buttons, l_stick, r_stick, accel, gyro, battery)
             if self.rumble_expire and int(time.time() * 1000) >= self.rumble_expire:
                 self.send_rumble(False, False, 0)
 
