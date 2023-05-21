@@ -380,7 +380,7 @@ def delete_script(controllerName):
 async def run_socket_server():
     async def websocket_server(websocket, path):
         async for message in websocket:
-            data = json.load(message)
+            data = json.loads(message)
             if data['type']=='comand':
                 await execute_comand_line(data['comand'])
             await websocket.send(message)
