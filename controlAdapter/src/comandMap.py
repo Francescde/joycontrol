@@ -87,7 +87,7 @@ async def main(websocket):
         panic('Unable to open the controller. Make sure you have plugged in the controller and have sufficient permission to open it (either as root or with udev rules): {}'.format(e))
     print('done\nEnjoy!')
     try:
-        con.start(await send_to_controller)
+        con.start(send_to_controller)
     except KeyboardInterrupt:
         print('\rGoodbye!')
     except OSError:
