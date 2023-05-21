@@ -124,6 +124,7 @@ socketio = SocketIO(app, async_mode='eventlet')
 @app.route('/connect')
 async def connect():
     await get_client_transport()
+    print('returned')
     return jsonify({'message': 'Created'})
 
 
