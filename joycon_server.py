@@ -380,9 +380,7 @@ async def main_async(app):
             print(message)
             await websocket.send(message)
     async with websockets.serve(websocket_server, "localhost", 8765):
-        print('websocket is serving')
-        app.run(host='0.0.0.0', port=8082)
-        await asyncio.Future()  # run forever
+        print('websocket is serving')# run forever
 
 
 if __name__ == '__main__':
@@ -390,3 +388,4 @@ if __name__ == '__main__':
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
     asyncio.run(main_async(app))
+    app.run(host='0.0.0.0', port=8082)  
