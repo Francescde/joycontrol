@@ -374,18 +374,22 @@ def delete_script(controllerName):
         'controllerName': controllerName
     })
 
-async def main_async(app):
+async def run_socket_server():
     async def websocket_server(websocket, path):
         async for message in websocket:
             print(message)
             await websocket.send(message)
     async with websockets.serve(websocket_server, "localhost", 8765):
-        print('websocket is serving')# run forever
+        print('websocket is serving')
+        await asyncio.Future()  # run forever
 
 
 if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
-    asyncio.run(main_async(app))
-    app.run(host='0.0.0.0', port=8082)  
+    # Start both Flask and WebSocket servers concurrently
+    loop = asyncio.get_event_loop()
+    flask_task = loop.run_in_executor(None, app.run, ('0.0.0.0', 8082))
+    socket_task = loop.create_task(run_socket_server())
+    loop.run_until_complete(asyncio.gather(flask_task, socket_task))
