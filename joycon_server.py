@@ -374,13 +374,14 @@ def delete_script(controllerName):
         'controllerName': controllerName
     })
 
-async def main():
+async def main_async(app):
     async def websocket_server(websocket, path):
         async for message in websocket:
             print(message)
             await websocket.send(message)
     async with websockets.serve(websocket_server, "localhost", 8765):
         print('websocket is serving')
+        app.run(host='0.0.0.0', port=8082)
         await asyncio.Future()  # run forever
 
 
@@ -388,5 +389,4 @@ if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).replace('-folder=', '')
-    app.run(host='0.0.0.0', port=8082)
-    asyncio.run(main())
+    asyncio.run(main(app))
