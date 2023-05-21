@@ -379,7 +379,7 @@ async def run_socket_server():
         async for message in websocket:
             print(message)
             await websocket.send(message)
-    async with websockets.serve(websocket_server, "localhost", 8765):
+    async with websockets.serve(websocket_server, "localhost", '8765'):
         print('websocket is serving')
         await asyncio.Future()  # run forever
 
@@ -390,6 +390,6 @@ if __name__ == '__main__':
             amiiboFolder = str(arg).replace('-folder=', '')
     # Start both Flask and WebSocket servers concurrently
     loop = asyncio.get_event_loop()
-    flask_task = loop.run_in_executor(None, app.run, ('0.0.0.0', 8082))
+    flask_task = loop.run_in_executor(None, app.run, ('0.0.0.0', '8082'))
     socket_task = loop.create_task(run_socket_server())
     loop.run_until_complete(asyncio.gather(flask_task, socket_task))
