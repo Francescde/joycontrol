@@ -61,11 +61,12 @@ def main():
                     #emit event on webdocket
                     #print('hold '+uinput_button)
                     response = requests.post('http://0.0.0.0:8082/comand', data = {'line':'hold '+uinput_button})
+                    print(response)
                 else:
                     #emit event on websocket
                     #print('release '+uinput_button)
                     response = requests.post('http://0.0.0.0:8082/comand', data = {'line':'release '+uinput_button})
-
+                    print(response)
         buttons_prev = buttons
         analog_max_abs_value = 32767
         if((not are_close_values(l_stick_values['v'], l_stick[0], l_stick_values['precision'])) or (not are_close_values(l_stick_values['h'], -l_stick[1], l_stick_values['precision']))):

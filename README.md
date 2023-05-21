@@ -33,6 +33,7 @@ sudo pip3 install Flask==2
 ```
 ```bash
 python3 -m venv server
+source server/bin/activate
 sudo pip install aioconsole hid crc8 aioflask Flask==2
 ```
  If you are unsure if the packages are properly installed, try running `sudo python3` and import each using `import package_name`.
@@ -55,7 +56,7 @@ sudo pip install aioconsole hid crc8 aioflask Flask==2
 
 ```bash
 python3 -m venv clientCtr
-sudo pip install hidapi==0.7.99.post21 requests
+pip install hidapi==0.7.99.post21 requests
 ```
 
 ## joycon_server.py
