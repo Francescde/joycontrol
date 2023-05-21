@@ -378,17 +378,6 @@ def delete_script(controllerName):
         'controllerName': controllerName
     })
 
-async def run_socket_server():
-    async def websocket_server(websocket, path):
-        async for message in websocket:
-            data = json.loads(message)
-            if data['type']=='comand':
-                await execute_comand_line(data['comand'])
-            await websocket.send(message)
-    async with websockets.serve(websocket_server, "localhost", 8765):
-        print('websocket is serving')
-        await asyncio.Future()  # run forever
-
 # SocketIO event handler for WebSocket connections
 @socketio.on('connect')
 def handle_connect():
