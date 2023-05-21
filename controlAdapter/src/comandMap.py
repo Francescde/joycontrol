@@ -60,12 +60,12 @@ def main():
                 if v:
                     #emit event on webdocket
                     #print('hold '+uinput_button)
-                    response = requests.post('http://0.0.0.0:8082/comand', data = {'line':'hold '+uinput_button})
+                    response = requests.post('http://localhost:8082/comand', data = {'line':'hold '+uinput_button})
                     print(response)
                 else:
                     #emit event on websocket
                     #print('release '+uinput_button)
-                    response = requests.post('http://0.0.0.0:8082/comand', data = {'line':'release '+uinput_button})
+                    response = requests.post('http://localhost:8082/comand', data = {'line':'release '+uinput_button})
                     print(response)
         buttons_prev = buttons
         analog_max_abs_value = 32767
