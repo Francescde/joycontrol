@@ -396,5 +396,5 @@ if __name__ == '__main__':
     # Start both Flask and WebSocket servers concurrently
     loop = asyncio.get_event_loop()
     flask_task = loop.run_in_executor(None, app.run, '0.0.0.0', 8082)
-    socket_task = loop.run_in_executor(None, run_socket_server)
+    socket_task = loop.run_in_executor(None, run_socket_server, None)
     loop.run_until_complete(asyncio.gather(flask_task, socket_task))
