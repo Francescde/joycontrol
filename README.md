@@ -50,7 +50,7 @@ sudo pip3 install aioconsole hid crc8 aioflask Flask flask[async] Flask-SocketIO
   - see [Issue #4](https://github.com/Poohl/joycontrol/issues/4) if despite that the switch doesn't connect or disconnects randomly.
 
 ```bash
-pip install websockets hidapi==0.7.99.post21
+pip install python-socketio hidapi==0.7.99.post21
 ```
 
 ## joycon_server.py

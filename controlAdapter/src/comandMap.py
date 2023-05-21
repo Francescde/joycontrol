@@ -115,7 +115,7 @@ def on_disconnect():
     print('Disconnected from server')
 
 # Connect to the server
-sio.connect('http://localhost:8082')
+sio.connect('http://0.0.0.0:8082')
 
 # Wait for messages and handle events
 sio.wait()
