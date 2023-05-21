@@ -260,30 +260,30 @@ async def disconnect():
 
 
 @app.route('/view/<controllerName>')
-async def display_view(controllerName):
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
+def display_view(controllerName):
+    return render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
 
 
 @app.route('/position_objects/<controllerName>')
-async def set_controller_objects(controllerName):
+def set_controller_objects(controllerName):
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
     data = json.load(f)
     if 'readInterval' not in data.keys():
         data['readInterval'] = readInterval
     data['filename'] = controllerName
-    return await render_template('set_controller_positions.html', params=json.dumps(data))
+    return render_template('set_controller_positions.html', params=json.dumps(data))
 
 
 @app.route('/controller/<controllerName>')
-async def display_controller(controllerName):
+def display_controller(controllerName):
     global readInterval
     # Opening JSON file
     f = open('controllers/'+controllerName+'.json')
     data = json.load(f)
     if 'readInterval' not in data.keys():
         data['readInterval'] = readInterval
-    return await render_template('default_controller.html', params=json.dumps(data))
+    return render_template('default_controller.html', params=json.dumps(data))
 
 
 @app.route('/files', methods=['POST'])
