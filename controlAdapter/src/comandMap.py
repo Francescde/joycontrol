@@ -11,6 +11,7 @@ def panic(msg):
     sys.exit(1)
 
 def are_close_values(val, com, err):
+    print(val, com, err)
     return val+err>com and val-err<com
 
 def rule_of_three(val):
