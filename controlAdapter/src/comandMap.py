@@ -11,7 +11,6 @@ def panic(msg):
     sys.exit(1)
 
 def are_close_values(val, com, err):
-    print(val, com, err)
     return val+err>com and val-err<com
 
 def rule_of_three(val):
@@ -78,14 +77,14 @@ def main():
             l_stick_values['h']=l_stick[0]
             l_stick_values['v']=l_stick[1]
             response = requests.post('http://localhost:8082/analog', json = { 'key': 'l','vertical': rule_of_three(l_stick_values['v']),'horizontal': rule_of_three(l_stick_values['h'])})
-            print(response)
+            #print(response)
             #emit event on websocket
         if((not are_close_values(r_stick_values['v'], r_stick[1], r_stick_values['precision'])) or (not are_close_values(r_stick_values['h'], r_stick[0], r_stick_values['precision']))):
             #print('r_stick ' + str(r_stick[0]) +", "+ str(-r_stick[1]))
             r_stick_values['h']=r_stick[0]
             r_stick_values['v']=r_stick[1]
             response = requests.post('http://localhost:8082/analog', json = { 'key': 'r', 'vertical': rule_of_three(r_stick_values['v']), 'horizontal': rule_of_three(r_stick_values['h'])})
-            print(response)
+            #print(response)
             #emit event on websocket
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
