@@ -4,8 +4,7 @@ import sys
 
 import procon
 import requests
-import asyncio
-import json
+import math
 
 def panic(msg):
     print(msg)
