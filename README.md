@@ -22,7 +22,9 @@ Chack out https://www.youtube.com/channel/UCE3sSyM4Ng1SrWQdWBFw-nA where we will
 - Install dependencies  
   Raspbian:
 ```bash
-sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-pip
+sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-pip python3-venv
+sudo python3 -m venv server
+source server/bin/activate
 ```
   Python: (a setup.py is present but not yet up to date)  
   Note that pip here _has_ to be run as root, as otherwise the packages are not available to the root user.
