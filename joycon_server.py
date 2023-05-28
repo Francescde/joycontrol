@@ -377,5 +377,5 @@ def delete_script(controllerName):
 if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
-            amiiboFolder = str(arg).replace('-folder=', '')
+            amiiboFolder = str(arg).split('-folder=')[-1]
     app.run(host='0.0.0.0', port=8082)
