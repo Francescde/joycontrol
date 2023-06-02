@@ -1,3 +1,5 @@
+#!/bin/sh
+
 if [[ -d ./clientCtr ]]
 then
     echo "./clientCtr exists on your filesystem."
