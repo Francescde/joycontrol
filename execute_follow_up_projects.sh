@@ -3,13 +3,13 @@ sudo chmod -R 777 .
 if [[ -d ./clientCtr ]]
 then
     echo "./clientCtr exists on your filesystem."
-    source clientCtr/bin/activate 
+    source /home/pi/joycontrol/clientCtr/bin/activate 
 else
     echo "./clientCtr does not exist on your filesystem."
     sudo cp controlAdapter/udev/* /etc/udev/rules.d
     python3 -m venv clientCtr
     sleep 10
-    source clientCtr/bin/activate
+    source /home/pi/joycontrol/bin/activate
     sleep 10
     pip install hidapi==0.7.99.post21 requests
 fi
