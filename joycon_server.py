@@ -78,8 +78,6 @@ async def client_sent_line(line):
     global objectMap;
     if (objectMap['active']):
         await objectMap['cli'].run_line(line)
-    else:
-        await get_client_transport()
 
 
 async def runScriptAsync(script, nfc):
@@ -200,7 +198,7 @@ async def analog():
         "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
         "time": timePass
     })
-    if(len(comandTimer) > maxComandLines):
+    if(len(comandTimer)> maxComandLines):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
     return jsonify({'message': 'Send'})
