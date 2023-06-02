@@ -46,17 +46,17 @@ def main():
     buttons_prev = {}
     l_stick_values = {
         "center": True,
-        "centerRadius": 10000,
+        "centerRadius": 1000,
         "v": 0,
         "h": 0,
-        "precision": 10000
+        "precision": 1000
     }
     r_stick_values = {
         "center": True,
         "centerRadius": 1000,
         "v": 0,
         "h": 0,
-        "precision": 10000
+        "precision": 1000
     }
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev, l_stick_values, r_stick_values
