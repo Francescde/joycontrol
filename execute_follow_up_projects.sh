@@ -12,6 +12,6 @@ else
     sleep 10
     . clientCtr/bin/activate 
     sleep 10
-    pip uninstall hidapi==0.7.99.post21 requests
+    pip install hidapi==0.7.99.post21 requests
 fi
 python3 controlAdapter/src/comandMap.py &
