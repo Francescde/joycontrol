@@ -200,7 +200,7 @@ async def analog():
         "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
         "time": timePass
     })
-    if(len(comandTimer)>100):
+    if(len(comandTimer) > maxComandLines):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
     return jsonify({'message': 'Send'})
