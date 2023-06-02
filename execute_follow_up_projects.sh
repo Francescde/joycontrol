@@ -1,5 +1,5 @@
 #!/bin/sh
-
+sudo chmod -R 777 .
 if [[ -d ./clientCtr ]]
 then
     echo "./clientCtr exists on your filesystem."
