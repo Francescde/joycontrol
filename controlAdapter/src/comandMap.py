@@ -18,6 +18,9 @@ def rule_of_three(val):
     analog_max_abs_value = 32767
     return math.floor(((val + analog_max_abs_value)/(analog_max_abs_value*2))*maxAnalog)
 
+def calculate_distance(x1, y1, x2, y2):
+    distance = math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
+    return distance
 
 def main():
     uinput_buttons_map = {
@@ -42,14 +45,18 @@ def main():
     }
     buttons_prev = {}
     l_stick_values = {
+        "center": True,
+        "centerRadius": 10000,
         "v": 0,
         "h": 0,
-        "precision": 1000
+        "precision": 10000
     }
     r_stick_values = {
+        "center": True,
+        "centerRadius": 1000,
         "v": 0,
         "h": 0,
-        "precision": 1000
+        "precision": 10000
     }
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev, l_stick_values, r_stick_values
@@ -72,14 +79,18 @@ def main():
                     response = requests.post('http://localhost:8082/comand', json = {'line':'release '+uinput_button})
                     #print(response)
         buttons_prev = buttons
-        if((not are_close_values(l_stick_values['v'], l_stick[1], l_stick_values['precision'])) or (not are_close_values(l_stick_values['h'], l_stick[0], l_stick_values['precision']))):
+        if( calculate_distance(l_stick_values['v'], l_stick_values['h'], l_stick[1], l_stick[0]) < l_stick_values['centerRadius'] and not l_stick_values['center']):
+            response = requests.post('http://localhost:8082/comand', json = {'line':'stick l center'})
+        elif((not are_close_values(l_stick_values['v'], l_stick[1], l_stick_values['precision'])) or (not are_close_values(l_stick_values['h'], l_stick[0], l_stick_values['precision']))):
             #print('l_stick ' + str(l_stick[0]) +", "+ str(-l_stick[1]))
             l_stick_values['h']=l_stick[0]
             l_stick_values['v']=l_stick[1]
             response = requests.post('http://localhost:8082/analog', json = { 'key': 'l','vertical': rule_of_three(l_stick_values['v']),'horizontal': rule_of_three(l_stick_values['h'])})
             #print(response)
             #emit event on websocket
-        if((not are_close_values(r_stick_values['v'], r_stick[1], r_stick_values['precision'])) or (not are_close_values(r_stick_values['h'], r_stick[0], r_stick_values['precision']))):
+        if( calculate_distance(r_stick_values['v'], r_stick_values['h'], r_stick[1], r_stick[0]) < r_stick_values['centerRadius'] and not r_stick_values['center']):
+            response = requests.post('http://localhost:8082/comand', json = {'line':'stick r center'})
+        elif((not are_close_values(r_stick_values['v'], r_stick[1], r_stick_values['precision'])) or (not are_close_values(r_stick_values['h'], r_stick[0], r_stick_values['precision']))):
             #print('r_stick ' + str(r_stick[0]) +", "+ str(-r_stick[1]))
             r_stick_values['h']=r_stick[0]
             r_stick_values['v']=r_stick[1]
