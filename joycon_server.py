@@ -160,18 +160,14 @@ def killScript():
     return jsonify({'message': 'cancel'})
 
 
-@app.route("/comand", methods=['POST'])
-async def comand():
+async def execute_line(line):
     global timerFlag, lastTime, comandTimer, maxComandLines
-    content = request.get_json()
-    line = content['line']
     timePass=0
     if timerFlag:
         timePass = timer() - lastTime
     timerFlag = True
     lastTime = timer()
     lineTask = [asyncio.create_task(client_sent_line(line))]
-    await asyncio.gather(* lineTask)
     comandTimer.append({
         "comand": line,
         "time": timePass
@@ -179,28 +175,21 @@ async def comand():
     if(len(comandTimer) > maxComandLines):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
+    await asyncio.gather(* lineTask)
+
+@app.route("/comand", methods=['POST'])
+async def comand():
+    content = request.get_json()
+    line = content['line']
+    await execute_line(line)
     return jsonify({'message': 'Send'})
 
 
 @app.route("/analog", methods=['POST'])
 async def analog():
-    global timerFlag, lastTime, comandTimer
     content = request.get_json()
-    timePass=0
-    if timerFlag:
-        timePass = timer() - lastTime
-    timerFlag = True
     line = "stick "+content['key']+" v "+str(content['vertical'])+" && "+"stick "+content['key']+" h "+str(content['horizontal'])
-    lastTime = timer()
-    lineTask = [asyncio.create_task(client_sent_line(line))]
-    await asyncio.gather(* lineTask)
-    comandTimer.append({
-        "comand": line,
-        "time": timePass
-    })
-    if(len(comandTimer)> maxComandLines):
-        comandTimer.pop(0)
-        comandTimer[0]['time']=0
+    await execute_line(line)
     return jsonify({'message': 'Send'})
 
 
