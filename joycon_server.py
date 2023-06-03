@@ -25,7 +25,7 @@ lastTime = 0
 timerFlag = False
 timeOutScript = 0.00
 maxComandLines = 10000
-delayOfClone = 0.000025
+delayOfClone = -0.00005
 readInterval = 10
 
 amiiboFolder = None
@@ -165,13 +165,13 @@ async def execute_line(line):
     global timerFlag, lastTime, comandTimer, maxComandLines, delayOfClone
     timePass=0
     if timerFlag:
-        timePass = timer() - lastTime
+        timePass = (timer() - lastTime) + delayOfClone
     timerFlag = True
     lastTime = timer()
     lineTask = [asyncio.create_task(client_sent_line(line))]
     comandTimer.append({
         "comand": line,
-        "time": timePass + delayOfClone
+        "time": timePass
     })
     if(len(comandTimer) > maxComandLines):
         comandTimer.pop(0)
