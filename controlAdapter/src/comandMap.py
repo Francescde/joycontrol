@@ -82,7 +82,9 @@ def main():
         if( calculate_distance(0, 0, l_stick[1], l_stick[0]) < l_stick_values['centerRadius']):
             if not l_stick_values['center']:
                 response = requests.post('http://localhost:8082/comand', json = {'line':'stick l center'})
-            l_stick_values['center'] = True
+                l_stick_values['h']= 0
+                l_stick_values['v']= 0
+                l_stick_values['center'] = True
         elif((not are_close_values(l_stick_values['v'], l_stick[1], l_stick_values['precision'])) or (not are_close_values(l_stick_values['h'], l_stick[0], l_stick_values['precision']))):
             #print('l_stick ' + str(l_stick[0]) +", "+ str(-l_stick[1]))
             l_stick_values['h']=l_stick[0]
@@ -94,7 +96,9 @@ def main():
         if( calculate_distance(0, 0, r_stick[1], r_stick[0]) < r_stick_values['centerRadius']):
             if not r_stick_values['center']:
                 response = requests.post('http://localhost:8082/comand', json = {'line':'stick r center'})
-            r_stick_values['center'] = True
+                r_stick_values['h']= 0
+                r_stick_values['v']= 0
+                r_stick_values['center'] = True
         elif((not are_close_values(r_stick_values['v'], r_stick[1], r_stick_values['precision'])) or (not are_close_values(r_stick_values['h'], r_stick[0], r_stick_values['precision']))):
             #print('r_stick ' + str(r_stick[0]) +", "+ str(-r_stick[1]))
             r_stick_values['center'] = False
