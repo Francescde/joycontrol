@@ -171,7 +171,6 @@ async def comand():
     timerFlag = True
     lastTime = timer()
     lineTask = [asyncio.create_task(client_sent_line(line))]
-    print(line)
     await asyncio.gather(* lineTask)
     comandTimer.append({
         "comand": line,
@@ -191,10 +190,12 @@ async def analog():
     if timerFlag:
         timePass = timer() - lastTime
     timerFlag = True
-    await asyncio.gather(*[client_sent_line("stick "+content['key']+" v "+str(content['vertical'])), client_sent_line("stick "+content['key']+" h "+str(content['horizontal']))])
+    line = "stick "+content['key']+" v "+str(content['vertical'])+" && "+"stick "+content['key']+" h "+str(content['horizontal'])
     lastTime = timer()
+    lineTask = [asyncio.create_task(client_sent_line(line))]
+    await asyncio.gather(* lineTask)
     comandTimer.append({
-        "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
+        "comand": line,
         "time": timePass
     })
     if(len(comandTimer)> maxComandLines):
