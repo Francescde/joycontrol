@@ -108,7 +108,6 @@ async def runScriptAsync(script, nfc):
             lineTask = []
             for subline in line:
                 lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
-            print(line)
             if(sleeps[lineIndex]):
                 await asyncio.gather(* lineTask)
             lineIndex +=1
