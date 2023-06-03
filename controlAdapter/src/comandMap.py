@@ -5,6 +5,7 @@ import sys
 import procon
 import requests
 import math
+import time
 
 def panic(msg):
     print(msg)
@@ -49,14 +50,14 @@ def main():
         "centerRadius": 1000,
         "v": 0,
         "h": 0,
-        "precision": 15000
+        "precision": 10000
     }
     r_stick_values = {
         "center": True,
         "centerRadius": 1000,
         "v": 0,
         "h": 0,
-        "precision": 15000
+        "precision": 10000
     }
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev, l_stick_values, r_stick_values
@@ -107,6 +108,7 @@ def main():
             response = requests.post('http://localhost:8082/analog', json = { 'key': 'r', 'vertical': rule_of_three(r_stick_values['v']), 'horizontal': rule_of_three(r_stick_values['h'])})
             #print(response)
             #emit event on websocket
+        time.sleep(0.3)
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
         con = procon.ProCon()
