@@ -25,7 +25,8 @@ lastTime = 0
 timerFlag = False
 timeOutScript = 0.00
 maxComandLines = 10000
-delayOfClone = -0.000035
+comandDelay = -0.000035
+comandDelayUnits = 1000
 readInterval = 10
 
 amiiboFolder = None
@@ -162,10 +163,10 @@ def killScript():
 
 
 async def execute_line(line):
-    global timerFlag, lastTime, comandTimer, maxComandLines, delayOfClone
+    global timerFlag, lastTime, comandTimer, maxComandLines, comandDelay
     timePass=0
     if timerFlag:
-        timePass = (timer() - lastTime) + delayOfClone
+        timePass = (timer() - lastTime) + comandDelay
     timerFlag = True
     lastTime = timer()
     lineTask = [asyncio.create_task(client_sent_line(line))]
@@ -238,6 +239,18 @@ async def resetActions():
     return jsonify({'message': "succes"})
 
 
+@app.route("/reset-actions", methods=['POST'])
+async def resetActionsAndSet():
+    global comandTimer, lastTime, timerFlag, maxComandLines, comandDelay
+    content = request.get_json()
+    maxComandLines = int(content['maxComandLines'])
+    comandDelay = float(content['comandDelay'])/comandDelayUnits
+    comandTimer = []
+    lastTime = 0
+    timerFlag = False
+    return jsonify({'message': "succes"})
+
+
 @app.route('/disconnect')
 async def disconnect():
     await close_transport()
@@ -246,7 +259,7 @@ async def disconnect():
 
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay*comandDelayUnits )
 
 
 @app.route('/position_objects/<controllerName>')

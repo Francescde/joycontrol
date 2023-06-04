@@ -431,9 +431,19 @@
             <div>Scripts</div>
             <button type="button" class="btn btn-primary" onclick="requestScripts()">reload</button>
             <!-- Button trigger modal -->
-            <button type="button" class="btn btn-primary" onclick="cleanCurrentScriptForm()">
-                clean current
-            </button>
+            <div class="d-flex flex-column justify-content-around">
+                <div class="form-outline">
+                    <input type="number" id="maxComandLines" class="form-control" value="{{maxComandLines}}" />
+                    <label class="form-label" for="maxComandLines">max stored comands</label>
+                </div>
+                <div class="form-outline">
+                    <input type="number" id="comandDelay" class="form-control" value="{{comandDelay}}" />
+                    <label class="form-label" for="comandDelay">comand delay</label>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="cleanCurrentScriptForm()">
+                    clean current
+                </button>
+            </div>
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="showCurrentScriptForm()">
                 Current script
             </button>
