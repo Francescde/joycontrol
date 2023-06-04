@@ -289,13 +289,17 @@
         }
         
         function cleanCurrentScriptForm(){
+            const comandDelay = $("#comandDelay").val();
+            const maxComandLines = $("#maxComandLines").val();
             $.ajax({
                     url: '/reset-actions',
-                    type: 'get',
+                    type: 'post',
+                    dataType: 'json',
                     contentType: 'application/json',
                     success: function (data, status) {
                         
                     }
+                    data: JSON.stringify({maxComandLines: maxComandLines, comandDelay: comandDelay})
                 });
         }
 
