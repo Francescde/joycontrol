@@ -25,7 +25,7 @@ lastTime = 0
 timerFlag = False
 timeOutScript = 0.00
 maxComandLines = 10000
-delayOfClone = -0.00005
+delayOfClone = -0.000035
 readInterval = 10
 
 amiiboFolder = None
