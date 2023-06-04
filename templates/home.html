@@ -444,12 +444,14 @@
                     clean current
                 </button>
             </div>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="showCurrentScriptForm()">
-                Current script
-            </button>
-            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="cleanScriptsForm()">
-                Create script
-            </button>
+            <div class="d-flex flex-column justify-content-around">
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="showCurrentScriptForm()">
+                    Current script
+                </button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="cleanScriptsForm()">
+                    Create script
+                </button>
+            </div>
         </div>
         <div id="scripList" class="d-flex flex-column justify-content-around">
         </div>
