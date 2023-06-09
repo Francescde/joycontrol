@@ -64,6 +64,7 @@ def main():
         if not buttons_prev:
             buttons_prev = buttons
             return
+        comands_to_send = []
         for k, v in buttons.items():
             if buttons_prev[k] != v:
                 uinput_button = uinput_buttons_map[k]
@@ -72,17 +73,20 @@ def main():
                 if v:
                     #emit event on webdocket
                     #print('hold '+uinput_button)
-                    response = requests.post('http://localhost:8082/comand', json = {'line':'hold '+uinput_button})
+                    comands_to_send.append('hold '+uinput_button)
+                    #response = requests.post('http://localhost:8082/comand', json = {'line':'hold '+uinput_button})
                     #print(response)
                 else:
                     #emit event on websocket
                     #print('release '+uinput_button)
-                    response = requests.post('http://localhost:8082/comand', json = {'line':'release '+uinput_button})
+                    comands_to_send.append('release '+uinput_button)
+                    #response = requests.post('http://localhost:8082/comand', json = {'line':'release '+uinput_button})
                     #print(response)
         buttons_prev = buttons
         if( calculate_distance(0, 0, l_stick[1], l_stick[0]) < l_stick_values['centerRadius']):
             if not l_stick_values['center']:
-                response = requests.post('http://localhost:8082/comand', json = {'line':'stick l center'})
+                comands_to_send.append('stick l center')
+                #response = requests.post('http://localhost:8082/comand', json = {'line':'stick l center'})
                 l_stick_values['h']= 0
                 l_stick_values['v']= 0
                 l_stick_values['center'] = True
@@ -91,12 +95,15 @@ def main():
             l_stick_values['h']=l_stick[0]
             l_stick_values['v']=l_stick[1]
             l_stick_values['center'] = False
-            response = requests.post('http://localhost:8082/analog', json = { 'key': 'l','vertical': rule_of_three(l_stick_values['v']),'horizontal': rule_of_three(l_stick_values['h'])})
+            line = "stick l v "+str(rule_of_three(l_stick_values['v']))+" && "+"stick l h "+str(rule_of_three(l_stick_values['h']))
+            comands_to_send.append(line)
+            #response = requests.post('http://localhost:8082/analog', json = { 'key': 'l','vertical': rule_of_three(l_stick_values['v']),'horizontal': rule_of_three(l_stick_values['h'])})
             #print(response)
             #emit event on websocket
         if( calculate_distance(0, 0, r_stick[1], r_stick[0]) < r_stick_values['centerRadius']):
             if not r_stick_values['center']:
-                response = requests.post('http://localhost:8082/comand', json = {'line':'stick r center'})
+                comands_to_send.append('stick r center')
+                #response = requests.post('http://localhost:8082/comand', json = {'line':'stick r center'})
                 r_stick_values['h']= 0
                 r_stick_values['v']= 0
                 r_stick_values['center'] = True
@@ -105,9 +112,14 @@ def main():
             r_stick_values['center'] = False
             r_stick_values['h']=r_stick[0]
             r_stick_values['v']=r_stick[1]
-            response = requests.post('http://localhost:8082/analog', json = { 'key': 'r', 'vertical': rule_of_three(r_stick_values['v']), 'horizontal': rule_of_three(r_stick_values['h'])})
+            line = "stick r v "+str(rule_of_three(r_stick_values['v']))+" && "+"stick r h "+str(rule_of_three(r_stick_values['h']))
+            comands_to_send.append(line)
+            #response = requests.post('http://localhost:8082/analog', json = { 'key': 'r', 'vertical': rule_of_three(r_stick_values['v']), 'horizontal': rule_of_three(r_stick_values['h'])})
             #print(response)
             #emit event on websocket
+        if len(comands_to_send)>0:
+            response = requests.post('http://localhost:8082/comand', json = {'line':" && ".join(comands_to_send)})
+
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
         con = procon.ProCon()
