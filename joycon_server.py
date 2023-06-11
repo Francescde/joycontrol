@@ -176,7 +176,7 @@ async def execute_line(line):
     global timerFlag, lastTime, comandTimer, maxComandLines, comandDelay
     timePass=0
     if timerFlag:
-        timePass = (timer() - lastTime)
+        timePass = (timer() - lastTime) + comandDelay
     lineTask = [asyncio.create_task(client_sent_line(line))]
     lastTime = timer()
     await asyncio.gather(* lineTask)
