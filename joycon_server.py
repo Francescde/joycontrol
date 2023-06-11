@@ -84,37 +84,47 @@ async def client_sent_line(line):
 
 async def runScriptAsync(script, nfc):
     global objectMap
-    f = open(script, 'r+')
-    lines = []
-    try:
-        lines = f.readlines()
-    except Exception as e:
-        print("An exception occurred" + str(e))
-    f.close()
     tasks = []
     sleeps = []
+    
+    lines = []
+    with open(script, 'r') as f:
+        try:
+            lines = f.readlines()
+        except Exception as e:
+            print("An exception occurred" + str(e))
+    
     for line in lines:
         if '{nfc}' in line:
             line = line.replace('{nfc}', nfc)
-        sleeps.append(('sleep' in line))
-        lineTask = []
-        if ';' in line:
-            for subline in line.split(';'):
-                lineTask.append(subline)
-        else:
-            lineTask = [line]
+        sleeps.append('sleep' in line)
+        lineTask = line.split(';')
         tasks.append(lineTask)
-    while(objectMap['repeats']!=0):
-        lineIndex = 0
-        for line in tasks:
-            lineTask = []
-            for subline in line:
-                lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
-            if(sleeps[lineIndex]):
-                await asyncio.gather(* lineTask)
-            lineIndex +=1
-        if objectMap['repeats']>0:
-            objectMap['repeats'] = objectMap['repeats'] - 1
+    execution_objects = []
+    non_sleep_line=[]
+    for lineIndex, line in enumerate(tasks):
+        if sleeps[lineIndex]:
+            execution_objects.append({
+                'non_sleep_line': non_sleep_line,
+                'sleep_line': line
+            })
+            non_sleep_line = []
+        else:
+            non_sleep_line.extend(line)
+
+    if len(non_sleep_lines)>0:  # Handle any remaining non-sleep lines
+        execution_objects.append({
+            'non_sleep_lines': non_sleep_line,
+            'sleep_lines': []
+        })
+    
+    while objectMap['repeats'] != 0:
+        for execution_object in execution_objects:
+            [asyncio.create_task(objectMap['cli'].run_line(subline)) for subline in execution_object['non_sleep_line']]
+            await asyncio.gather(*[asyncio.create_task(objectMap['cli'].run_line(subline)) for subline in execution_object['sleep_line']])
+        
+        if objectMap['repeats'] > 0:
+            objectMap['repeats'] -= 1
 
 
 app = Flask(__name__, static_folder='static')
