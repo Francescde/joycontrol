@@ -177,9 +177,9 @@ async def execute_line(line):
     timePass=0
     if timerFlag:
         timePass = (timer() - lastTime) + comandDelay
-    timerFlag = True
-    lastTime = timer()
     lineTask = [asyncio.create_task(client_sent_line(line))]
+    lastTime = timer()
+    timerFlag = True
     comandTimer.append({
         "comand": line,
         "time": timePass
