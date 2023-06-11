@@ -112,7 +112,7 @@ async def runScriptAsync(script, nfc):
         else:
             non_sleep_line.extend(line)
 
-    if len(non_sleep_lines)>0:  # Handle any remaining non-sleep lines
+    if len(non_sleep_line)>0:  # Handle any remaining non-sleep lines
         execution_objects.append({
             'non_sleep_lines': non_sleep_line,
             'sleep_lines': []
