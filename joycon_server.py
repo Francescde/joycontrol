@@ -25,7 +25,7 @@ lastTime = 0
 timerFlag = False
 timeOutScript = 0.00
 maxComandLines = 10000
-comandDelay = -0.000035
+comandDelay = 0
 comandDelayUnits = 1000
 readInterval = 10
 
