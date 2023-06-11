@@ -23,9 +23,8 @@ objectMap['repeats'] = 0
 comandTimer = []
 lastTime = 0
 timerFlag = False
-timeOutScript = 0.00
 maxComandLines = 10000
-comandDelay = 0
+comandDelay = 50
 comandDelayUnits = 1000
 readInterval = 10
 
@@ -173,10 +172,10 @@ def killScript():
 
 
 async def execute_line(line):
-    global timerFlag, lastTime, comandTimer, maxComandLines, comandDelay
+    global timerFlag, lastTime, comandTimer, maxComandLines
     timePass=0
     if timerFlag:
-        timePass = (timer() - lastTime) + comandDelay
+        timePass = (timer() - lastTime)
     lineTask = [asyncio.create_task(client_sent_line(line))]
     lastTime = timer()
     await asyncio.gather(* lineTask)
@@ -226,7 +225,7 @@ async def writeScript(filename):
 
 @app.route("/last-actions", methods=['GET'])
 async def getRunningScript():
-    global comandTimer, timeOutScript
+    global comandTimer, comandDelay
     '''
     comandTimer.append({
         "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
@@ -235,7 +234,7 @@ async def getRunningScript():
     lines = []
     for comand in comandTimer:
         if comand["time"]>0:
-            lines.append("sleep "+str(comand["time"]-timeOutScript))
+            lines.append("sleep "+str(comand["time"]+ (comandDelay/comandDelayUnits)))
         lines.append(comand["comand"])
     return jsonify({'message': '\n'.join(lines)})
 
