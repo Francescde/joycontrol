@@ -56,7 +56,7 @@ async def get_client_transport():
 
     await controller_state.connect()
     async def sleep(*args):
-        time = float(args[0])-0.005
+        time = float(args[0])
         await asyncio.sleep(time)
     cli.add_command(sleep.__name__, sleep)
     objectMap['cli'] = cli
