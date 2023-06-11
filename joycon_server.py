@@ -176,9 +176,10 @@ async def execute_line(line):
     global timerFlag, lastTime, comandTimer, maxComandLines, comandDelay
     timePass=0
     if timerFlag:
-        timePass = (timer() - lastTime) + comandDelay
+        timePass = (timer() - lastTime)
     lineTask = [asyncio.create_task(client_sent_line(line))]
     lastTime = timer()
+    await asyncio.gather(* lineTask)
     timerFlag = True
     comandTimer.append({
         "comand": line,
@@ -187,7 +188,6 @@ async def execute_line(line):
     if(len(comandTimer) > maxComandLines):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
-    await asyncio.gather(* lineTask)
 
 @app.route("/comand", methods=['POST'])
 async def comand():
