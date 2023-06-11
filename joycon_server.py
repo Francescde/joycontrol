@@ -7,7 +7,7 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask import Flask, send_from_directory, jsonify, render_template, request
+from aioflask import Flask, jsonify, render_template, request
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
@@ -24,8 +24,7 @@ comandTimer = []
 lastTime = 0
 timerFlag = False
 maxComandLines = 10000
-comandDelay = 50
-comandDelayUnits = 1000
+comandDelay = -0.05
 readInterval = 10
 
 amiiboFolder = None
@@ -55,8 +54,7 @@ async def get_client_transport():
 
     await controller_state.connect()
     async def sleep(*args):
-        time = float(args[0])
-        await asyncio.sleep(time)
+        await asyncio.sleep(float(args[0]))
     cli.add_command(sleep.__name__, sleep)
     objectMap['cli'] = cli
     objectMap['transport'] = transport
@@ -178,7 +176,6 @@ async def execute_line(line):
         timePass = (timer() - lastTime)
     lineTask = [asyncio.create_task(client_sent_line(line))]
     lastTime = timer()
-    await asyncio.gather(* lineTask)
     timerFlag = True
     comandTimer.append({
         "comand": line,
@@ -187,6 +184,7 @@ async def execute_line(line):
     if(len(comandTimer) > maxComandLines):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
+    await asyncio.gather(* lineTask)
 
 @app.route("/comand", methods=['POST'])
 async def comand():
@@ -233,8 +231,8 @@ async def getRunningScript():
     })'''
     lines = []
     for comand in comandTimer:
-        if comand["time"]>0:
-            lines.append("sleep "+str(comand["time"]+ (comandDelay/comandDelayUnits)))
+        if comand["time"] + (comandDelay)>0:
+            lines.append("sleep "+str(comand["time"]+ (comandDelay)))
         lines.append(comand["comand"])
     return jsonify({'message': '\n'.join(lines)})
 
@@ -253,7 +251,7 @@ async def resetActionsAndSet():
     global comandTimer, lastTime, timerFlag, maxComandLines, comandDelay
     content = request.get_json()
     maxComandLines = int(content['maxComandLines'])
-    comandDelay = float(content['comandDelay'])/comandDelayUnits
+    comandDelay = float(content['comandDelay'])
     comandTimer = []
     lastTime = 0
     timerFlag = False
@@ -268,7 +266,7 @@ async def disconnect():
 
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay*comandDelayUnits )
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay )
 
 
 @app.route('/position_objects/<controllerName>')
