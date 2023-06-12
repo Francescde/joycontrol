@@ -24,7 +24,7 @@ comandTimer = []
 lastTime = 0
 timerFlag = False
 maxComandLines = 10000
-comandDelay = -0.05
+comandDelay = -0.0085
 readInterval = 10
 
 amiiboFolder = None
