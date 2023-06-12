@@ -1,0 +1,316 @@
+hold a
+sleep 0.1265280910000947
+release a
+sleep 5.488849911000129
+hold a
+sleep 0.1440935589997971
+release a
+sleep 5.0792530349998777
+hold a
+sleep 0.11134866700004203
+release a
+sleep 14.0898525190004
+hold a
+sleep 0.1496251819998215
+release a
+sleep 1.7687378270001355
+hold a
+sleep 0.11027179100065404
+release a
+sleep 1.7607534860007072
+hold a
+sleep 0.126974890000296
+release a
+sleep 1.7519375149994667
+stick l v 2375 && stick l h 2055
+sleep 0.023688539000344462
+stick l v 3011 && stick l h 2057
+sleep 0.01378106199981994
+stick l v 3638 && stick l h 2055
+sleep 0.018493473999937123
+stick l v 4093 && stick l h 2054
+sleep 1.5260359509992705
+hold x
+sleep 0.10235288199956266
+release x
+sleep 0.2164283760002072
+hold x
+sleep 0.12778372499988472
+release x
+sleep 0.1991411439993535
+stick r v 1347 && stick r h 1972
+sleep 0.00920252000005712
+stick r v 1018 && stick r h 1974
+sleep 0.009186926999886054
+stick r v 491 && stick r h 1975
+sleep 0.0092775180000026
+stick r v 46 && stick r h 1978
+sleep 0.8820248099999881
+stick r v 9 && stick r h 2292
+sleep 0.15171275100047205
+stick l v 4088 && stick l h 2373
+sleep 0.1501071770007038
+stick r v 423 && stick r h 2345
+sleep 0.01100012700035586
+stick r v 885 && stick r h 2339
+sleep 0.008463685000519035
+stick r v 1836 && stick r h 2012
+sleep 0.009847949000599328
+stick r center
+sleep 1.897709095000122
+hold r
+sleep 0.08628721599953132
+release r
+sleep 0.08765734999988489
+stick l v 3693 && stick l h 2580
+sleep 0.01841232699999091
+stick l v 3376 && stick l h 2577
+sleep 0.01036412299973017
+stick l v 2754 && stick l h 2559
+sleep 0.00862375500028429
+stick l v 2401 && stick l h 2318
+sleep 0.008987858000095002
+stick l center
+sleep 0.3465534690002678
+stick l v 2361 && stick l h 2128
+sleep 0.01579896200010262
+stick l v 2827 && stick l h 2366
+sleep 0.01471180099988851
+stick l v 3342 && stick l h 2407
+sleep 0.03141889899953094
+stick l v 3680 && stick l h 2411
+sleep 0.15178364000067085
+stick l v 3124 && stick l h 2559
+sleep 0.023286251999619707
+stick l v 2537 && stick l h 2442
+sleep 0.03147000900017156
+stick l center
+sleep 0.4216766359994872
+stick l v 2389 && stick l h 2120
+sleep 0.030999946000432828
+stick l v 2817 && stick l h 2313
+sleep 0.14920881000025837
+stick l v 2385 && stick l h 2270
+sleep 0.020324764999626495
+stick l center
+sleep 0.3970976469999223
+stick l v 2554 && stick l h 1417
+sleep 0.013442497000054572
+stick l v 2845 && stick l h 1049
+sleep 0.010246200000350654
+stick l v 3266 && stick l h 484
+sleep 0.5503610220002011
+stick l v 2870 && stick l h 193
+sleep 0.19965991400013444
+stick l v 2590 && stick l h 527
+sleep 0.023890516999839746
+hold x && stick l v 2281 && stick l h 1545
+sleep 0.039005688999990525
+stick l v 2148 && stick l h 1863
+sleep 0.007231066000626014
+stick l center
+sleep 0.059694215000403346
+release x
+sleep 3.131661744000579
+stick l v 2368 && stick l h 1892
+sleep 0.015481284000001323
+hold r
+sleep 0.025497962000285042
+stick l v 2777 && stick l h 1620
+sleep 0.05212657399979798
+stick l v 3131 && stick l h 1335
+sleep 0.018307164000274496
+release r
+sleep 0.025887859999696956
+stick l v 3502 && stick l h 1069
+sleep 0.017339371000074606
+stick l v 3820 && stick l h 959
+sleep 0.34491403399979753
+stick l v 4010 && stick l h 1330
+sleep 0.03144016000069678
+stick l v 4061 && stick l h 1652
+sleep 0.34347093700026016
+stick l v 3573 && stick l h 1661
+sleep 0.017663196999732463
+stick l v 3034 && stick l h 1664
+sleep 0.021712270999982138
+stick l v 2469 && stick l h 1821
+sleep 0.014387920000357553
+stick l center
+sleep 0.6159322709999324
+stick l v 2437 && stick l h 2028
+sleep 0.023918554000287258
+stick l v 2922 && stick l h 2131
+sleep 0.020206176000014238
+stick l v 3249 && stick l h 2208
+sleep 0.009797951000022294
+stick l v 3693 && stick l h 2231
+sleep 0.004816417000169167
+stick l v 4070 && stick l h 2243
+sleep 0.8745418690004081
+stick l v 3662 && stick l h 2258
+sleep 0.009695267999544739
+stick l v 3322 && stick l h 2258
+sleep 0.013526032999747258
+stick l v 2843 && stick l h 2178
+sleep 0.025780881000086082
+stick l center
+sleep 0.026611789000438875
+hold x
+sleep 0.11257413499961694
+release x
+sleep 0.8010575360002841
+stick r v 1875 && stick r h 2501
+sleep 0.024039200000428536
+stick r v 1881 && stick r h 3050
+sleep 0.009573493999509082
+stick r v 2001 && stick r h 3529
+sleep 0.012712495999861857
+stick r v 2203 && stick r h 4064
+sleep 0.47114311000032466
+stick r v 2077 && stick r h 3702
+sleep 0.019740723999260808
+stick r v 2041 && stick r h 2934
+sleep 0.007810867000356665
+stick r v 2045 && stick r h 1888
+sleep 1.8667160170006392
+stick l v 2365 && stick l h 2044
+sleep 0.05414426899997488
+stick l v 2725 && stick l h 2140
+sleep 0.031700080000431625
+stick l v 3073 && stick l h 2208
+sleep 0.03116903599939542
+hold r && stick l v 3408 && stick l h 2210
+sleep 0.031042780000374477
+stick l v 3785 && stick l h 2209
+sleep 0.07082857300056639
+release r
+sleep 1.0096350320008278
+stick l v 3219 && stick l h 2205
+sleep 0.013379424999497132
+stick l v 2843 && stick l h 2204
+sleep 0.009783730000803188
+stick l v 2252 && stick l h 2182
+sleep 0.022996558000071672
+stick l center
+sleep 0.5922368640002824
+stick l v 2258 && stick l h 2476
+sleep 0.023735559000582725
+stick l v 2426 && stick l h 2967
+sleep 0.009242037999596504
+stick l v 2477 && stick l h 3474
+sleep 0.04462632200002554
+stick l v 2648 && stick l h 3816
+sleep 0.08473338500053068
+stick l v 3028 && stick l h 3883
+sleep 0.08089601000020047
+stick l v 3350 && stick l h 3714
+sleep 0.15263701700032833
+stick l v 3655 && stick l h 3381
+sleep 0.6636453810005187
+stick l v 3345 && stick l h 3701
+sleep 0.019461749000496638
+stick l v 2825 && stick l h 3957
+sleep 0.027274922000200603
+stick l v 2437 && stick l h 4080
+sleep 0.10085049899944715
+stick l v 2100 && stick l h 4084
+sleep 0.16193339800056855
+stick l v 1838 && stick l h 3342
+sleep 0.014317459000179951
+stick l v 1970 && stick l h 2626
+sleep 0.009218205000164743
+stick l v 2008 && stick l h 1980
+sleep 0.008294486000435426
+hold x && stick l center
+sleep 0.04315054099961708
+release x
+sleep 0.730270711000143
+stick l v 2298 && stick l h 1721
+sleep 0.5116671949998854
+stick l center
+sleep 0.22345949099954304
+stick l v 1795 && stick l h 2378
+sleep 0.020319248000218067
+stick l v 1554 && stick l h 2777
+sleep 0.026506607000468647
+stick l v 1238 && stick l h 3097
+sleep 0.0525583809993841
+stick l v 805 && stick l h 3550
+sleep 1.122341361000421
+stick l v 1147 && stick l h 3736
+sleep 0.0782065550000916
+stick l v 1523 && stick l h 3494
+sleep 0.07136384099967835
+stick l v 1949 && stick l h 3404
+sleep 0.06350072399973578
+stick l v 2290 && stick l h 3404
+sleep 0.11993302700002823
+stick l v 2196 && stick l h 2934
+sleep 0.022906375000187836
+stick l v 2186 && stick l h 2308
+sleep 0.008514981000102124
+stick l center
+sleep 0.335468672000301
+hold r
+sleep 0.09431163099989498
+release r
+sleep 0.27272525499929906
+stick l v 2011 && stick l h 2417
+sleep 0.016377763999938906
+stick l v 1859 && stick l h 3098
+sleep 0.009061024999849905
+stick l v 1540 && stick l h 3866
+sleep 0.12134367900025972
+stick l v 1633 && stick l h 3435
+sleep 0.023504990000132238
+stick l v 1892 && stick l h 2784
+sleep 0.009094541999642387
+stick l center
+sleep 0.7291802469998439
+stick l v 1553 && stick l h 2001
+sleep 0.023385401000181445
+stick l v 1075 && stick l h 2083
+sleep 0.02241794200008735
+stick l v 460 && stick l h 2305
+sleep 0.023588674000078753
+stick l v 140 && stick l h 2454
+sleep 0.3525464880002837
+stick l v 225 && stick l h 2830
+sleep 0.16621530300008452
+stick l v 499 && stick l h 2515
+sleep 0.03268541100069706
+stick l v 559 && stick l h 2180
+sleep 0.07705722999972203
+stick l v 526 && stick l h 1864
+sleep 0.10449810299988166
+stick l v 1162 && stick l h 1827
+sleep 0.007852218999600154
+stick l v 1931 && stick l h 2033
+sleep 0.009556994999824382
+stick l center
+sleep 1.0860192630006205
+hold x
+sleep 0.07026901500003441
+release x
+sleep 14.186015071999377
+hold a
+sleep 0.12289884999612695
+release a
+sleep 5.673184131000111
+hold a
+sleep 0.10217399500007013
+release a
+sleep 2.9689268380006106
+hold a
+sleep 0.14233435899941832
+release a
+sleep 2.5448317680001344
+hold a
+sleep 0.10340922799960389
+release a
+sleep 5.84833176800012
+hold a
+sleep 0.19516627000075822
+release a
+sleep 2
