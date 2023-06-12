@@ -21,7 +21,7 @@ else
     sudo systemctl daemon-reload
     sudo systemctl restart bluetooth.service
     # Define the line to be appended
-    line_to_append="sudo /home/pi/joycontrol/startup_server.sh &"
+    line_to_append="cd /home/pi/joycontrol; sudo ./startup_server.sh &"
 
     # Check if the line already exists in the file
     if grep -Fxq "$line_to_append" /etc/rc.local; then
