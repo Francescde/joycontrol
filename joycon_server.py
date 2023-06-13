@@ -114,11 +114,14 @@ async def runScriptAsync(script, nfc):
             'non_sleep_lines': non_sleep_line,
             'sleep_lines': []
         })
-    
     while objectMap['repeats'] != 0:
+        awaitable_tasks = []
         for execution_object in execution_objects:
+            await asyncio.gather(*awaitable_tasks)
             [asyncio.create_task(objectMap['cli'].run_line(subline)) for subline in execution_object['non_sleep_line']]
-            await asyncio.gather(*[asyncio.create_task(objectMap['cli'].run_line(subline)) for subline in execution_object['sleep_line']])
+            awaitable_tasks = [asyncio.create_task(objectMap['cli'].run_line(subline)) for subline in execution_object['sleep_line']]
+        
+        await asyncio.gather(*awaitable_tasks)
         
         if objectMap['repeats'] > 0:
             objectMap['repeats'] -= 1

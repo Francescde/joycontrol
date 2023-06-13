@@ -16,10 +16,16 @@ else
     # Assign the attributes to a variable
     attributes="-C -P sap,input,avrcp"
 
-    # Find the ExecStart line in the bluetooth.service file and append the attributes
-    sudo sed -i "s/^ExecStart.*/& $attributes/g" /lib/systemd/system/bluetooth.service
-    sudo systemctl daemon-reload
-    sudo systemctl restart bluetooth.service
+    # Check if the attributes are already added to the ExecStart line
+    if grep -q "ExecStart.*$attributes" /lib/systemd/system/bluetooth.service; then
+        echo "Attributes already added to ExecStart line."
+    else
+        # Find the ExecStart line in the bluetooth.service file and append the attributes
+        sudo sed -i "s/^ExecStart.*/& $attributes/g" /lib/systemd/system/bluetooth.service
+        sudo systemctl daemon-reload
+        sudo systemctl restart bluetooth.service
+        echo "Attributes added to ExecStart line."
+    fi
     # Define the line to be appended
     line_to_append="cd /home/pi/joycontrol; sudo ./startup_server.sh &"
 
