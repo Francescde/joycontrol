@@ -131,6 +131,9 @@
                 success: function(response) {
                     // Maneja la respuesta del servidor
                     console.log(response); // Aquí puedes imprimir la respuesta en la consola del navegador
+                    let folderName = $("#amiibo").val();
+                    //amiiboList
+                    requestAmiibosFromFolder(folderName);
                     
                     // Dependiendo de la respuesta, puedes realizar acciones específicas en el cliente
                     // Por ejemplo, mostrar un mensaje de éxito o error al usuario, redirigirlo a otra página, etc.

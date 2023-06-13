@@ -12,6 +12,7 @@ from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
 import sys
+import zipfile
 from timeit import default_timer as timer
 
 objectMap = {}
@@ -388,23 +389,24 @@ def delete_script(controllerName):
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    file = request.files['file']  # Obtén el archivo cargado del campo 'file'
-    
-    # Verifica la extensión del archivo para determinar el comportamiento adecuado
+    print('arriba')
+    file = request.files['file']
     if file.filename.endswith('.bin'):
-        # Guarda el archivo BIN en la carpeta especificada
+        print('processing .bin file'+file.filename)
         file.save(os.path.join(amiiboFolder, file.filename))
         response = {'message': 'Archivo .bin recibido'}
     elif file.filename.endswith('.zip'):
-        # Extrae solo los archivos BIN del archivo ZIP en la carpeta especificada
-        zip_path = os.path.join(amiiboFolder, file.filename)
-        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        print('processing .zip file'+file.filename)
+        with zipfile.ZipFile(file, 'r') as zip_ref:
             for member in zip_ref.namelist():
-                if member.endswith('.bin'):
-                    zip_ref.extract(member, amiiboFolder)
+                print('processing .zip file'+member)
+                if member.endswith('.bin') and not os.path.basename(member).startswith('.'):
+                    extracted_file_path = os.path.join(amiiboFolder, os.path.basename(member))
+                    with open(extracted_file_path, 'wb') as extracted_file:
+                        extracted_file.write(zip_ref.read(member))
         response = {'message': 'Archivos ZIP recibidos y los archivos BIN descomprimidos fueron guardados'}
     else:
-        response = {'message': 'Tipo de archivo no válido'}
+        response = {'message': 'Tipo de archivo no valido'}
     
     return jsonify(response)
 

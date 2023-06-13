@@ -5,13 +5,14 @@ from flask import Flask, send_from_directory, jsonify, render_template, request
 import asyncio
 import os
 import sys
+import zipfile
 
 objectMap = {}
 objectMap['cli'] = None
 objectMap['transport'] = None
 objectMap['active'] = False
 
-amiiboFolder = None
+amiiboFolder = 'amiibos'
 script = None
 
 app = Flask(__name__, static_folder='static')
@@ -129,6 +130,29 @@ def add_scripts():
         outfile.write(file)
     return jsonify({'message': 'Created'})
 
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    print('arriba')
+    file = request.files['file']
+    if file.filename.endswith('.bin'):
+        print('processing .bin file'+file.filename)
+        file.save(os.path.join(amiiboFolder, file.filename))
+        response = {'message': 'Archivo .bin recibido'}
+    elif file.filename.endswith('.zip'):
+        print('processing .zip file'+file.filename)
+        with zipfile.ZipFile(file, 'r') as zip_ref:
+            for member in zip_ref.namelist():
+                print('processing .zip file'+member)
+                if member.endswith('.bin') and not os.path.basename(member).startswith('.'):
+                    extracted_file_path = os.path.join(amiiboFolder, os.path.basename(member))
+                    with open(extracted_file_path, 'wb') as extracted_file:
+                        extracted_file.write(zip_ref.read(member))
+        response = {'message': 'Archivos ZIP recibidos y los archivos BIN descomprimidos fueron guardados'}
+    else:
+        response = {'message': 'Tipo de archivo no valido'}
+    
+    return jsonify(response)
 
 
 if __name__ == '__main__':
