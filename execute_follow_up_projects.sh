@@ -14,4 +14,8 @@ else
     sleep 10
     pip install hidapi==0.7.99.post21 requests
 fi
-python3 controlAdapter/src/comandMap.py &
+while true
+do
+    python3 controlAdapter/src/comandMap.py
+    sleep 10
+done
