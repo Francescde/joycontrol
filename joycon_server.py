@@ -27,7 +27,7 @@ maxComandLines = 10000
 comandDelay = -0.0085
 readInterval = 10
 
-amiiboFolder = None
+amiiboFolder = 'amiibos'
 script = None
 
 async def get_client_transport():
@@ -386,6 +386,27 @@ def delete_script(controllerName):
         'controllerName': controllerName
     })
 
+@app.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['file']  # Obtén el archivo cargado del campo 'file'
+    
+    # Verifica la extensión del archivo para determinar el comportamiento adecuado
+    if file.filename.endswith('.bin'):
+        # Guarda el archivo BIN en la carpeta especificada
+        file.save(os.path.join(amiiboFolder, file.filename))
+        response = {'message': 'Archivo .bin recibido'}
+    elif file.filename.endswith('.zip'):
+        # Extrae solo los archivos BIN del archivo ZIP en la carpeta especificada
+        zip_path = os.path.join(amiiboFolder, file.filename)
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            for member in zip_ref.namelist():
+                if member.endswith('.bin'):
+                    zip_ref.extract(member, amiiboFolder)
+        response = {'message': 'Archivos ZIP recibidos y los archivos BIN descomprimidos fueron guardados'}
+    else:
+        response = {'message': 'Tipo de archivo no válido'}
+    
+    return jsonify(response)
 
 if __name__ == '__main__':
     for arg in sys.argv:

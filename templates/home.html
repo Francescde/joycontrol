@@ -116,6 +116,32 @@
             requestAmiibosFromFolder(folderName);
         }
 
+        function uploadAmiibo(){
+
+            var formData = new FormData();
+            formData.append('file', $('#amiibofile')[0].files[0]); // Obtén el archivo seleccionado
+            
+            // Realiza la solicitud AJAX
+            $.ajax({
+                url: '/upload', // Ruta del servidor donde procesarás la carga del archivo
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    // Maneja la respuesta del servidor
+                    console.log(response); // Aquí puedes imprimir la respuesta en la consola del navegador
+                    
+                    // Dependiendo de la respuesta, puedes realizar acciones específicas en el cliente
+                    // Por ejemplo, mostrar un mensaje de éxito o error al usuario, redirigirlo a otra página, etc.
+                },
+                error: function(xhr, status, error) {
+                    // Maneja los errores de la solicitud AJAX
+                    console.error(error);
+                }
+            });
+        }
+
         function Connection(e) {
             $.get("/connected", function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
@@ -425,7 +451,14 @@
             <small id="amiibot" class="form-text text-muted">Folder where amiibos are found</small>
         </div>
         <div class="form-group">
-            <button class="btn btn-primary" onclick="fillAmiiboList()"></button>
+            <button class="btn btn-primary" onclick="fillAmiiboList()">Folder content</button>
+        </div>
+        <div class="form-group">
+            <label for="amiibofile">Amiibo File</label>
+            <input type="file" name="amiibofile" id="amiibofile">
+        </div>
+        <div class="form-group">
+            <button class="btn btn-primary" onclick="uploadAmiibo()">Upload amiibo</button>
         </div>
         <div id="amiiboList" class="d-flex flex-column justify-content-around">
         </div>
