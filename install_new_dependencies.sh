@@ -1,5 +1,4 @@
 #!/bin/sh
-sudo chmod -R 777 .
 if [ -d "./server" ]
 then
     echo "./server exists on your filesystem."
