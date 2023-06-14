@@ -380,7 +380,7 @@ def add_scripts():
 
 #os.system('sudo reboot')
 @app.route('/system', methods=['POST'])
-def add_scripts():
+def system_functions():
     content = request.get_json()
     action = content['action']
     if 'reboot' in action:
