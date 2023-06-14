@@ -53,11 +53,12 @@
 
         function amiibo_btn(e, btn_id){
             let today = new Date().toLocaleDateString();
-            $("#"+btn_id).classList.remove("btn-success");
-            $("#"+btn_id).classList.add("btn-warning");
+            e.classList.remove("btn-success");
+            e.classList.add("btn-warning");
 
             // Store the current date as the last clicked date
-            localStorage.setItem("lastClicked", today);
+            localStorage.setItem("RJCT_lastClicked_"+btn_id, today);
+            console.log("set","RJCT_lastClicked_"+btn_id, today);
         }
 
         function requestAmiibosFromFolder(folderName) {
@@ -73,12 +74,15 @@
                         const buttonId = "amiibo_btn_"+data[i];
                         var lastClicked = localStorage.getItem("RJCT_lastClicked_"+buttonId);
                         let today = new Date().toLocaleDateString();
+                        console.log("check","RJCT_lastClicked_"+buttonId, lastClicked, today);
 
-                        if (lastClicked === today) {
-                            $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button btn-success\" class=\"btn btn-primary\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
+                        if (lastClicked!=null && lastClicked.trim().includes(today.trim())) {
+                            console.log("succes");
+                            $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
                         }
                         else {
-                            $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button btn-warning\" class=\"btn btn-primary\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
+                            console.log("no found");
+                            $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
                         }
                     }
                 },
