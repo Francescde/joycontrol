@@ -378,6 +378,18 @@ def add_scripts():
         outfile.write(file)
     return jsonify({'message': 'Created'})
 
+#os.system('sudo reboot')
+@app.route('/system', methods=['POST'])
+def add_scripts():
+    content = request.get_json()
+    action = content['action']
+    if 'reboot' in action:
+        os.system('sudo reboot now')
+    if 'shutdown' in action:
+        os.system('sudo shutdown now')
+    return jsonify({
+        'response': 'goodby'
+    })
 
 @app.route('/delete_script/<controllerName>')
 def delete_script(controllerName):
