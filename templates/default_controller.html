@@ -734,14 +734,14 @@ function ol() {
 	// Emulating touchmove event
 	canvas.addEventListener('mousemove', function(event) {
 		event.preventDefault();
-		touches = [{ clientX: event.clientX, clientY: event.clientY }];
+		touches = [{ clientX: event.pageX, clientY: event.pageY }];
 	});
 
 	// Emulating touchstart event
 	canvas.addEventListener('mousedown', function(event) {
 		event.preventDefault();
 		console.log('start');
-		touches = [{ clientX: event.clientX, clientY: event.clientY }];
+		touches = [{ clientX: event.pageX, clientY: event.pageY }];
 	});
 
 };
