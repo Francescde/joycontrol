@@ -51,6 +51,15 @@
             });
         }
 
+        function amiibo_btn(e, btn_id){
+            let today = new Date().toLocaleDateString();
+            $("#"+btn_id).classList.remove("btn-success");
+            $("#"+btn_id).classList.add("btn-warning");
+
+            // Store the current date as the last clicked date
+            localStorage.setItem("lastClicked", today);
+        }
+
         function requestAmiibosFromFolder(folderName) {
             $("#amiiboList").empty();
             $.ajax({
@@ -61,7 +70,16 @@
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
                     for (let i = 0; i < data.length; i++) {
-                        $("#amiiboList").append("<button type=\"button\" class=\"btn btn-primary\" onclick='sendComand(this,\"nfc " + data[i] + "\")'>" + data[i] + "</button>");
+                        const buttonId = "amiibo_btn_"+data[i];
+                        var lastClicked = localStorage.getItem("RJCT_lastClicked_"+buttonId);
+                        let today = new Date().toLocaleDateString();
+
+                        if (lastClicked === today) {
+                            $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button btn-success\" class=\"btn btn-primary\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
+                        }
+                        else {
+                            $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button btn-warning\" class=\"btn btn-primary\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
+                        }
                     }
                 },
                 data: JSON.stringify({path: folderName})
