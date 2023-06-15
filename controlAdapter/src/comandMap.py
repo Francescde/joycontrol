@@ -24,7 +24,8 @@ def calculate_distance(x1, y1, x2, y2):
     return distance
 
 def main():
-    map = requests.get('http://localhost:8082/controller_map')
+    response_map = requests.get('http://localhost:8082/controller_map')
+    map = response_map.json()
     uinput_buttons_map = {
         procon.ProCon.Button.A: "a",
         procon.ProCon.Button.B: "b",
