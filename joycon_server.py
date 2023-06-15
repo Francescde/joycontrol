@@ -24,11 +24,70 @@ objectMap['repeats'] = 0
 comandTimer = []
 lastTime = 0
 timerFlag = False
+def build_defauld_controller_map():
+    mapControllerKeys = ["a", "b", "x", "y", "up", "down", "left", "right", "minus", "plus", "capture", "home", "l", "zl", "r", "zr", "l_stick", "r_stick"]
+    dictionary = {}
+    for key in mapControllerKeys:
+        dictionary[key] = {"type": "button", "value": key}
+    dictionary['stick']={
+        'l': {
+            "center": True,
+            "centerRadius": 1000,
+            "v": 0,
+            "h": 0,
+            "precision": 5000
+        },
+        'r': {
+            "center": True,
+            "centerRadius": 1000,
+            "v": 0,
+            "h": 0,
+            "precision": 5000
+        }
+    }
+    return dictionary
+
+
 maxComandLines = 10000
 comandDelay = -0.0085
 readInterval = 10
-
 amiiboFolder = 'amiibos'
+mapControllerValues = build_defauld_controller_map()
+
+CONFIG_FILE = "properties.conf.json"
+
+def read_config():
+    global maxComandLines, comandDelay, readInterval, amiiboFolder, mapControllerValues
+    try:
+        with open(CONFIG_FILE, "r") as file:
+            config = json.load(file)
+            maxComandLines = config['maxComandLines']
+            comandDelay = config['comandDelay']
+            readInterval = config['readInterval']
+            amiiboFolder = config['amiiboFolder']
+            mapControllerValues = config['mapControllerValues']
+    except _:
+        print('file no found')
+
+def write_config():
+    global maxComandLines, comandDelay, readInterval, amiiboFolder, mapControllerValues
+    with open(CONFIG_FILE, "w") as file:
+        config = {
+            'maxComandLines': maxComandLines,
+            'comandDelay': comandDelay,
+            'readInterval': readInterval,
+            'amiiboFolder': amiiboFolder,
+            'mapControllerValues': mapControllerValues
+        }
+        json.dump(config, file, indent=4)
+
+
+read_config()
+
+write_config()
+
+
+
 script = None
 
 async def get_client_transport():
@@ -256,6 +315,7 @@ async def resetActionsAndSet():
     content = request.get_json()
     maxComandLines = int(content['maxComandLines'])
     comandDelay = float(content['comandDelay'])
+    write_config()
     comandTimer = []
     lastTime = 0
     timerFlag = False
@@ -399,6 +459,10 @@ def delete_script(controllerName):
         'controllerName': controllerName
     })
 
+@app.route('/controller_map')
+def get_controller_map():
+    return jsonify(mapControllerValues)
+
 @app.route('/upload', methods=['POST'])
 def upload():
     print('arriba')
@@ -426,4 +490,5 @@ if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).split('-folder=')[-1]
+            write_config()
     app.run(host='0.0.0.0', port=8082)

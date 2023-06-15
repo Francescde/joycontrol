@@ -24,6 +24,7 @@ def calculate_distance(x1, y1, x2, y2):
     return distance
 
 def main():
+    map = requests.get('http://localhost:8082/controller_map')
     uinput_buttons_map = {
         procon.ProCon.Button.A: "a",
         procon.ProCon.Button.B: "b",
@@ -44,42 +45,34 @@ def main():
         procon.ProCon.Button.LS: "l_stick",
         procon.ProCon.Button.RS: "r_stick"
     }
+    l_stick_values = map['stick']['l']
+    r_stick_values = map['stick']['r']
     buttons_prev = {}
-    l_stick_values = {
-        "center": True,
-        "centerRadius": 1000,
-        "v": 0,
-        "h": 0,
-        "precision": 5000
-    }
-    r_stick_values = {
-        "center": True,
-        "centerRadius": 1000,
-        "v": 0,
-        "h": 0,
-        "precision": 5000
-    }
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
-        nonlocal buttons_prev, l_stick_values, r_stick_values
+        nonlocal buttons_prev, l_stick_values, r_stick_values, map
         if not buttons_prev:
             buttons_prev = buttons
             return
         comands_to_send = []
         for k, v in buttons.items():
             if buttons_prev[k] != v:
-                uinput_button = uinput_buttons_map[k]
+                uinput_button = map[uinput_buttons_map[k]]
                 if not uinput_button:
                     continue
                 if v:
                     #emit event on webdocket
                     #print('hold '+uinput_button)
-                    comands_to_send.append('hold '+uinput_button)
+                    if 'button' in uinput_button['type']:
+                        comands_to_send.append('hold '+uinput_button['value'])
+                    elif 'script' in uinput_button['type']:
+                        requests.post('http://localhost:8082/execute_script', json = {'script': "rjctScripts/"+uinput_button['value']+".txt", 'nfc':"", 'repeats': 1})
                     #response = requests.post('http://localhost:8082/comand', json = {'line':'hold '+uinput_button})
                     #print(response)
                 else:
                     #emit event on websocket
                     #print('release '+uinput_button)
-                    comands_to_send.append('release '+uinput_button)
+                    if 'button' in uinput_button['type']:
+                        comands_to_send.append('release '+uinput_button['value'])
                     #response = requests.post('http://localhost:8082/comand', json = {'line':'release '+uinput_button})
                     #print(response)
         buttons_prev = buttons
