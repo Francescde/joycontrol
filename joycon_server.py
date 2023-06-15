@@ -66,7 +66,7 @@ def read_config():
             readInterval = config['readInterval']
             amiiboFolder = config['amiiboFolder']
             mapControllerValues = config['mapControllerValues']
-    except _:
+    except:
         print('file no found')
 
 def write_config():
