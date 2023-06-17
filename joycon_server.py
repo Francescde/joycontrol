@@ -52,12 +52,13 @@ maxComandLines = 10000
 comandDelay = -0.0085
 readInterval = 10
 amiiboFolder = 'amiibos'
+mapControllerFile = None
 mapControllerValues = build_defauld_controller_map()
 
 CONFIG_FILE = "properties.conf.json"
 
 def read_config():
-    global maxComandLines, comandDelay, readInterval, amiiboFolder, mapControllerValues
+    global maxComandLines, comandDelay, readInterval, amiiboFolder, mapControllerValues, mapControllerFile
     try:
         with open(CONFIG_FILE, "r") as file:
             config = json.load(file)
@@ -65,18 +66,20 @@ def read_config():
             comandDelay = config['comandDelay']
             readInterval = config['readInterval']
             amiiboFolder = config['amiiboFolder']
+            mapControllerFile = config['mapControllerFile']
             mapControllerValues = config['mapControllerValues']
     except:
         print('file no found')
 
 def write_config():
-    global maxComandLines, comandDelay, readInterval, amiiboFolder, mapControllerValues
+    global maxComandLines, comandDelay, readInterval, amiiboFolder, mapControllerValues, mapControllerFile
     with open(CONFIG_FILE, "w") as file:
         config = {
             'maxComandLines': maxComandLines,
             'comandDelay': comandDelay,
             'readInterval': readInterval,
             'amiiboFolder': amiiboFolder,
+            'mapControllerFile': mapControllerFile,
             'mapControllerValues': mapControllerValues
         }
         json.dump(config, file, indent=4)
@@ -330,7 +333,7 @@ async def disconnect():
 
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay )
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile )
 
 
 @app.route('/position_objects/<controllerName>')
@@ -459,9 +462,83 @@ def delete_script(controllerName):
         'controllerName': controllerName
     })
 
+
 @app.route('/controller_map')
 def get_controller_map():
     return jsonify(mapControllerValues)
+
+
+@app.route('/controller_maps', methods=['GET'])
+def get_controller_maps():
+    folderpath = 'controllerMaps'
+    return jsonify(
+        [f for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.json' in f)])
+
+
+@app.route('/controller_maps/get')
+def get_controller_map_defaulf():
+    # Opening JSON file
+    data = build_defauld_controller_map()
+    return jsonify({
+        'controllerName': None,
+        'jsonFile': data,
+    })
+
+
+@app.route('/controller_maps/get/<controllerName>')
+def get_controller_map_by_name(controllerName):
+    # Opening JSON file
+    f = open('controllerMaps/'+controllerName)
+    data = json.load(f)
+    return jsonify({
+        'controllerName': controllerName,
+        'jsonFile': data,
+    })
+
+
+@app.route('/delete_controller_map/<controllerName>')
+def delete_controller(controllerName):
+    path = os.path.join('controllerMaps', controllerName)  
+    os.remove(path)
+    return jsonify({
+        'controllerName': controllerName
+    })
+
+
+@app.route('/controllers_maps_post', methods=['POST'])
+def add_controllers_maps():
+    global mapControllerValues, mapControllerFile
+    content = request.get_json()
+    print('content')
+    print(content)
+    folderpath = 'controllerMaps'
+    file = content['json']
+    filename = content['filename']
+    mapControllerValues = file
+    mapControllerFile = filename
+    # Directly from dictionary
+    with open(join(folderpath, filename), 'w') as outfile:
+        json.dump(file, outfile)
+    return jsonify({'message': 'Created'})
+
+
+
+@app.route('/controllers_maps_post', methods=['POST'])
+def add_controllers():
+    global mapControllerValues
+    content = request.get_json()
+    print('content')
+    print(content)
+    folderpath = 'controllerMaps'
+    file = content['json']
+    filename = content['filename']
+    mapControllerValues = json.load(file)
+    # Directly from dictionary
+    with open(join(folderpath, filename), 'w') as outfile:
+        json.dump(file, outfile)
+    write_config()
+    return jsonify({'message': 'Created'})
+
 
 @app.route('/upload', methods=['POST'])
 def upload():

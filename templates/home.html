@@ -128,6 +128,201 @@
             });
         }
 
+        // Function to populate the controller select element
+        function populateControllerSelect() {
+            $.ajax({
+                url: "/controller_maps",
+                type: "GET",
+                success: function(response) {
+                // Clear the select options
+                $("#selectedController").empty();
+
+                // Add an empty option
+                var emptyOption = $("<option></option>").attr("value", "").text("Select controller");
+                $("#selectedController").append(emptyOption);
+
+                // Add options to the select element
+                response.forEach(function(controller) {
+                    var option = $("<option></option>").attr("value", controller).text(controller);
+                    $("#selectedController").append(option);
+                });
+                },
+                error: function(error) {
+                // Handle the error here
+                console.log(error);
+                }
+            });
+        }
+
+        // Function to handle the change event on the select element
+        function selectController() {
+            var selectedController = $("#selectedController").val();
+
+            if (selectedController === "") {
+                // Handle the empty selection
+                $("#deleteMapButton").prop("disabled", true);
+
+                $.ajax({
+                url: "/controller_maps/get",
+                type: "GET",
+                success: function(response) {
+                    // Populate the filename and JSON config
+                    $("#filenameControllerCtrMap").val(response.controllerName);
+                    $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
+                },
+                error: function(error) {
+                    // Handle the error here
+                    console.log(error);
+                }
+                });
+            } else {
+                // Handle the non-empty selection
+                $("#deleteMapButton").prop("disabled", false);
+
+                $.ajax({
+                url: "/controller_maps/get/" + selectedController,
+                type: "GET",
+                success: function(response) {
+                    // Populate the filename and JSON config
+                    $("#filenameControllerCtrMap").val(response.controllerName);
+                    $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
+                },
+                error: function(error) {
+                    // Handle the error here
+                    console.log(error);
+                }
+                });
+            }
+        }
+
+        // Function to handle the click event on the deleteMapButton
+        function deleteControllerMap() {
+            var selectedController = $("#selectedController").val();
+
+            if (selectedController !== "") {
+                $.ajax({
+                url: "/delete_controller_map/" + selectedController,
+                type: "GET",
+                success: function(response) {
+                    // Handle the success response here
+                    console.log("Controller map deleted:", response.controllerName);
+
+                    // Optionally, perform any additional actions after deleting the map
+                    // For example, you can clear the input fields or refresh the list of maps
+
+                    // Disable the deleteMapButton
+                    $("#deleteMapButton").prop("disabled", true);
+                    populateControllerSelect();
+                    selectController();
+                },
+                error: function(error) {
+                    // Handle the error here
+                    console.log(error);
+                }
+                });
+            }
+        }
+
+        // Function to check the validity of controller map inputs
+        function checkControllerMapValid() {
+            $("#setMapButton").prop("disabled", true);
+            var jsonTextarea = $("#txtBodyControllerCtr");
+            var filenameInput = $("#filenameControllerCtrMap");
+            var jsonConfig = jsonTextarea.val();
+            var filename = filenameInput.val();
+
+            // Validate JSON input
+            try {
+                JSON.parse(jsonConfig);
+                jsonTextarea.removeClass("is-invalid");
+                jsonTextarea.next(".invalid-feedback").hide();
+            } catch (error) {
+                jsonTextarea.addClass("is-invalid");
+                jsonTextarea.next(".invalid-feedback").text("Invalid JSON format").show();
+                return; // Stop validation if JSON is invalid
+            }
+
+            // Validate filename input
+            var filenameExtension = filename.split(".").pop().toLowerCase();
+            var validExtensions = ["json"];
+
+            if (filename.trim() === "") {
+                filenameInput.addClass("is-invalid");
+                filenameInput.next(".invalid-feedback").text("Filename is required").show();
+            } else if (!validExtensions.includes(filenameExtension)) {
+                filenameInput.addClass("is-invalid");
+                filenameInput.next(".invalid-feedback").text("Invalid file extension").show();
+            } else {
+                $("#setMapButton").prop("disabled", false);
+                filenameInput.removeClass("is-invalid");
+                filenameInput.next(".invalid-feedback").hide();
+            }
+        }
+
+        // Function to update the controller map
+        function updateControllerMap() {
+            var jsonTextarea = $("#txtBodyControllerCtr");
+            var filenameInput = $("#filenameControllerCtrMap");
+            var jsonConfig = jsonTextarea.val();
+            var filename = filenameInput.val();
+
+            // Validate JSON input
+            try {
+                JSON.parse(jsonConfig);
+                jsonTextarea.removeClass("is-invalid");
+                jsonTextarea.next(".invalid-feedback").hide();
+            } catch (error) {
+                jsonTextarea.addClass("is-invalid");
+                jsonTextarea.next(".invalid-feedback").text("Invalid JSON format").show();
+                return; // Stop updating if JSON is invalid
+            }
+
+            // Validate filename input
+            var filenameExtension = filename.split(".").pop().toLowerCase();
+            var validExtensions = ["json"];
+
+            if (filename.trim() === "") {
+                filenameInput.addClass("is-invalid");
+                filenameInput.next(".invalid-feedback").text("Filename is required").show();
+                return; // Stop updating if filename is invalid
+            } else if (!validExtensions.includes(filenameExtension)) {
+                filenameInput.addClass("is-invalid");
+                filenameInput.next(".invalid-feedback").text("Invalid file extension").show();
+                return; // Stop updating if filename extension is invalid
+            } else {
+                filenameInput.removeClass("is-invalid");
+                filenameInput.next(".invalid-feedback").hide();
+            }
+
+            // Prepare the data for the AJAX request
+            var requestData = {
+                filename: filename,
+                json: JSON.parse(jsonConfig)
+            };
+
+            // Send the AJAX request
+            $.ajax({
+                url: "/controllers_maps_post",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(requestData),
+                success: function(response) {
+                    populateControllerSelect();
+                    selectController();
+                    // Handle the success response here
+                    console.log("Controller map created:", response.message);
+
+                    // Optionally, perform any additional actions after updating the map
+                    // For example, you can clear the input fields or refresh the list of maps
+                },
+                error: function(error) {
+                // Handle the error here
+                console.log(error);
+                }
+            });
+        }
+
+
         function fillAmiiboList() {
             let folderName = $("#amiibo").val();
             //amiiboList
@@ -229,7 +424,19 @@
             }
             requestControllers();
             requestScripts();
+            populateControllerSelect();
+            selectController();
+            var selectedController = "";
+            {% if mapControllerFile %}
+                selectedController = "{{ mapControllerFile }}";
+            {% endif %}
+            // Add an event listener to the modal
+            $("#modalController").on("shown.bs.modal", function() {
+                $("#selectedController").val(selectedController);
+                selectController();
+            });
         });
+
 
         function isJsonString(str) {
             try {
@@ -463,6 +670,22 @@
     <div class="d-flex justify-content-between">
         <ul class="nav">
             <li class="nav-item">
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalController">
+                    controller map
+                </button>
+            </li>
+        </ul>
+        <ul class="nav">
+            <li>
+                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalShutdown">
+                    Connection
+                </button>
+            </li>
+        </ul>
+    </div>
+    <div class="d-flex justify-content-between">
+        <ul class="nav">
+            <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="#" onclick="showController()">controller</a>
             </li>
             <li class="nav-item">
@@ -473,11 +696,6 @@
             </li>
         </ul>
         <ul class="nav">
-            <li>
-                <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modalShutdown">
-                    Connection
-                </button>
-            </li>
         </ul>
     </div>
     <div id="controller">
@@ -556,7 +774,7 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="filenameController">File name</label>
-                <input type="email" class="form-control" id="filenameController" onchange="checkControllerJsonValid()" placeholder="Enter filename">
+                <input type="text" class="form-control" id="filenameController" onchange="checkControllerJsonValid()" placeholder="Enter filename">
             </div>
             <div class="form-group">
                 <label for="jsonBodyController">Json config</label>
@@ -584,7 +802,7 @@
         <div class="modal-body">
             <div class="form-group">
                 <label for="filenameControllerScript">File name</label>
-                <input type="email" class="form-control" id="filenameControllerScript" onchange="checkControllerScriptValid()" placeholder="Enter filename">
+                <input type="text" class="form-control" id="filenameControllerScript" onchange="checkControllerScriptValid()" placeholder="Enter filename">
             </div>
             <div class="form-group">
                 <label for="txtBodyControllerScript">Json config</label>
@@ -622,6 +840,38 @@
           <button type="button" class="btn btn-warning" onclick="Connection(this)" data-dismiss="modal">Connect/Disconnect</button>
           <button type="button" class="btn btn-danger" onclick="ShutDown(this)" data-dismiss="modal">Shut down</button>
           <button type="button" class="btn btn-danger" onclick="Reboot(this)" data-dismiss="modal">Reboot</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="modalController" tabindex="-1" role="dialog" aria-labelledby="modalControllerLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalControllerLabel">Controller map</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            Map To connect controller
+            <select id="selectedController" class="form-select" aria-label="Get controller" onchange="selectController()">
+            </select>
+            <button type="button" class="btn btn-danger" id="deleteMapButton" disabled onclick="deleteControllerMap()">Delete</button>
+            <div class="form-group">
+                <label for="filenameControllerScriptMap">File name</label>
+                <input type="text" class="form-control" id="filenameControllerCtrMap" onchange="checkControllerMapValid()" placeholder="Enter filename">
+                <div class="invalid-feedback"></div>
+            </div>
+            <div class="form-group">
+                <label for="txtBodyControllerScript">Json config</label>
+                <textarea class="form-control" id="txtBodyControllerCtr" rows="15" onchange="checkControllerMapValid()"></textarea>
+                <div class="invalid-feedback"></div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" id="setMapButton" disabled onclick="updateControllerMap()">Save and Set</button>
         </div>
       </div>
     </div>
