@@ -497,7 +497,7 @@ def get_controller_map_by_name(controllerName):
 
 
 @app.route('/delete_controller_map/<controllerName>')
-def delete_controller(controllerName):
+def delete_controller_map(controllerName):
     path = os.path.join('controllerMaps', controllerName)  
     os.remove(path)
     return jsonify({
