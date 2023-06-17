@@ -1,0 +1,6 @@
+hold zl && hold zr
+stick r v 2650 && stick r h 2048
+sleep 0.4
+release zr
+sleep 0.5
+stick r center
