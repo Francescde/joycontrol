@@ -7,11 +7,12 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask import Flask, send_from_directory, jsonify, render_template, request
+from aioflask import Flask, jsonify, render_template, request
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
 import sys
+import zipfile
 from timeit import default_timer as timer
 
 objectMap = {}
@@ -23,11 +24,73 @@ objectMap['repeats'] = 0
 comandTimer = []
 lastTime = 0
 timerFlag = False
-timeOutScript = 0.00
-maxComandLines = 200
-readInterval = 10
+def build_defauld_controller_map():
+    mapControllerKeys = ["a", "b", "x", "y", "up", "down", "left", "right", "minus", "plus", "capture", "home", "l", "zl", "r", "zr", "l_stick", "r_stick"]
+    dictionary = {}
+    for key in mapControllerKeys:
+        dictionary[key] = {"type": "button", "value": key}
+    dictionary['stick']={
+        'l': {
+            "center": True,
+            "centerRadius": 1000,
+            "v": 0,
+            "h": 0,
+            "precision": 5000
+        },
+        'r': {
+            "center": True,
+            "centerRadius": 1000,
+            "v": 0,
+            "h": 0,
+            "precision": 5000
+        }
+    }
+    return dictionary
 
-amiiboFolder = None
+
+maxComandLines = 10000
+comandDelay = -0.0085
+readInterval = 10
+amiiboFolder = 'amiibos'
+mapControllerFile = None
+mapControllerValues = build_defauld_controller_map()
+
+CONFIG_FILE = "properties.conf.json"
+
+def read_config():
+    global maxComandLines, comandDelay, readInterval, amiiboFolder, mapControllerValues, mapControllerFile
+    try:
+        with open(CONFIG_FILE, "r") as file:
+            config = json.load(file)
+            maxComandLines = config['maxComandLines']
+            comandDelay = config['comandDelay']
+            readInterval = config['readInterval']
+            amiiboFolder = config['amiiboFolder']
+            mapControllerFile = config['mapControllerFile']
+            mapControllerValues = config['mapControllerValues']
+    except:
+        print('file no found')
+
+def write_config():
+    global maxComandLines, comandDelay, readInterval, amiiboFolder, mapControllerValues, mapControllerFile
+    with open(CONFIG_FILE, "w") as file:
+        config = {
+            'maxComandLines': maxComandLines,
+            'comandDelay': comandDelay,
+            'readInterval': readInterval,
+            'amiiboFolder': amiiboFolder,
+            'mapControllerFile': mapControllerFile,
+            'mapControllerValues': mapControllerValues
+        }
+        json.dump(config, file, indent=4)
+
+
+read_config()
+
+write_config()
+
+
+
 script = None
 
 async def get_client_transport():
@@ -54,8 +117,7 @@ async def get_client_transport():
 
     await controller_state.connect()
     async def sleep(*args):
-        time = float(args[0])-0.005
-        await asyncio.sleep(time)
+        await asyncio.sleep(float(args[0]))
     cli.add_command(sleep.__name__, sleep)
     objectMap['cli'] = cli
     objectMap['transport'] = transport
@@ -82,38 +144,50 @@ async def client_sent_line(line):
 
 async def runScriptAsync(script, nfc):
     global objectMap
-    f = open(script, 'r+')
-    lines = []
-    try:
-        lines = f.readlines()
-    except Exception as e:
-        print("An exception occurred" + str(e))
-    f.close()
     tasks = []
     sleeps = []
+    
+    lines = []
+    with open(script, 'r') as f:
+        try:
+            lines = f.readlines()
+        except Exception as e:
+            print("An exception occurred" + str(e))
+    
     for line in lines:
         if '{nfc}' in line:
             line = line.replace('{nfc}', nfc)
-        sleeps.append(('sleep' in line))
-        lineTask = []
-        if ';' in line:
-            for subline in line.split(';'):
-                lineTask.append(subline)
-        else:
-            lineTask = [line]
+        sleeps.append('sleep' in line)
+        lineTask = line.split(';')
         tasks.append(lineTask)
-    while(objectMap['repeats']!=0):
-        lineIndex = 0
-        for line in tasks:
-            lineTask = []
-            for subline in line:
-                lineTask.append(asyncio.create_task(objectMap['cli'].run_line(subline)))
-            print(line)
-            if(sleeps[lineIndex]):
-                await asyncio.gather(* lineTask)
-            lineIndex +=1
-        if objectMap['repeats']>0:
-            objectMap['repeats'] = objectMap['repeats'] - 1
+    execution_objects = []
+    non_sleep_line=[]
+    for lineIndex, line in enumerate(tasks):
+        if sleeps[lineIndex]:
+            execution_objects.append({
+                'non_sleep_line': non_sleep_line,
+                'sleep_line': line
+            })
+            non_sleep_line = []
+        else:
+            non_sleep_line.extend(line)
+
+    if len(non_sleep_line)>0:  # Handle any remaining non-sleep lines
+        execution_objects.append({
+            'non_sleep_lines': non_sleep_line,
+            'sleep_lines': []
+        })
+    while objectMap['repeats'] != 0:
+        awaitable_tasks = []
+        for execution_object in execution_objects:
+            await asyncio.gather(*awaitable_tasks)
+            [asyncio.create_task(objectMap['cli'].run_line(subline)) for subline in execution_object['non_sleep_line']]
+            awaitable_tasks = [asyncio.create_task(objectMap['cli'].run_line(subline)) for subline in execution_object['sleep_line']]
+        
+        await asyncio.gather(*awaitable_tasks)
+        
+        if objectMap['repeats'] > 0:
+            objectMap['repeats'] -= 1
 
 
 app = Flask(__name__, static_folder='static')
@@ -161,46 +235,36 @@ def killScript():
     return jsonify({'message': 'cancel'})
 
 
-@app.route("/comand", methods=['POST'])
-async def comand():
+async def execute_line(line):
     global timerFlag, lastTime, comandTimer, maxComandLines
-    content = request.get_json()
-    line = content['line']
     timePass=0
     if timerFlag:
-        timePass = timer() - lastTime
-    timerFlag = True
-    lastTime = timer()
+        timePass = (timer() - lastTime)
     lineTask = [asyncio.create_task(client_sent_line(line))]
-    print(line)
-    await asyncio.gather(* lineTask)
+    lastTime = timer()
+    timerFlag = True
     comandTimer.append({
         "comand": line,
         "time": timePass
     })
-    if(len(comandTimer)>maxComandLines):
+    if(len(comandTimer) > maxComandLines):
         comandTimer.pop(0)
         comandTimer[0]['time']=0
+    await asyncio.gather(* lineTask)
+
+@app.route("/comand", methods=['POST'])
+async def comand():
+    content = request.get_json()
+    line = content['line']
+    await execute_line(line)
     return jsonify({'message': 'Send'})
 
 
 @app.route("/analog", methods=['POST'])
 async def analog():
-    global timerFlag, lastTime, comandTimer
     content = request.get_json()
-    timePass=0
-    if timerFlag:
-        timePass = timer() - lastTime
-    timerFlag = True
-    await asyncio.gather(*[client_sent_line("stick "+content['key']+" v "+str(content['vertical'])), client_sent_line("stick "+content['key']+" h "+str(content['horizontal']))])
-    lastTime = timer()
-    comandTimer.append({
-        "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
-        "time": timePass
-    })
-    if(len(comandTimer)>100):
-        comandTimer.pop(0)
-        comandTimer[0]['time']=0
+    line = "stick "+content['key']+" v "+str(content['vertical'])+" && "+"stick "+content['key']+" h "+str(content['horizontal'])
+    await execute_line(line)
     return jsonify({'message': 'Send'})
 
 
@@ -225,7 +289,7 @@ async def writeScript(filename):
 
 @app.route("/last-actions", methods=['GET'])
 async def getRunningScript():
-    global comandTimer, timeOutScript
+    global comandTimer, comandDelay
     '''
     comandTimer.append({
         "comand": "stick "+content['key']+" v "+str(content['vertical'])+"; "+ "stick "+content['key']+" h "+str(content['horizontal']),
@@ -233,8 +297,8 @@ async def getRunningScript():
     })'''
     lines = []
     for comand in comandTimer:
-        if comand["time"]>0:
-            lines.append("sleep "+str(comand["time"]-timeOutScript))
+        if comand["time"] + (comandDelay)>0:
+            lines.append("sleep "+str(comand["time"]+ (comandDelay)))
         lines.append(comand["comand"])
     return jsonify({'message': '\n'.join(lines)})
 
@@ -242,6 +306,19 @@ async def getRunningScript():
 @app.route("/reset-actions", methods=['GET'])
 async def resetActions():
     global comandTimer, lastTime, timerFlag
+    comandTimer = []
+    lastTime = 0
+    timerFlag = False
+    return jsonify({'message': "succes"})
+
+
+@app.route("/reset-actions", methods=['POST'])
+async def resetActionsAndSet():
+    global comandTimer, lastTime, timerFlag, maxComandLines, comandDelay
+    content = request.get_json()
+    maxComandLines = int(content['maxComandLines'])
+    comandDelay = float(content['comandDelay'])
+    write_config()
     comandTimer = []
     lastTime = 0
     timerFlag = False
@@ -256,7 +333,7 @@ async def disconnect():
 
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script )
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile )
 
 
 @app.route('/position_objects/<controllerName>')
@@ -364,6 +441,18 @@ def add_scripts():
         outfile.write(file)
     return jsonify({'message': 'Created'})
 
+#os.system('sudo reboot')
+@app.route('/system', methods=['POST'])
+def system_functions():
+    content = request.get_json()
+    action = content['action']
+    if 'reboot' in action:
+        os.system('sudo reboot now')
+    if 'shutdown' in action:
+        os.system('sudo shutdown now')
+    return jsonify({
+        'response': 'goodby'
+    })
 
 @app.route('/delete_script/<controllerName>')
 def delete_script(controllerName):
@@ -374,8 +463,109 @@ def delete_script(controllerName):
     })
 
 
+@app.route('/controller_map')
+def get_controller_map():
+    return jsonify(mapControllerValues)
+
+
+@app.route('/controller_maps', methods=['GET'])
+def get_controller_maps():
+    folderpath = 'controllerMaps'
+    return jsonify(
+        [f for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.json' in f)])
+
+
+@app.route('/controller_maps/get')
+def get_controller_map_defaulf():
+    # Opening JSON file
+    data = build_defauld_controller_map()
+    return jsonify({
+        'controllerName': None,
+        'jsonFile': data,
+    })
+
+
+@app.route('/controller_maps/get/<controllerName>')
+def get_controller_map_by_name(controllerName):
+    # Opening JSON file
+    f = open('controllerMaps/'+controllerName)
+    data = json.load(f)
+    return jsonify({
+        'controllerName': controllerName,
+        'jsonFile': data,
+    })
+
+
+@app.route('/delete_controller_map/<controllerName>')
+def delete_controller(controllerName):
+    path = os.path.join('controllerMaps', controllerName)  
+    os.remove(path)
+    return jsonify({
+        'controllerName': controllerName
+    })
+
+
+@app.route('/controllers_maps_post', methods=['POST'])
+def add_controllers_maps():
+    global mapControllerValues, mapControllerFile
+    content = request.get_json()
+    print('content')
+    print(content)
+    folderpath = 'controllerMaps'
+    file = content['json']
+    filename = content['filename']
+    mapControllerValues = file
+    mapControllerFile = filename
+    # Directly from dictionary
+    with open(join(folderpath, filename), 'w') as outfile:
+        json.dump(file, outfile)
+    return jsonify({'message': 'Created'})
+
+
+
+@app.route('/controllers_maps_post', methods=['POST'])
+def add_controllers():
+    global mapControllerValues
+    content = request.get_json()
+    print('content')
+    print(content)
+    folderpath = 'controllerMaps'
+    file = content['json']
+    filename = content['filename']
+    mapControllerValues = json.load(file)
+    # Directly from dictionary
+    with open(join(folderpath, filename), 'w') as outfile:
+        json.dump(file, outfile)
+    write_config()
+    return jsonify({'message': 'Created'})
+
+
+@app.route('/upload', methods=['POST'])
+def upload():
+    print('arriba')
+    file = request.files['file']
+    if file.filename.endswith('.bin'):
+        print('processing .bin file'+file.filename)
+        file.save(os.path.join(amiiboFolder, file.filename))
+        response = {'message': 'Archivo .bin recibido'}
+    elif file.filename.endswith('.zip'):
+        print('processing .zip file'+file.filename)
+        with zipfile.ZipFile(file, 'r') as zip_ref:
+            for member in zip_ref.namelist():
+                print('processing .zip file'+member)
+                if member.endswith('.bin') and not os.path.basename(member).startswith('.'):
+                    extracted_file_path = os.path.join(amiiboFolder, os.path.basename(member))
+                    with open(extracted_file_path, 'wb') as extracted_file:
+                        extracted_file.write(zip_ref.read(member))
+        response = {'message': 'Archivos ZIP recibidos y los archivos BIN descomprimidos fueron guardados'}
+    else:
+        response = {'message': 'Tipo de archivo no valido'}
+    
+    return jsonify(response)
+
 if __name__ == '__main__':
     for arg in sys.argv:
         if '-folder=' in arg:
             amiiboFolder = str(arg).split('-folder=')[-1]
+            write_config()
     app.run(host='0.0.0.0', port=8082)

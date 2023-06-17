@@ -724,6 +724,31 @@ function ol() {
 	console.log('start');
 	touches = event.touches;
 	});
+
+	var touchedByMouse = false;
+	// Emulating touchend event
+	canvas.addEventListener('mouseup', function(event) {
+		touchedByMouse = false;
+		event.preventDefault();
+		touches = [];
+	});
+
+	// Emulating touchmove event
+	canvas.addEventListener('mousemove', function(event) {
+		event.preventDefault();
+		if (touchedByMouse) {
+			touches = [{ pageX: event.clientX, pageY: event.clientY }];
+		}
+	});
+
+	// Emulating touchstart event
+	canvas.addEventListener('mousedown', function(event) {
+		touchedByMouse = true;
+		event.preventDefault();
+		console.log('start');
+		touches = [{ pageX: event.clientX, pageY: event.clientY }];
+	});
+
 };
 
 let images = [];
