@@ -519,25 +519,9 @@ def add_controllers_maps():
     # Directly from dictionary
     with open(join(folderpath, filename), 'w') as outfile:
         json.dump(file, outfile)
-    return jsonify({'message': 'Created'})
-
-
-
-@app.route('/controllers_maps_post', methods=['POST'])
-def add_controllers():
-    global mapControllerValues
-    content = request.get_json()
-    print('content')
-    print(content)
-    folderpath = 'controllerMaps'
-    file = content['json']
-    filename = content['filename']
-    mapControllerValues = json.load(file)
-    # Directly from dictionary
-    with open(join(folderpath, filename), 'w') as outfile:
-        json.dump(file, outfile)
     write_config()
     return jsonify({'message': 'Created'})
+
 
 
 @app.route('/upload', methods=['POST'])
