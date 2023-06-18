@@ -24,7 +24,7 @@ def calculate_distance(x1, y1, x2, y2):
     return distance
 
 def main():
-    response_map = requests.get('http://localhost:8082/controller_map')
+    response_map = requests.get('http://localhost:80/controller_map')
     map = response_map.json()
     uinput_buttons_map = {
         procon.ProCon.Button.A: "a",
@@ -66,21 +66,21 @@ def main():
                     if 'button' in uinput_button['type']:
                         comands_to_send.append('hold '+uinput_button['value'])
                     elif 'script' in uinput_button['type']:
-                        requests.post('http://localhost:8082/execute_script', json = {'script': "rjctScripts/"+uinput_button['value']+".txt", 'nfc':"", 'repeats': 1})
-                    #response = requests.post('http://localhost:8082/comand', json = {'line':'hold '+uinput_button})
+                        requests.post('http://localhost:80/execute_script', json = {'script': "rjctScripts/"+uinput_button['value']+".txt", 'nfc':"", 'repeats': 1})
+                    #response = requests.post('http://localhost:80/comand', json = {'line':'hold '+uinput_button})
                     #print(response)
                 else:
                     #emit event on websocket
                     #print('release '+uinput_button)
                     if 'button' in uinput_button['type']:
                         comands_to_send.append('release '+uinput_button['value'])
-                    #response = requests.post('http://localhost:8082/comand', json = {'line':'release '+uinput_button})
+                    #response = requests.post('http://localhost:80/comand', json = {'line':'release '+uinput_button})
                     #print(response)
         buttons_prev = buttons
         if( calculate_distance(0, 0, l_stick[1], l_stick[0]) < l_stick_values['centerRadius']):
             if not l_stick_values['center']:
                 comands_to_send.append('stick l center')
-                #response = requests.post('http://localhost:8082/comand', json = {'line':'stick l center'})
+                #response = requests.post('http://localhost:80/comand', json = {'line':'stick l center'})
                 l_stick_values['h']= 0
                 l_stick_values['v']= 0
                 l_stick_values['center'] = True
@@ -91,13 +91,13 @@ def main():
             l_stick_values['center'] = False
             line = "stick l v "+str(rule_of_three(l_stick_values['v']))+" && "+"stick l h "+str(rule_of_three(l_stick_values['h']))
             comands_to_send.append(line)
-            #response = requests.post('http://localhost:8082/analog', json = { 'key': 'l','vertical': rule_of_three(l_stick_values['v']),'horizontal': rule_of_three(l_stick_values['h'])})
+            #response = requests.post('http://localhost:80/analog', json = { 'key': 'l','vertical': rule_of_three(l_stick_values['v']),'horizontal': rule_of_three(l_stick_values['h'])})
             #print(response)
             #emit event on websocket
         if( calculate_distance(0, 0, r_stick[1], r_stick[0]) < r_stick_values['centerRadius']):
             if not r_stick_values['center']:
                 comands_to_send.append('stick r center')
-                #response = requests.post('http://localhost:8082/comand', json = {'line':'stick r center'})
+                #response = requests.post('http://localhost:80/comand', json = {'line':'stick r center'})
                 r_stick_values['h']= 0
                 r_stick_values['v']= 0
                 r_stick_values['center'] = True
@@ -108,11 +108,11 @@ def main():
             r_stick_values['v']=r_stick[1]
             line = "stick r v "+str(rule_of_three(r_stick_values['v']))+" && "+"stick r h "+str(rule_of_three(r_stick_values['h']))
             comands_to_send.append(line)
-            #response = requests.post('http://localhost:8082/analog', json = { 'key': 'r', 'vertical': rule_of_three(r_stick_values['v']), 'horizontal': rule_of_three(r_stick_values['h'])})
+            #response = requests.post('http://localhost:80/analog', json = { 'key': 'r', 'vertical': rule_of_three(r_stick_values['v']), 'horizontal': rule_of_three(r_stick_values['h'])})
             #print(response)
             #emit event on websocket
         if len(comands_to_send)>0:
-            response = requests.post('http://localhost:8082/comand', json = {'line':" && ".join(comands_to_send)})
+            response = requests.post('http://localhost:80/comand', json = {'line':" && ".join(comands_to_send)})
 
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
