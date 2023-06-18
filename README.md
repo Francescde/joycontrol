@@ -4,7 +4,9 @@ Branch: master->amiibo_edits
 
 Emulate Nintendo Switch Controllers over Bluetooth it is possible to connect a procontroller so you can have the capabilities that the tool gives, and still be ussing your controller.
 
-I have tested the system on Raspberry Pi Zero W without a real Pro Controller, and it works fine for a while as Wi-Fi is mandatory. However, it will eventually disconnect, and the disconnection occurs even faster when using the Pro Controller. On Raspberry Pi 4B with Raspbian, the system performs exceptionally well if you disable Wi-Fi. If Wi-Fi is enabled, it can still work for hours, but based on my experience, it will eventually disconnect. Adding a controller to the setup does not have any effect. It's worth noting that on Raspberry Pi, there appears to be a shared bus for Bluetooth and Wi-Fi, which can lead to indications of a slow connection and subsequent disconnection. This setup should also be compatible with Raspberry Pi 3B+ and other similar devices.
+It's worth noting that on Raspberry Pi, there appears to be a shared bus for Bluetooth and Wi-Fi, which can lead to indications of a slow connection and subsequent disconnection.
+
+I have tested the system on Raspberry Pi Zero W without a real Pro Controller, and it works fine for a while(can be hours) but as Wi-Fi is mandatory it will eventually disconnect, and the disconnection occurs even faster when using the Pro Controller. On Raspberry Pi 4B with Raspbian, the system performs exceptionally well if you disable Wi-Fi. If Wi-Fi is enabled, it can still work for hours, but based on my experience, it will eventually disconnect. Adding a controller to the setup does not have any effect. This setup should also be compatible with Raspberry Pi 3B+ and other similar devices.
 
 Chack out https://www.youtube.com/channel/UCE3sSyM4Ng1SrWQdWBFw-nA where we will explain the project in detail
 
