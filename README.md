@@ -2,9 +2,11 @@
 
 Branch: master->amiibo_edits
 
-Emulate Nintendo Switch Controllers over Bluetooth.
+Emulate Nintendo Switch Controllers over Bluetooth it is possible to connect a procontroller so you can have the capabilities that the tool gives, and still be ussing your controller.
 
-Tested on Raspberry Zero w, Raspberry 4B Raspbian, should work on 3B+ too and anything that can do the setup.
+It's worth noting that on Raspberry Pi, there appears to be a shared bus for Bluetooth and Wi-Fi, which can lead to indications of a slow connection and subsequent disconnection.
+
+I have tested the system on Raspberry Pi Zero W without a real Pro Controller, and it works fine for a while(can be hours) but as Wi-Fi is mandatory it will eventually disconnect, and the disconnection occurs even faster when using the Pro Controller. On Raspberry Pi 4B with Raspbian, the system performs exceptionally well if you disable Wi-Fi. If Wi-Fi is enabled, it can still work for hours, but based on my experience, it will eventually disconnect. Adding a controller to the setup does not have any effect. This setup should also be compatible with Raspberry Pi 3B+ and other similar devices.
 
 Chack out https://www.youtube.com/channel/UCE3sSyM4Ng1SrWQdWBFw-nA where we will explain the project in detail
 
@@ -19,6 +21,9 @@ Chack out https://www.youtube.com/channel/UCE3sSyM4Ng1SrWQdWBFw-nA where we will
 - controller/{controllerConfigFileName}: shows the controller configurated on /view/home
 
 ## Installation
+
+the service_installer.sh script takes care of installation. And it generates two system services (my_joycon_server, my_map_controller) If you want to do it manually follow the following steps:
+
 - Install dependencies  
   Raspbian:
 ```bash
@@ -50,9 +55,11 @@ sudo pip3 install Flask==2
     sudo systemctl restart bluetooth.service
   ```
   - see [Issue #4](https://github.com/Poohl/joycontrol/issues/4) if despite that the switch doesn't connect or disconnects randomly.
-
+The following steps are meant to install the switch pro controller driver (to connect the pro controller to the raspberry and interact with the program)
 ```bash
+sudo cp controlAdapter/udev/* /etc/udev/rules.d
 python3 -m venv clientCtr
+source clientCtr/bin/activate
 pip install hidapi==0.7.99.post21 requests
 ```
 
@@ -61,9 +68,17 @@ Serves web controllers ussing flask that allow you to send comands
 
 - joycon_server: serves a webside with configurable controllers
 ```bash
+source server/bin/activate
 sudo python3 joycon_server.py --folder=<amiiboFolderPath>
 ```
 
+- pro controller map: connects with procontroller via usb and sends comands to the server (the steps on the install explanation install the dependancies in a virtual enviroment make sure to activate it before executiong the script)
+The dependencies of joycon_server and comandMap are incompatible this is why they must be executed in diferent environments. to that end i use viruenvieroment clientCtr
+
+```bash
+source clientCtr/bin/activate
+python3 controlAdapter/src/comandMap.py
+```
 the main view /view/home has three parts
 
 #### Controller
