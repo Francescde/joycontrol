@@ -7,7 +7,7 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask import Flask, jsonify, render_template, request
+from aioflask import Flask, jsonify, render_template, request, redirect
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os

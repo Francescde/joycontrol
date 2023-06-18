@@ -1,7 +1,7 @@
 import json
 from os.path import isfile, join
 
-from flask import Flask, send_from_directory, jsonify, render_template, request
+from flask import Flask, send_from_directory, jsonify, render_template, request, redirect
 import asyncio
 import os
 import sys
@@ -68,6 +68,11 @@ def disconnect():
 @app.route('/view/<controllerName>')
 def load_view(controllerName):
     return render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script, mapControllerFile=mapControllerFile  )
+
+
+@app.route('/')
+def redirect_to_home():
+    return redirect('/view/home')
 
 
 @app.route('/controller/<controllerName>')
