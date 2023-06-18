@@ -11,8 +11,10 @@ cat <<EOF | sudo tee $SERVICE_FILE
 [Unit]
 Description=My Startup Service
 
-[Service]ExecStart=/bin/bash -c "sudo -u $USERNAME -s <<EOF_SCRIPT
-cd /home/$USERNAME/joycontrol && ./startup_server.sh
+[Service]
+WorkingDirectory=/home/$USERNAME/joycontrol
+ExecStart=/bin/bash -c "sudo -u $USERNAME -s <<EOF_SCRIPT
+./startup_server.sh
 EOF_SCRIPT"
 Restart=always
 RestartSec=10
