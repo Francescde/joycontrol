@@ -1,32 +1,48 @@
-#!/bin/bash
+#!/bin/sh
+if [ -d "./server" ]
+then
+    echo "./server exists on your filesystem."
+    . server/bin/activate 
+else
+    sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-pip python3-venv
+    echo "./server does not exist on your filesystem."
+    python3 -m venv server
+    sleep 10
+    . server/bin/activate 
+    sleep 10
+    sudo pip3 install aioconsole hid crc8
+    sudo pip3 install aioflask
+    sudo pip3 install Flask==2
+    # Assign the attributes to a variable
+    attributes="-C -P sap,input,avrcp"
 
-SERVICE_NAME="my_startup"
-SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
+    # Check if the attributes are already added to the ExecStart line
+    if grep -q "ExecStart.*$attributes" /lib/systemd/system/bluetooth.service; then
+        echo "Attributes already added to ExecStart line."
+    else
+        # Find the ExecStart line in the bluetooth.service file and append the attributes
+        sudo sed -i "s/^ExecStart.*/& $attributes/g" /lib/systemd/system/bluetooth.service
+        sudo systemctl daemon-reload
+        sudo systemctl restart bluetooth.service
+        echo "Attributes added to ExecStart line."
+    fi
+fi
+sudo ./service-server-setup.sh
 
-# Determine the username dynamically
-USERNAME=$(logname)
-WORKING_DIRECTORY="/home/$USERNAME/joycontrol"
+#!/bin/sh
+if [ -d "./clientCtr" ]
+then
+    echo "./clientCtr exists on your filesystem."
+    . clientCtr/bin/activate 
+    pip install hidapi==0.7.99.post21 requests
+else
+    echo "./clientCtr does not exist on your filesystem."
+    sudo cp controlAdapter/udev/* /etc/udev/rules.d
+    python3 -m venv clientCtr
+    sleep 10
+    . clientCtr/bin/activate 
+    sleep 10
+    pip install hidapi==0.7.99.post21 requests
+fi
 
-# Create the systemd service file
-cat <<EOF | sudo tee $SERVICE_FILE
-[Unit]
-Description=My Startup Service
-
-[Service]
-WorkingDirectory=$WORKING_DIRECTORY
-ExecStart=/bin/bash -c "sudo -u $USERNAME -s <<EOF_SCRIPT ./startup_server.sh EOF_SCRIPT"
-Restart=always
-RestartSec=10
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-# Set permissions for the service file
-sudo chmod 644 $SERVICE_FILE
-
-# Enable and start the systemd service
-sudo systemctl enable $SERVICE_NAME
-sudo systemctl start $SERVICE_NAME
-
-echo "Systemd service created and enabled."
+sudo ./service-mapcontroller-setup.sh
