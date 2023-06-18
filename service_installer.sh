@@ -5,6 +5,7 @@ SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
 
 # Determine the username dynamically
 USERNAME=$(logname)
+WORKING_DIRECTORY="/home/$USERNAME/joycontrol"
 
 # Create the systemd service file
 cat <<EOF | sudo tee $SERVICE_FILE
@@ -12,10 +13,8 @@ cat <<EOF | sudo tee $SERVICE_FILE
 Description=My Startup Service
 
 [Service]
-WorkingDirectory=/home/$USERNAME/joycontrol
-ExecStart=/bin/bash -c "sudo -u $USERNAME -s <<EOF_SCRIPT
-./startup_server.sh
-EOF_SCRIPT"
+WorkingDirectory=$WORKING_DIRECTORY
+ExecStart=/bin/bash -c "sudo -u $USERNAME -s <<EOF_SCRIPT ./startup_server.sh EOF_SCRIPT"
 Restart=always
 RestartSec=10
 
