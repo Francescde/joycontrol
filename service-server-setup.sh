@@ -14,7 +14,7 @@ Description=My Startup Service
 
 [Service]
 WorkingDirectory=$WORKING_DIRECTORY
-ExecStart=/bin/bash -c "sudo -u $USERNAME -s <<EOF_SCRIPT sudo python3 joycon_server.py EOF_SCRIPT"
+ExecStart=sudo python3 /home/$USERNAME/joycontrol/joycon_server.py
 Restart=always
 RestartSec=10
 

@@ -14,7 +14,7 @@ Description=My map controller service
 
 [Service]
 WorkingDirectory=$WORKING_DIRECTORY
-ExecStart=clientCtr/bin/python controlAdapter/src/comandMap.py
+ExecStart=/home/$USERNAME/joycontrol/clientCtr/bin/python /home/$USERNAME/joycontrol/controlAdapter/src/comandMap.py
 Restart=always
 RestartSec=10
 
