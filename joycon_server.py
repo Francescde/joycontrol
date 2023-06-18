@@ -336,6 +336,11 @@ async def display_view(controllerName):
     return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile )
 
 
+@app.route('/')
+def redirect_to_home():
+    return redirect('/view/home')
+
+
 @app.route('/position_objects/<controllerName>')
 async def set_controller_objects(controllerName):
     # Opening JSON file
