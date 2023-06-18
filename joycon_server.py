@@ -552,4 +552,4 @@ if __name__ == '__main__':
         if '-folder=' in arg:
             amiiboFolder = str(arg).split('-folder=')[-1]
             write_config()
-    app.run(host='0.0.0.0', port=8082)
+    app.run(host='0.0.0.0', port=80)
