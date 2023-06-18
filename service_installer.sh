@@ -2,6 +2,7 @@
 
 SERVICE_NAME="my_startup"
 SERVICE_FILE="/etc/systemd/system/$SERVICE_NAME.service"
+SCRIPT_PATH="/home/pi/joycontrol/startup_server.sh"
 
 # Determine the username dynamically
 USERNAME=$(logname)
@@ -12,10 +13,9 @@ cat <<EOF | sudo tee $SERVICE_FILE
 Description=My Startup Service
 
 [Service]
-ExecStart=/bin/bash -c "cd $PWD && ./startup_server.sh"
+ExecStart=/bin/bash -c "sudo -u $USERNAME cd $PWD && sudo $SCRIPT_PATH"
 Restart=always
 RestartSec=10
-User=$USERNAME
 
 [Install]
 WantedBy=multi-user.target
