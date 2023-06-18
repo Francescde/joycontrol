@@ -26,15 +26,4 @@ else
         sudo systemctl restart bluetooth.service
         echo "Attributes added to ExecStart line."
     fi
-    # Define the line to be appended
-    line_to_append="cd /home/pi/joycontrol; sudo ./startup_server.sh &"
-
-    # Check if the line already exists in the file
-    if grep -Fxq "$line_to_append" /etc/rc.local; then
-        echo "Line already exists in /etc/rc.local. No changes made."
-    else
-        # Append the line before the 'exit' line
-        sudo sed -i "/^exit/i $line_to_append" /etc/rc.local
-        echo "Line appended to /etc/rc.local."
-    fi
 fi
