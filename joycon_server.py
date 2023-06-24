@@ -603,7 +603,8 @@ def update():
                 pass
 
             # Execute the dependency installation script
-            subprocess.check_call(['./install_update_dependencies.sh'], cwd=project_dir)
+            install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
+            subprocess.check_call(['bash', install_script_path], cwd=project_dir)
 
             # Restart the Raspberry Pi
             subprocess.check_call(['sudo', 'reboot'])
