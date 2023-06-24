@@ -358,7 +358,7 @@ def check_update():
 
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
-    updatable = check_update()['value']
+    updatable = check_update().json()['value']
     return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile, updatable=updatable )
 
 
