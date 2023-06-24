@@ -837,6 +837,10 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+          {% if updatable %}
+            <a href="/update" class="btn btn-warning">Update</a>
+          {% endif %}
           <button type="button" class="btn btn-warning" onclick="Connection(this)" data-dismiss="modal">Connect/Disconnect</button>
           <button type="button" class="btn btn-danger" onclick="ShutDown(this)" data-dismiss="modal">Shut down</button>
           <button type="button" class="btn btn-danger" onclick="Reboot(this)" data-dismiss="modal">Reboot</button>

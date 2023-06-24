@@ -11,6 +11,7 @@ from aioflask import Flask, jsonify, render_template, request, redirect
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
+import subprocess
 import sys
 import zipfile
 from timeit import default_timer as timer
@@ -331,9 +332,30 @@ async def disconnect():
     return jsonify({'message': 'Closed'})
 
 
+@app.route('/check_update')
+def check_update():
+    # Get the current project directory
+    project_dir = os.getcwd()
+
+    subprocess.check_output(['git', 'checkout', 'main'], cwd=project_dir)
+    subprocess.check_output(['git', 'fetch'], cwd=project_dir)
+
+    # Get the latest commit hashes of local and remote main branch
+    local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
+    remote_commit = subprocess.check_output(['git', 'rev-parse', 'origin/main'], cwd=project_dir).decode().strip()
+
+    if local_commit != remote_commit:
+        return jsonify({'status': 'Update available', 'value': True})
+    else:
+        return jsonify({'status': 'Up to date', 'value': False})
+
+
+
+updatable = check_update()['value']
+
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile )
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile, updatable=updatable )
 
 
 @app.route('/')
@@ -551,6 +573,30 @@ def upload():
         response = {'message': 'Tipo de archivo no valido'}
     
     return jsonify(response)
+
+
+@app.route('/update')
+def update():
+    # Get the current project directory
+    project_dir = os.getcwd()
+
+    # Stash any local changes
+    subprocess.check_call(['git', 'stash'], cwd=project_dir)
+
+    # Pull the latest changes from Git
+    subprocess.check_call(['git', 'pull'], cwd=project_dir)
+
+    # Pop the stashed changes
+    subprocess.check_call(['git', 'stash', 'pop'], cwd=project_dir)
+
+    # Execute the dependency installation script
+    install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
+    subprocess.check_call(['bash', install_script_path], cwd=project_dir)
+
+    # Restart the Raspberry Pi
+    subprocess.check_call(['sudo', 'reboot'])
+
+    return 'Update initiated. The Raspberry Pi will restart shortly.'
 
 if __name__ == '__main__':
     for arg in sys.argv:
