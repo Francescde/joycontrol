@@ -338,15 +338,10 @@ async def disconnect():
 
 @app.route('/check_update')
 def check_update():
-    # Get the absolute path of the current script file
-    script_path = os.path.abspath(__file__)
-
-    # Get the directory containing the script file (project directory)
-    project_dir = os.path.dirname(script_path)
 
     # Get the latest commit hashes of local and remote main branch
-    local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
-    remote_commit = subprocess.check_output(['git', 'rev-parse', 'origin'], cwd=project_dir).decode().strip()
+    local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
+    remote_commit = subprocess.check_output(['git', 'rev-parse', 'origin']).decode().strip()
 
     if local_commit != remote_commit:
         return jsonify({'status': 'Update available', 'value': True})
@@ -581,24 +576,19 @@ def upload():
 
 @app.route('/update')
 def update():
-    # Get the absolute path of the current script file
-    script_path = os.path.abspath(__file__)
-
-    # Get the directory containing the script file (project directory)
-    project_dir = os.path.dirname(script_path)
 
     # Stash any local changes
-    subprocess.check_call(['git', 'stash'], cwd=project_dir)
+    subprocess.check_call(['git', 'stash'])
 
     # Pull the latest changes from Git
-    subprocess.check_call(['git', 'pull'], cwd=project_dir)
+    subprocess.check_call(['git', 'pull'])
 
     # Pop the stashed changes
-    subprocess.check_call(['git', 'stash', 'pop'], cwd=project_dir)
+    subprocess.check_call(['git', 'stash', 'pop'])
 
     # Execute the dependency installation script
     install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
-    subprocess.check_call(['bash', install_script_path], cwd=project_dir)
+    subprocess.check_call(['bash', install_script_path])
 
     # Restart the Raspberry Pi
     subprocess.check_call(['sudo', 'reboot'])
