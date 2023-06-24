@@ -341,12 +341,9 @@ def check_update():
     # Get the current project directory
     project_dir = os.getcwd()
 
-    subprocess.check_output(['git', 'checkout', 'main'], cwd=project_dir)
-    subprocess.check_output(['git', 'fetch'], cwd=project_dir)
-
     # Get the latest commit hashes of local and remote main branch
     local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
-    remote_commit = subprocess.check_output(['git', 'rev-parse', 'origin/main'], cwd=project_dir).decode().strip()
+    remote_commit = subprocess.check_output(['git', 'rev-parse', 'origin'], cwd=project_dir).decode().strip()
 
     if local_commit != remote_commit:
         return jsonify({'status': 'Update available', 'value': True})
