@@ -586,9 +586,7 @@ def update():
     # Pop the stashed changes
     subprocess.check_call(['git', 'stash', 'pop'])
 
-    # Execute the dependency installation script
-    install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
-    subprocess.check_call(['bash', install_script_path])
+    subprocess.check_call(['bash', 'install_update_dependencies.sh'])
 
     # Restart the Raspberry Pi
     subprocess.check_call(['sudo', 'reboot'])
