@@ -69,12 +69,12 @@ def main():
     if 'stick' in map and 'r' in map['stick'] and 'precision' in map['stick']['r']:
         r_stick_values['center'] = map['stick']['r']['precision']
     if 'autoconnect' in map:
-        if 'enable' in map['autoupdate'] and map['autoupdate']['enable']:
+        if 'enable' in map['autoconnect'] and map['autoconnect']['enable']:
             response_map_con = requests.get('http://localhost:80/connected')
             json_con = response_map_con.json()
             if not json_con['connected']:
-                if 'autoupdate' in map and 'timeout' in map['autoupdate']:
-                    time.sleep(map['autoupdate']['timeout'])
+                if 'autoconnect' in map and 'timeout' in map['autoconnect']:
+                    time.sleep(map['autoconnect']['timeout'])
                 requests.get('http://localhost:80/connect')
     buttons_prev = {}
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
