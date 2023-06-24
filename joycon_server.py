@@ -588,23 +588,32 @@ def update():
         # Get the directory containing the script file (project directory)
         project_dir = os.path.dirname(script_path)
 
-        # Stash any local changes
-        subprocess.check_call(['git', 'stash'], cwd=project_dir)
+        try:
+            # Stash any local changes
+            subprocess.check_call(['git', 'stash'], cwd=project_dir)
 
-        # Pull the latest changes from Git
-        subprocess.check_call(['git', 'pull'], cwd=project_dir)
+            # Pull the latest changes from Git
+            subprocess.check_call(['git', 'pull'], cwd=project_dir)
 
-        # Pop the stashed changes
-        subprocess.check_call(['git', 'stash', 'pop'], cwd=project_dir)
+            try:
+                # Pop the stashed changes
+                subprocess.check_call(['git', 'stash', 'pop'], cwd=project_dir)
+            except subprocess.CalledProcessError:
+                # Handle the case where no stash is available to pop
+                pass
 
-        # Execute the dependency installation script
-        install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
-        subprocess.check_call(['bash', install_script_path], cwd=project_dir)
+            # Execute the dependency installation script
+            install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
+            subprocess.check_call(['bash', install_script_path], cwd=project_dir)
 
-        # Restart the Raspberry Pi
-        subprocess.check_call(['sudo', 'reboot'])
+            # Restart the Raspberry Pi
+            subprocess.check_call(['sudo', 'reboot'])
 
-        return 'Update initiated. The Raspberry Pi will restart shortly.'
+            return 'Update initiated. The Raspberry Pi will restart shortly.'
+        
+        except subprocess.CalledProcessError:
+            return 'Update failed. An error occurred during the update process.'
+
 
 if __name__ == '__main__':
     for arg in sys.argv:
