@@ -46,6 +46,10 @@ def build_defauld_controller_map():
             "precision": 5000
         }
     }
+    dictionary['autoconnect']={
+        'enable': False,
+        'timeout': 10
+    }
     return dictionary
 
 
