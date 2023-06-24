@@ -68,8 +68,8 @@ def main():
         r_stick_values['center'] = map['stick']['r']['center']
     if 'stick' in map and 'r' in map['stick'] and 'precision' in map['stick']['r']:
         r_stick_values['center'] = map['stick']['r']['precision']
-    if 'autoconnect' in map.keys:
-        if map['autoupdate']['enable']:
+    if 'autoconnect' in map:
+        if 'enable' in map['autoupdate'] and map['autoupdate']['enable']:
             response_map_con = requests.get('http://localhost:80/connected')
             json_con = response_map_con.json()
             if not json_con['connected']:
