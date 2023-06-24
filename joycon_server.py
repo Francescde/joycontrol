@@ -338,20 +338,21 @@ async def disconnect():
 
 @app.route('/check_update')
 def check_update():
-    # Get the absolute path of the current script file
-    script_path = os.path.abspath(__file__)
+    with app.app_context():
+        # Get the absolute path of the current script file
+        script_path = os.path.abspath(__file__)
 
-    # Get the directory containing the script file (project directory)
-    project_dir = os.path.dirname(script_path)
+        # Get the directory containing the script file (project directory)
+        project_dir = os.path.dirname(script_path)
 
-    # Get the latest commit hashes of local and remote main branch
-    local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
-    remote_commit = subprocess.check_output(['git', 'rev-parse', 'origin'], cwd=project_dir).decode().strip()
+        # Get the latest commit hashes of local and remote main branch
+        local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
+        remote_commit = subprocess.check_output(['git', 'rev-parse', 'origin'], cwd=project_dir).decode().strip()
 
-    if local_commit != remote_commit:
-        return jsonify({'status': 'Update available', 'value': True})
-    else:
-        return jsonify({'status': 'Up to date', 'value': False})
+        if local_commit != remote_commit:
+            return jsonify({'status': 'Update available', 'value': True})
+        else:
+            return jsonify({'status': 'Up to date', 'value': False})
 
 
 
@@ -581,29 +582,30 @@ def upload():
 
 @app.route('/update')
 def update():
-    # Get the absolute path of the current script file
-    script_path = os.path.abspath(__file__)
+    with app.app_context():
+        # Get the absolute path of the current script file
+        script_path = os.path.abspath(__file__)
 
-    # Get the directory containing the script file (project directory)
-    project_dir = os.path.dirname(script_path)
+        # Get the directory containing the script file (project directory)
+        project_dir = os.path.dirname(script_path)
 
-    # Stash any local changes
-    subprocess.check_call(['git', 'stash'], cwd=project_dir)
+        # Stash any local changes
+        subprocess.check_call(['git', 'stash'], cwd=project_dir)
 
-    # Pull the latest changes from Git
-    subprocess.check_call(['git', 'pull'], cwd=project_dir)
+        # Pull the latest changes from Git
+        subprocess.check_call(['git', 'pull'], cwd=project_dir)
 
-    # Pop the stashed changes
-    subprocess.check_call(['git', 'stash', 'pop'], cwd=project_dir)
+        # Pop the stashed changes
+        subprocess.check_call(['git', 'stash', 'pop'], cwd=project_dir)
 
-    # Execute the dependency installation script
-    install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
-    subprocess.check_call(['bash', install_script_path], cwd=project_dir)
+        # Execute the dependency installation script
+        install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
+        subprocess.check_call(['bash', install_script_path], cwd=project_dir)
 
-    # Restart the Raspberry Pi
-    subprocess.check_call(['sudo', 'reboot'])
+        # Restart the Raspberry Pi
+        subprocess.check_call(['sudo', 'reboot'])
 
-    return 'Update initiated. The Raspberry Pi will restart shortly.'
+        return 'Update initiated. The Raspberry Pi will restart shortly.'
 
 if __name__ == '__main__':
     for arg in sys.argv:
