@@ -68,14 +68,6 @@ def main():
         r_stick_values['center'] = map['stick']['r']['center']
     if 'stick' in map and 'r' in map['stick'] and 'precision' in map['stick']['r']:
         r_stick_values['center'] = map['stick']['r']['precision']
-    if 'autoconnect' in map:
-        if 'enable' in map['autoconnect'] and map['autoconnect']['enable']:
-            response_map_con = requests.get('http://localhost:80/connected')
-            json_con = response_map_con.json()
-            if not json_con['connected']:
-                if 'autoconnect' in map and 'timeout' in map['autoconnect']:
-                    time.sleep(map['autoconnect']['timeout'])
-                requests.get('http://localhost:80/connect')
     buttons_prev = {}
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
         nonlocal buttons_prev, l_stick_values, r_stick_values, map
@@ -148,6 +140,14 @@ def main():
     except OSError as e:
         panic('Unable to open the controller. Make sure you have plugged in the controller and have sufficient permission to open it (either as root or with udev rules): {}'.format(e))
     print('done\nEnjoy!')
+    if 'autoconnect' in map:
+        if 'enable' in map['autoconnect'] and map['autoconnect']['enable']:
+            response_map_con = requests.get('http://localhost:80/connected')
+            json_con = response_map_con.json()
+            if not json_con['connected']:
+                if 'autoconnect' in map and 'timeout' in map['autoconnect']:
+                    time.sleep(map['autoconnect']['timeout'])
+                requests.get('http://localhost:80/connect')
     try:
         con.start(send_to_controller)
     except KeyboardInterrupt:
