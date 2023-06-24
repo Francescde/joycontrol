@@ -338,8 +338,11 @@ async def disconnect():
 
 @app.route('/check_update')
 def check_update():
-    # Get the current project directory
-    project_dir = os.getcwd()
+    # Get the absolute path of the current script file
+    script_path = os.path.abspath(__file__)
+
+    # Get the directory containing the script file (project directory)
+    project_dir = os.path.dirname(script_path)
 
     # Get the latest commit hashes of local and remote main branch
     local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
@@ -578,8 +581,11 @@ def upload():
 
 @app.route('/update')
 def update():
-    # Get the current project directory
-    project_dir = os.getcwd()
+    # Get the absolute path of the current script file
+    script_path = os.path.abspath(__file__)
+
+    # Get the directory containing the script file (project directory)
+    project_dir = os.path.dirname(script_path)
 
     # Stash any local changes
     subprocess.check_call(['git', 'stash'], cwd=project_dir)
