@@ -350,7 +350,7 @@ def check_update():
 
         # Get the last remote commit hash associated with the current local branch
         remote_commit = subprocess.check_output(['git', 'rev-parse', '@{u}'], cwd=project_dir).decode().strip()
-        
+
         if local_commit != remote_commit:
             return jsonify({'status': 'Update available', 'value': True})
         else:
@@ -535,6 +535,15 @@ def delete_controller_map(controllerName):
     os.remove(path)
     return jsonify({
         'controllerName': controllerName
+    })
+
+
+@app.route('/controller_map_file')
+def get_current_controller_map_file():
+    global mapControllerFile
+    # Opening JSON file
+    return jsonify({
+        'fileName': mapControllerFile
     })
 
 

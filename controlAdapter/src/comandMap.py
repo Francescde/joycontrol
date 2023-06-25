@@ -69,12 +69,14 @@ def main():
     if 'stick' in map and 'r' in map['stick'] and 'precision' in map['stick']['r']:
         r_stick_values['center'] = map['stick']['r']['precision']
     buttons_prev = {}
+    comands_to_send = []
+    timesRetried = 0
+    maxRetryTimes = 5
     def send_to_controller(buttons, l_stick, r_stick, _, __, ___):
-        nonlocal buttons_prev, l_stick_values, r_stick_values, map
+        nonlocal buttons_prev, l_stick_values, r_stick_values, map, comands_to_send, timesRetried, maxRetryTimes
         if not buttons_prev:
             buttons_prev = buttons
             return
-        comands_to_send = []
         for k, v in buttons.items():
             if buttons_prev[k] != v:
                 uinput_button = map[uinput_buttons_map[k]]
@@ -132,7 +134,16 @@ def main():
             #print(response)
             #emit event on websocket
         if len(comands_to_send)>0:
-            response = requests.post('http://localhost:80/comand', json = {'line':" && ".join(comands_to_send)})
+            try:
+                response = requests.post('http://localhost:80/comand', json = {'line':" && ".join(comands_to_send)})
+                response.raise_for_status()  # Raises an exception for 4XX and 5XX status codes
+                comands_to_send = []
+                timesRetried = 0
+            except requests.exceptions.RequestException as e:
+                print(f"Request failed: {e}")
+                if timesRetried > maxRetryTimes:
+                    comands_to_send = []
+                timesRetried += 1
 
     print('Initializing Nintendo Switch Pro Controller... ', end='', flush=True)
     try:
