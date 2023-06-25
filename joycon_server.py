@@ -15,6 +15,26 @@ import subprocess
 import sys
 import zipfile
 from timeit import default_timer as timer
+import shutil
+
+def copy_files_to_parent_folder(subfolder_path, extension):
+    # Get the absolute paths of the parent and subfolder
+    parent_folder = os.path.dirname(subfolder_path)
+    subfolder_files = os.listdir(subfolder_path)
+
+    for file_name in subfolder_files:
+        if file_name.endswith(extension):
+            subfolder_file_path = os.path.join(subfolder_path, file_name)
+            parent_file_path = os.path.join(parent_folder, file_name)
+
+            if not os.path.exists(parent_file_path):
+                shutil.copy2(subfolder_file_path, parent_folder)
+                print(f"File '{file_name}' copied to parent folder.")
+
+# Example usage:
+extension = ".txt"
+copy_files_to_parent_folder("controllers/controllersDefauld", '.json')
+copy_files_to_parent_folder("rjctScripts/rjctScriptsDefauld", '.txt')
 
 objectMap = {}
 objectMap['cli'] = None
