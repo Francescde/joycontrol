@@ -1,0 +1,91 @@
+{
+   "add": [
+      {
+         "actionType": 5,
+         "borderColor": "#FF0000",
+         "center": {
+            "h": 85,
+            "w": 84
+         },
+         "fillColor": "#000000",
+         "radius": 21.90625,
+         "script": "try",
+         "selectedColor": "#FFFFFF",
+         "text": "script",
+         "textFont": "32px Brush Script MT",
+         "writeColor": "#00FF00"
+      }
+   ],
+   "analogLimitsColor": "#4CDA64",
+   "backgroundColor": "#DDE4EC",
+   "drawColor": "#007AFF",
+   "itemsFillColor": "#E3EDE5",
+   "images": [
+      {
+         "height": 102.4,
+         "name": "raspberry",
+         "pos": {
+            "h": 47,
+            "w": 281
+         },
+         "url": "/static/raspberry.png",
+         "width": 68.2
+      },
+      {
+         "height": 76.4,
+         "name": "joy con left",
+         "pos": {
+            "h": 83,
+            "w": 173
+         },
+         "url": "/static/joy-con-left.png",
+         "width": 102.4
+      },
+      {
+         "height": 76.4,
+         "name": "joy con right",
+         "pos": {
+            "h": 71,
+            "w": 490
+         },
+         "url": "/static/joy-con-right.png",
+         "width": 76.4
+      },
+      {
+         "height": 40,
+         "name": "trol",
+         "pos": {
+            "h": 189,
+            "w": 308
+         },
+         "url": "/static/trol.png",
+         "width": 33
+      }
+   ],
+   "remove": [
+      "HL",
+      "HR"
+   ],
+   "substitute": [
+      {
+         "actionType": 4,
+         "link": "/view/home",
+         "selectedColor": "#FF0000",
+         "text": "#"
+      }
+   ],
+   "texts": [
+      {
+         "text": "Raspi"
+      },
+      {
+         "text": "Joy"
+      },
+      {
+         "text": "Con"
+      },
+      {
+         "text": "Trol"
+      }
+   ]
+}
