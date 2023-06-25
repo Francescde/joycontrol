@@ -625,12 +625,14 @@ def update():
             subprocess.check_call(['bash', install_script_path], cwd=project_dir)
 
             # Restart the Raspberry Pi
-            subprocess.check_call(['sudo', 'reboot', 'now'])
             update_completed = True;
+            subprocess.check_call(['sudo', 'reboot', 'now'])
             return redirect('/view/home')
         except subprocess.CalledProcessError:
             if not update_completed:
                 return 'Update failed. An error occurred during the update process.'
+            else: 
+                return redirect('/view/home')
 
 
 if __name__ == '__main__':
