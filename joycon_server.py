@@ -11,6 +11,7 @@ from aioflask import Flask, jsonify, render_template, request, redirect
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
+import subprocess
 import sys
 import zipfile
 from timeit import default_timer as timer
@@ -44,6 +45,10 @@ def build_defauld_controller_map():
             "h": 0,
             "precision": 5000
         }
+    }
+    dictionary['autoconnect']={
+        'enable': False,
+        'timeout': 10
     }
     return dictionary
 
@@ -331,9 +336,38 @@ async def disconnect():
     return jsonify({'message': 'Closed'})
 
 
+@app.route('/check_update')
+def check_update():
+    with app.app_context():
+        # Get the absolute path of the current script file
+        script_path = os.path.abspath(__file__)
+
+        # Get the directory containing the script file (project directory)
+        project_dir = os.path.dirname(script_path)
+
+        try:
+            # Fetch the latest changes from the remote repository
+            subprocess.check_call(['git', 'fetch'], cwd=project_dir)
+
+            # Get the last local commit hash
+            local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
+
+            # Get the last remote commit hash associated with the current local branch
+            remote_commit = subprocess.check_output(['git', 'rev-parse', '@{u}'], cwd=project_dir).decode().strip()
+
+            if local_commit != remote_commit:
+                return jsonify({'status': 'Update available', 'value': True})
+            else:
+                return jsonify({'status': 'Up to date', 'value': False})
+        except:
+            return jsonify({'status': 'Could not check', 'value': False})
+
+
+
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile )
+    updatable = check_update().json['value']
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile, updatable=updatable )
 
 
 @app.route('/')
@@ -510,6 +544,15 @@ def delete_controller_map(controllerName):
     })
 
 
+@app.route('/controller_map_file')
+def get_current_controller_map_file():
+    global mapControllerFile
+    # Opening JSON file
+    return jsonify({
+        'fileName': mapControllerFile
+    })
+
+
 @app.route('/controllers_maps_post', methods=['POST'])
 def add_controllers_maps():
     global mapControllerValues, mapControllerFile
@@ -551,6 +594,46 @@ def upload():
         response = {'message': 'Tipo de archivo no valido'}
     
     return jsonify(response)
+
+
+@app.route('/update')
+def update():
+    update_completed = False
+    with app.app_context():
+        # Get the absolute path of the current script file
+        script_path = os.path.abspath(__file__)
+
+        # Get the directory containing the script file (project directory)
+        project_dir = os.path.dirname(script_path)
+
+        try:
+            # Stash any local changes
+            subprocess.check_call(['git', 'stash'], cwd=project_dir)
+
+            # Pull the latest changes from Git
+            subprocess.check_call(['git', 'pull'], cwd=project_dir)
+
+            try:
+                # Pop the stashed changes
+                subprocess.check_call(['git', 'stash', 'pop'], cwd=project_dir)
+            except subprocess.CalledProcessError:
+                # Handle the case where no stash is available to pop
+                pass
+
+            # Execute the dependency installation script
+            install_script_path = os.path.join(project_dir, 'install_update_dependencies.sh')
+            subprocess.check_call(['bash', install_script_path], cwd=project_dir)
+
+            # Restart the Raspberry Pi
+            update_completed = True;
+            subprocess.check_call(['sudo', 'reboot', 'now'])
+            return redirect('/view/home')
+        except subprocess.CalledProcessError:
+            if not update_completed:
+                return 'Update failed. An error occurred during the update process.'
+            else: 
+                return redirect('/view/home')
+
 
 if __name__ == '__main__':
     for arg in sys.argv:
