@@ -345,16 +345,22 @@ def check_update():
         # Get the directory containing the script file (project directory)
         project_dir = os.path.dirname(script_path)
 
-        # Get the last local commit hash
-        local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
+        try:
+            # Fetch the latest changes from the remote repository
+            subprocess.check_call(['git', 'fetch'], cwd=project_dir)
 
-        # Get the last remote commit hash associated with the current local branch
-        remote_commit = subprocess.check_output(['git', 'rev-parse', '@{u}'], cwd=project_dir).decode().strip()
+            # Get the last local commit hash
+            local_commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=project_dir).decode().strip()
 
-        if local_commit != remote_commit:
-            return jsonify({'status': 'Update available', 'value': True})
-        else:
-            return jsonify({'status': 'Up to date', 'value': False})
+            # Get the last remote commit hash associated with the current local branch
+            remote_commit = subprocess.check_output(['git', 'rev-parse', '@{u}'], cwd=project_dir).decode().strip()
+
+            if local_commit != remote_commit:
+                return jsonify({'status': 'Update available', 'value': True})
+            else:
+                return jsonify({'status': 'Up to date', 'value': False})
+        except:
+            return jsonify({'status': 'Could not check', 'value': False})
 
 
 
