@@ -598,6 +598,7 @@ def upload():
 
 @app.route('/update')
 def update():
+    update_completed = False
     with app.app_context():
         # Get the absolute path of the current script file
         script_path = os.path.abspath(__file__)
@@ -624,12 +625,12 @@ def update():
             subprocess.check_call(['bash', install_script_path], cwd=project_dir)
 
             # Restart the Raspberry Pi
-            subprocess.check_call(['sudo', 'reboot'])
-
-            return 'Update initiated. The Raspberry Pi will restart shortly.'
-        
+            subprocess.check_call(['sudo', 'reboot', 'now'])
+            update_completed = True;
+            return redirect('/view/home')
         except subprocess.CalledProcessError:
-            return 'Update failed. An error occurred during the update process.'
+            if not update_completed:
+                return 'Update failed. An error occurred during the update process.'
 
 
 if __name__ == '__main__':
