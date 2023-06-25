@@ -8,6 +8,7 @@
     <link href="/static/bootstrap.min.css" rel="stylesheet">
     <script>
         comands = {}
+        var currentSelectedController = "";
 
         function sendComandHold(e,cmd) {
             if (!comands[cmd]) {
@@ -307,6 +308,7 @@
                 contentType: "application/json",
                 data: JSON.stringify(requestData),
                 success: function(response) {
+                    currentSelectedController = filename;
                     populateControllerSelect();
                     selectController();
                     // Handle the success response here
@@ -417,6 +419,20 @@
             $("#scriptlister").show();
         }
 
+        // Add an event listener to the modal
+        function updateControllerMapFile() {
+            fetch('/controller_map_file')
+                .then(response => response.json())
+                .then(data => {
+                // Update the variable with the filename
+                    currentSelectedController = data.fileName;
+                    $("#selectedCurrentController").text(currentSelectedController);
+                })
+                .catch(error => {
+                console.error('Error:', error);
+                });
+        }
+
         $(document).ready(function () {
             showController();
             if("{{amiiboFolder}}"!=""){
@@ -426,13 +442,18 @@
             requestScripts();
             populateControllerSelect();
             selectController();
-            var selectedController = "";
             {% if mapControllerFile %}
-                selectedController = "{{ mapControllerFile }}";
+                currentSelectedController = "{{ mapControllerFile }}";
+                $("#selectedCurrentController").text(currentSelectedController);
             {% endif %}
-            // Add an event listener to the modal
+
+            // Call the function immediately
+            updateControllerMapFile();
+
+            // Call the function every minute (60,000 milliseconds)
+            setInterval(updateControllerMapFile, 60000);
             $("#modalController").on("shown.bs.modal", function() {
-                $("#selectedController").val(selectedController);
+                $("#selectedController").val(currentSelectedController);
                 selectController();
             });
         });
@@ -673,6 +694,7 @@
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalController">
                     controller map
                 </button>
+                <span id="#selectedCurrentController"></span>
             </li>
         </ul>
         <ul class="nav">
