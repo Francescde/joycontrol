@@ -757,9 +757,12 @@ let blackgroundImage = null;
 function clear(){
 	ctx.clearRect(0, 0, w, h);
 	let drawColor = "#000000";
+	let writeSelectedColor = drawColor;
+	let writeColor = drawColor;
 	let analogLimitsColor = "#00FF00";
 	let itemsFillColor = "#FFFFFF";
 	let textFont = "30px Comic Sans MS";
+	let selectedColor ="rgba(0, 0, 200, 0.2)"
 	if("{{params}}"!=""){
 		const params = JSON.parse({{ params | tojson }});
 		if(params.analogLimitsColor){
@@ -776,6 +779,15 @@ function clear(){
 		}
 		if(params.drawColor){
 			drawColor = params.drawColor;
+		}
+		if(params.writeColor){
+			writeColor = params.writeColor;
+		}
+		if(params.writeSelectedColor){
+			writeSelectedColor = params.writeSelectedColor;
+		}
+		if(params.selectedColor){
+			selectedColor = params.selectedColor;
 		}
 		if(params.backgroundImage) {
 			if(blackgroundImage==null) {
@@ -842,7 +854,7 @@ function clear(){
 			if(fig.selectedColor){
 				ctx.fillStyle = fig.selectedColor;
 			} else {
-				ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+				ctx.fillStyle = selectedColor;
 			}
 			ctx.fill();
 		}
@@ -850,8 +862,11 @@ function clear(){
 		ctx.font = fig.textFont!=null? fig.textFont : textFont;
 		ctx.textAlign = "center";
 		ctx.fillStyle = drawColor;
-		if (fig.writeColor) {
-			ctx.fillStyle = fig.writeColor;
+		if(fig.selected ? writeSelectedColor : writeColor){
+			ctx.fillStyle = fig.selected ? writeSelectedColor : writeColor;
+		}
+		if (fig.selected ? fig.writeSelectedColor : fig.writeColor) {
+			ctx.fillStyle = fig.selected ? fig.writeSelectedColor : fig.writeColor;
 		}
 		ctx.fillText(fig.text, fig.center.w, fig.center.h+10);
 		if(fig.actionType == ActionType.analog) {

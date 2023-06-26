@@ -1,0 +1,117 @@
+{
+    "add": [
+       {
+          "actionType": 5,
+          "center": {
+             "h": 234,
+             "w": 664
+          },
+          "radius": 21.90625,
+          "repeats": 1,
+          "script": "arrow_fast",
+          "text": "arrow",
+          "textFont": "32px Brush Script MT"
+       }
+    ],
+    "analogLimitsColor": "#0e5135",
+    "selectedColor": "#0e5135",
+    "backgroundColor": "#DDE4EC",
+    "backgroundImage": "https://images.nintendolife.com/8c5c26088a5d6/zelda-tears-of-the-kingdom-carving.large.jpg",
+    "drawColor": "#000000",
+    "writeSelectedColor": "#FF0000",
+    "writeColor": "#0e5135",
+    "filename": "contreller botw",
+    "images": [
+       {
+          "height": 102.4,
+          "name": "raspberry",
+          "pos": {
+             "h": 244,
+             "w": 21
+          },
+          "url": "/static/raspberry.png",
+          "width": 68.2
+       },
+       {
+          "height": 76.4,
+          "name": "joy con left",
+          "pos": {
+             "h": 60,
+             "w": 174
+          },
+          "url": "/static/joy-con-left.png",
+          "width": 102.4
+       },
+       {
+          "height": 76.4,
+          "name": "joy con right",
+          "pos": {
+             "h": 60,
+             "w": 467
+          },
+          "url": "/static/joy-con-right.png",
+          "width": 76.4
+       },
+       {
+          "height": 40,
+          "name": "trol",
+          "pos": {
+             "h": 264,
+             "w": 664
+          },
+          "url": "/static/trol.png",
+          "width": 33
+       },
+       {
+          "height": 40,
+          "name": "trol",
+          "pos": {
+             "h": 264,
+             "w": 664
+          },
+          "url": "https://steamuserimages-a.akamaihd.net/ugc/2035109000233672166/162AC01A3FBD04499F53936A9A46E9EF9CDACBE7/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false",
+          "width": 33
+       }
+    ],
+    "itemsFillColor": "#000000",
+    "readInterval": 10,
+    "remove": [],
+    "substitute": [
+       {
+          "actionType": 4,
+          "link": "/view/home",
+          "radius": 29,
+          "text": "#"
+       }
+    ],
+    "texts": [
+       {
+          "pos": {
+             "h": 65,
+             "w": 350
+          },
+          "text": "Raspi"
+       },
+       {
+          "pos": {
+             "h": 95,
+             "w": 278
+          },
+          "text": "Joy"
+       },
+       {
+          "pos": {
+             "h": 95,
+             "w": 437
+          },
+          "text": "Con"
+       },
+       {
+          "pos": {
+             "h": 176,
+             "w": 341
+          },
+          "text": "Trol"
+       }
+    ]
+ }
