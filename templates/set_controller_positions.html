@@ -29,6 +29,8 @@ const ActionType = {
 let figures = [];
 
 let drawColor = "#000000";
+let writeSelectedColor = drawColor;
+let writeColor = drawColor;
 let analogLimitsColor = "#00FF00";
 let textFont = "30px Comic Sans MS";
 let itemsFillColor = "#FFFFFF";
@@ -69,7 +71,7 @@ function getCursorPosition(event) {
             };
             ctx.font = newParams.texts[inerindex].font!=null?newParams.texts[inerindex].font:textFont;
             ctx.textAlign = "center";
-            ctx.fillStyle = newParams.texts[inerindex].writeColor!=null?newParams.texts[inerindex].writeColor:drawColor;
+            ctx.fillStyle = newParams.texts[inerindex].writeColor!=null?newParams.texts[inerindex].writeColor:writeColor;
 
             ctx.fillText(newParams.texts[inerindex].text, newParams.texts[inerindex].pos.w, newParams.texts[inerindex].pos.h);
         }
@@ -439,6 +441,12 @@ function setPositions(){
     if(params.drawColor){
         drawColor = params.drawColor;
     }
+	if(params.writeColor){
+		writeColor = params.writeColor;
+	}
+	if(params.writeSelectedColor){
+		writeSelectedColor = params.writeSelectedColor;
+	}
 	ctx.clearRect(0, 0, w, h);
     if(params.remove){
         const newFigures = [];
