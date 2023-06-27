@@ -854,9 +854,9 @@ function clear(){
 	}
 	figures.forEach(fig => {
 		if(fig.imageFlow!=null) {
+			let imgIndex = fig.selected ? fig.imageFlow.imgSelectedIndex : fig.imageFlow.imgUnselectedIndex;
 			if(imagesLoaded[imgIndex].loaded) {
 				const radius = fig.radius /  Math.sqrt(2);
-				let imgIndex = fig.selected ? fig.imageFlow.imgSelectedIndex : fig.imageFlow.imgUnselectedIndex;
 				ctx.drawImage(images[imgIndex],fig.center.w-(radius*fig.scalePrecisionSquare),fig.center.h-(radius*fig.scalePrecisionSquare), 2*(radius*fig.scalePrecisionSquare),2*(radius*fig.scalePrecisionSquare));
 			}
 		}
