@@ -857,7 +857,7 @@ function clear(){
 			let imgIndex = fig.selected ? fig.imageFlow.imgSelectedIndex : fig.imageFlow.imgUnselectedIndex;
 			if(imagesLoaded[imgIndex].loaded) {
 				const radius = fig.radius /  Math.sqrt(2);
-				ctx.drawImage(images[imgIndex],fig.center.w-(radius*fig.scalePrecisionSquare),fig.center.h-(radius*fig.scalePrecisionSquare), 2*(radius*fig.scalePrecisionSquare),2*(radius*fig.scalePrecisionSquare));
+				ctx.drawImage(images[imgIndex],fig.center.w-(radius),fig.center.h-(radius), 2*(radius),2*(radius));
 			}
 		}
 		else {
