@@ -752,6 +752,7 @@ function ol() {
 };
 
 let images = [];
+let imagesLoaded = [];
 let blackgroundImage = null;
 
 function clear(){
@@ -809,7 +810,11 @@ function clear(){
 			if(images.length==0) {
 				params.images.forEach(img => {
 					var imgCan = new Image();
+					let imgLoad = {
+						loaded=false
+					};
 					imgCan.onload = function() {
+						imgLoad.loaded = true;
 						if(img.pos!=null){
 							if(img.width!=null && img.height!=null){
 								ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
@@ -820,6 +825,7 @@ function clear(){
 						}
 					}
 					imgCan.src = img.url;
+					imagesLoaded.push(imgLoad);
 					images.push(imgCan);
 				});
 			}
@@ -848,10 +854,11 @@ function clear(){
 	}
 	figures.forEach(fig => {
 		if(fig.imageFlow!=null) {
-			const radius = fig.radius /  Math.sqrt(2);
-			let imgIndex = fig.selected ? fig.imageFlow.imgSelectedIndex : fig.imageFlow.imgUnselectedIndex;
-			ctx.drawImage(images[imgIndex],fig.center.w-(radius*fig.scalePrecisionSquare),fig.center.h-(radius*fig.scalePrecisionSquare), 
-			fig.center.w+(radius*fig.scalePrecisionSquare),fig.center.h+(radius*fig.scalePrecisionSquare));
+			if(imagesLoaded[imgIndex].loaded) {
+				const radius = fig.radius /  Math.sqrt(2);
+				let imgIndex = fig.selected ? fig.imageFlow.imgSelectedIndex : fig.imageFlow.imgUnselectedIndex;
+				ctx.drawImage(images[imgIndex],fig.center.w-(radius*fig.scalePrecisionSquare),fig.center.h-(radius*fig.scalePrecisionSquare), 2*(radius*fig.scalePrecisionSquare),2*(radius*fig.scalePrecisionSquare));
+			}
 		}
 		else {
 			ctx.beginPath();
