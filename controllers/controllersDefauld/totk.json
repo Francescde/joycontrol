@@ -1,0 +1,50 @@
+{
+    "add": [
+       {
+          "actionType": 5,
+          "center": {
+             "h": 234,
+             "w": 664
+          },
+          "radius": 21.90625,
+          "repeats": 1,
+          "script": "arrow_fast",
+          "text": "arrow",
+          "textFont": "32px Brush Script MT"
+       }
+    ],
+    "analogLimitsColor": "#0e5135",
+    "selectedColor": "#0e5135",
+    "backgroundColor": "#DDE4EC",
+    "backgroundImage": "/static/zelda-tears-of-the-kingdom-carving copia.png",
+    "drawColor": "#000000",
+    "writeSelectedColor": "#FF0000",
+    "writeColor": "#0e5135",
+    "filename": "contreller botw",
+    "images": [
+       {
+          "name": "hand icon",
+          "url": "/static/hand-green.jpeg"
+       },
+       {
+          "name": "ultrahand",
+          "url": "/static/Ultrahand_Icon.webp"
+       }
+    ],
+    "itemsFillColor": "#000000",
+    "readInterval": 10,
+    "remove": [],
+    "substitute": [
+       { 
+        "imageFlow": {
+            "imgSelectedIndex": 1,
+            "imgUnselectedIndex": 0
+          },
+          "actionType": 4,
+          "link": "/view/home",
+          "radius": 29,
+          "text": "#"
+       }
+    ],
+    "texts": []
+ }

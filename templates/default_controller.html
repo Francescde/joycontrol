@@ -752,18 +752,26 @@ function ol() {
 };
 
 let images = [];
+let imagesLoaded = [];
 let blackgroundImage = null;
 
 function clear(){
 	ctx.clearRect(0, 0, w, h);
 	let drawColor = "#000000";
+	let writeSelectedColor = drawColor;
+	let writeColor = drawColor;
 	let analogLimitsColor = "#00FF00";
 	let itemsFillColor = "#FFFFFF";
 	let textFont = "30px Comic Sans MS";
+	let selectedColor ="rgba(0, 0, 200, 0.2)";
+	let hideText = false;
 	if("{{params}}"!=""){
 		const params = JSON.parse({{ params | tojson }});
 		if(params.analogLimitsColor){
 			analogLimitsColor = params.analogLimitsColor;
+		}
+		if(params.hideText){
+			hideText = params.hideText;
 		}
 		if(params.textFont){
 			textFont = params.textFont;
@@ -776,6 +784,15 @@ function clear(){
 		}
 		if(params.drawColor){
 			drawColor = params.drawColor;
+		}
+		if(params.writeColor){
+			writeColor = params.writeColor;
+		}
+		if(params.writeSelectedColor){
+			writeSelectedColor = params.writeSelectedColor;
+		}
+		if(params.selectedColor){
+			selectedColor = params.selectedColor;
 		}
 		if(params.backgroundImage) {
 			if(blackgroundImage==null) {
@@ -793,26 +810,35 @@ function clear(){
 			if(images.length==0) {
 				params.images.forEach(img => {
 					var imgCan = new Image();
+					let imgLoad = {
+						loaded: false
+					};
 					imgCan.onload = function() {
-						if(img.width!=null && img.height!=null){
-							ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
-						}
-						else {
-							ctx.drawImage(imgCan,img.pos.w,img.pos.h);
+						imgLoad.loaded = true;
+						if(img.pos!=null){
+							if(img.width!=null && img.height!=null){
+								ctx.drawImage(imgCan,img.pos.w,img.pos.h, img.width, img.height);
+							}
+							else {
+								ctx.drawImage(imgCan,img.pos.w,img.pos.h);
+							}
 						}
 					}
 					imgCan.src = img.url;
+					imagesLoaded.push(imgLoad);
 					images.push(imgCan);
 				});
 			}
 			else {
 				for(let imgIn=0; imgIn<params.images.length;++imgIn){
 					let img = params.images[imgIn];
-					if(img.width!=null && img.height!=null){
-						ctx.drawImage(images[imgIn],img.pos.w,img.pos.h, img.width, img.height);
-					}
-					else {
-						ctx.drawImage(images[imgIn],img.pos.w,img.pos.h);
+					if(img.pos!=null){
+						if(img.width!=null && img.height!=null){
+							ctx.drawImage(images[imgIn],img.pos.w,img.pos.h, img.width, img.height);
+						}
+						else {
+							ctx.drawImage(images[imgIn],img.pos.w,img.pos.h);
+						}
 					}
 				}
 			}
@@ -827,51 +853,65 @@ function clear(){
 		}
 	}
 	figures.forEach(fig => {
-		ctx.beginPath();
-		ctx.strokeStyle = drawColor;
-		if (fig.borderColor){
-			ctx.strokeStyle = fig.borderColor;
-		}
-		ctx.fillStyle = itemsFillColor;
-		if (fig.fillColor){
-			ctx.fillStyle = fig.fillColor;
-		}
-		ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
-		ctx.fill();
-		if(fig.selected){
-			if(fig.selectedColor){
-				ctx.fillStyle = fig.selectedColor;
-			} else {
-				ctx.fillStyle = "rgba(0, 0, 200, 0.2)";
+		if(fig.imageFlow!=null) {
+			let imgIndex = fig.selected ? fig.imageFlow.imgSelectedIndex : fig.imageFlow.imgUnselectedIndex;
+			if(imagesLoaded[imgIndex].loaded) {
+				const radius = fig.radius /  Math.sqrt(2);
+				ctx.drawImage(images[imgIndex],fig.center.w-(radius),fig.center.h-(radius), 2*(radius),2*(radius));
 			}
-			ctx.fill();
 		}
-		ctx.stroke();
-		ctx.font = fig.textFont!=null? fig.textFont : textFont;
-		ctx.textAlign = "center";
-		ctx.fillStyle = drawColor;
-		if (fig.writeColor) {
-			ctx.fillStyle = fig.writeColor;
-		}
-		ctx.fillText(fig.text, fig.center.w, fig.center.h+10);
-		if(fig.actionType == ActionType.analog) {
-			const radius = fig.radius /  Math.sqrt(2);
-			ctx.strokeStyle = analogLimitsColor;
-			if(fig.analogLimitsColor){
-				ctx.strokeStyle = fig.analogLimitsColor;
-			}
-			fig.scalePrecisionSquare = fig.scalePrecisionSquare!=null?fig.scalePrecisionSquare:1; 
-			fig.square = {
-					min: {
-						x: fig.center.w-(radius*fig.scalePrecisionSquare),
-						y: fig.center.h-(radius*fig.scalePrecisionSquare)
-					},
-				lateral: 2*radius*fig.scalePrecisionSquare
-			};
+		else {
 			ctx.beginPath();
-			ctx.rect(fig.square.min.x, fig.square.min.y,
-				fig.square.lateral, fig.square.lateral);
+			ctx.strokeStyle = drawColor;
+			if (fig.borderColor){
+				ctx.strokeStyle = fig.borderColor;
+			}
+			ctx.fillStyle = itemsFillColor;
+			if (fig.fillColor){
+				ctx.fillStyle = fig.fillColor;
+			}
+			ctx.arc(fig.center.w, fig.center.h, fig.radius, 0, 2 * Math.PI, true);
+			ctx.fill();
+			if(fig.selected){
+				if(fig.selectedColor){
+					ctx.fillStyle = fig.selectedColor;
+				} else {
+					ctx.fillStyle = selectedColor;
+				}
+				ctx.fill();
+			}
 			ctx.stroke();
+			ctx.font = fig.textFont!=null? fig.textFont : textFont;
+			ctx.textAlign = "center";
+			ctx.fillStyle = drawColor;
+			if(fig.selected ? writeSelectedColor : writeColor){
+				ctx.fillStyle = fig.selected ? writeSelectedColor : writeColor;
+			}
+			if (fig.selected ? fig.writeSelectedColor : fig.writeColor) {
+				ctx.fillStyle = fig.selected ? fig.writeSelectedColor : fig.writeColor;
+			}
+			if(!(!!hideText || !!fig.hideText)) {
+				ctx.fillText(fig.text, fig.center.w, fig.center.h+10);
+			}
+			if(fig.actionType == ActionType.analog) {
+				const radius = fig.radius /  Math.sqrt(2);
+				ctx.strokeStyle = analogLimitsColor;
+				if(fig.analogLimitsColor){
+					ctx.strokeStyle = fig.analogLimitsColor;
+				}
+				fig.scalePrecisionSquare = fig.scalePrecisionSquare!=null?fig.scalePrecisionSquare:1; 
+				fig.square = {
+						min: {
+							x: fig.center.w-(radius*fig.scalePrecisionSquare),
+							y: fig.center.h-(radius*fig.scalePrecisionSquare)
+						},
+					lateral: 2*radius*fig.scalePrecisionSquare
+				};
+				ctx.beginPath();
+				ctx.rect(fig.square.min.x, fig.square.min.y,
+					fig.square.lateral, fig.square.lateral);
+				ctx.stroke();
+			}
 		}
 	});
 	// draw touches
