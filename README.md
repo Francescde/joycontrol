@@ -81,7 +81,11 @@ The dependencies of joycon_server and comandMap are incompatible this is why the
 source clientCtr/bin/activate
 python3 controlAdapter/src/comandMap.py
 ```
-the main view /view/home has three parts
+the main view /view/home has the following parts
+- [Controller](#controller)
+- [Switch Pro Controller Configuration](#switch-pro-controller-configuration)
+- [Scripts](#scripts)
+- [Amiibos](#amiibos)
 
 #### Controller
 
