@@ -82,10 +82,10 @@ source clientCtr/bin/activate
 python3 controlAdapter/src/comandMap.py
 ```
 the main view /view/home has the following parts
-- [Controller](#Controller)
+- [Controller](#controller)
 - [Switch Pro Controller Configuration](#switch-pro-controller-configuration)
-- [Scripts](#Scripts)
-- [Amiibos](#Amiibos)
+- [Scripts](#scripts)
+- [Amiibos](#amiibos)
 
 #### Controller
 
