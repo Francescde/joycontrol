@@ -33,7 +33,7 @@ sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-p
 sudo python -m venv server
 source server/bin/activate
 ```
-  Python: (a setup.py is present but not yet up to date)  
+  Python:  
   Note that pip here _has_ to be run as root, as otherwise the packages are not available to the root user.
 ```bash
 sudo pip3 install aioconsole hid crc8
@@ -341,6 +341,151 @@ script: actionType value 5. On press it execute an script repeats times(-1 forev
       "repeats": -1
   }
 ```
+
+
+##### Switch Pro Controller Configuration
+
+To configure your Pro Controller, locate the settings button on the top left. I will create a video tutorial demonstrating the configuration process. Below is an example of a configuration JSON you can use:
+
+```json
+{
+  "a": {
+    "type": "button",
+    "value": "a"
+  },
+  "autoconnect": {
+    "enable": true,
+    "timeout": 10
+  },
+  "b": {
+    "type": "button",
+    "value": "b"
+  },
+  "capture": {
+    "type": "script",
+    "value": "unstick"
+  },
+  "down": {
+    "type": "button",
+    "value": "down"
+  },
+  "home": {
+    "type": "script",
+    "value": "arrow_fast"
+  },
+  "l": {
+    "type": "button",
+    "value": "l"
+  },
+  "l_stick": {
+    "type": "button",
+    "value": "l_stick"
+  },
+  "left": {
+    "type": "button",
+    "value": "left"
+  },
+  "minus": {
+    "type": "button",
+    "value": "minus"
+  },
+  "plus": {
+    "type": "button",
+    "value": "plus"
+  },
+  "r": {
+    "type": "button",
+    "value": "r"
+  },
+  "r_stick": {
+    "type": "button",
+    "value": "r_stick"
+  },
+  "right": {
+    "type": "button",
+    "value": "right"
+  },
+  "stick": {
+    "l": {
+      "center": true,
+      "centerRadius": 1000,
+      "h": 0,
+      "precision": 5000,
+      "v": 0
+    },
+    "r": {
+      "center": true,
+      "centerRadius": 1000,
+      "h": 0,
+      "precision": 5000,
+      "v": 0
+    }
+  },
+  "up": {
+    "type": "button",
+    "value": "up"
+  },
+  "x": {
+    "type": "button",
+    "value": "x"
+  },
+  "y": {
+    "type": "button",
+    "value": "y"
+  },
+  "zl": {
+    "type": "button",
+    "value": "zl"
+  },
+  "zr": {
+    "type": "button",
+    "value": "zr"
+  }
+}
+```
+
+##### Scripts
+
+The script view allows you to write scripts from scratch or record actions performed on the Raspberry Pi. Note that actions executed from other scripts cannot be recorded.
+
+You can command to hold or release buttons, set the joystick position, or load amiibos. There are a few examples in the "joycontrolScripts" and "rjtcScripts/rjctScriptsDefault" folders within the project.
+
+Please be aware that the "rjctScripts" folder is where the server stores the project scripts.
+
+The following buttons can be used within the scripts. Writing the button without a command (hold, release) implies holding the button for 0.1 seconds:
+
+```txt
+a
+b
+capture
+down
+home
+l
+l_stick
+left
+minus
+plus
+r
+r_stick
+right
+up
+x
+y
+zl
+zr
+```
+
+One important aspect to understand while using this tool is that these scripts are not necessarily sequential. All the instructions are executed in parallel, meaning they happen simultaneously. The only instructions that deviate from this are the "sleep"-type instructions. Any line with a sleep instruction will not execute the next line until the specified time has passed.
+
+This approach has been adopted because each execution of the same code might not be identical due to varying conditions such as the Raspberry Pi or the Switch's workload. It is impossible to predict precisely when an instruction will execute while waiting for it to do so.
+
+So, to ensure the code's independence from these factors, the tool doesn't wait. However, if you genuinely need to ensure a button is pressed, you can place the hold instruction on the same line as a sleep instruction.
+
+##### Amiibos
+
+This tool supports loading Amiibos as .bin files. You can load them individually or load a compressed .zip file containing multiple .bin files. When you execute the NFC instruction to load an amiibo in the game, the pressed amiibo will be marked for the rest of the day, enabling you to keep track of which ones you've used.
+
+## The Project Without the Server
 
 ## load amiibos ussing an script
 
