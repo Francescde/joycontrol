@@ -79,13 +79,13 @@ def main():
             return
         for k, v in buttons.items():
             if buttons_prev[k] != v:
-                uinput_button = map[uinput_buttons_map[k]]
-                if not uinput_button:
+                if uinput_buttons_map[k] in map.keys():
                         if v:
                             comands_to_send.append('hold '+uinput_buttons_map[k])
                         else:
                             comands_to_send.append('release '+uinput_buttons_map[k])
                 else:
+                    uinput_button = map[uinput_buttons_map[k]]
                     if v:
                         #emit event on webdocket
                         #print('hold '+uinput_button)
