@@ -79,7 +79,7 @@ def main():
             return
         for k, v in buttons.items():
             if buttons_prev[k] != v:
-                if uinput_buttons_map[k] in map.keys():
+                if not uinput_buttons_map[k] in map.keys():
                         if v:
                             comands_to_send.append('hold '+uinput_buttons_map[k])
                         else:
