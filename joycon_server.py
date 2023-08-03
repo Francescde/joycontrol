@@ -575,7 +575,7 @@ def delete_controller_map(controllerName):
     mapControllerFile = None
     write_config()
     return jsonify({
-        'controllerName': controllerName
+        'controllerName': mapControllerFile
     })
 
 
