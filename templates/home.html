@@ -314,8 +314,10 @@
                 contentType: "application/json",
                 data: JSON.stringify(requestData),
                 success: function(response) {
-                    currentSelectedController = filename;
+                    $("#filenameControllerCtrMap").val(response.controllerName);
+                    currentSelectedController = response.controllerName!=null?response.controllerName:'';
                     $("#selectedCurrentController").text(currentSelectedController);
+                    $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                     populateControllerSelect();
                     selectController();
                     // Handle the success response here

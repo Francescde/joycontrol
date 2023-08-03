@@ -603,7 +603,10 @@ def add_controllers_maps():
     with open(join(folderpath, filename), 'w') as outfile:
         json.dump(file, outfile)
     write_config()
-    return jsonify({'message': 'Created'})
+    return jsonify({
+        'controllerName': filename,
+        'jsonFile': file,
+    })
 
 
 
