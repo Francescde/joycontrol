@@ -148,7 +148,6 @@
                     $("#selectedController").append(option);
                 });
 
-                    selectController();
                 },
                 error: function(error) {
                 // Handle the error here
@@ -320,6 +319,7 @@
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#selectedController").val(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
+                    
                     populateControllerSelect();
                     // Handle the success response here
                     console.log("Controller map created:", response);
