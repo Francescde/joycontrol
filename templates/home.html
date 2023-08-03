@@ -169,6 +169,7 @@
                 success: function(response) {
                     // Populate the filename and JSON config
                     $("#filenameControllerCtrMap").val(response.controllerName);
+                    currentSelectedController = filename;
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                 },
                 error: function(error) {
