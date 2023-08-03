@@ -537,8 +537,11 @@ def get_controller_maps():
 
 @app.route('/controller_maps/get')
 def get_controller_map_defaulf():
+    global mapControllerValues, mapControllerFile
     # Opening JSON file
     data = build_defauld_controller_map()
+    mapControllerValues = data
+    mapControllerFile = None
     return jsonify({
         'controllerName': None,
         'jsonFile': data,
@@ -551,8 +554,8 @@ def get_controller_map_by_name(controllerName):
     # Opening JSON file
     f = open('controllerMaps/'+controllerName)
     data = json.load(f)
-    mapControllerValues = controllerName
-    mapControllerFile = data
+    mapControllerValues = data
+    mapControllerFile = controllerName
     return jsonify({
         'controllerName': controllerName,
         'jsonFile': data,
