@@ -159,7 +159,7 @@
         function selectController() {
             var selectedController = $("#selectedController").val();
 
-            if (selectedController === "") {
+            if (selectController==null || selectedController === "") {
                 // Handle the empty selection
                 $("#deleteMapButton").prop("disabled", true);
 
