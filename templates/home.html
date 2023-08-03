@@ -147,6 +147,8 @@
                     var option = $("<option></option>").attr("value", controller).text(controller);
                     $("#selectedController").append(option);
                 });
+
+                    selectController();
                 },
                 error: function(error) {
                 // Handle the error here
@@ -315,13 +317,12 @@
                 data: JSON.stringify(requestData),
                 success: function(response) {
                     currentSelectedController = response.controllerName!=null?response.controllerName:'';
-                    $("#filenameControllerCtrMap").val(response.controllerName);
                     $("#selectedCurrentController").text(currentSelectedController);
+                    $("#selectedController").val(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                     populateControllerSelect();
-                    selectController();
                     // Handle the success response here
-                    console.log("Controller map created:", response);
+                    console.log("Controller map created:", response.message);
 
                     // Optionally, perform any additional actions after updating the map
                     // For example, you can clear the input fields or refresh the list of maps
