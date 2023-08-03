@@ -313,6 +313,7 @@
                 data: JSON.stringify(requestData),
                 success: function(response) {
                     currentSelectedController = filename;
+                    $("#selectedCurrentController").text(currentSelectedController);
                     populateControllerSelect();
                     selectController();
                     // Handle the success response here
