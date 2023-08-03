@@ -35,6 +35,7 @@ def copy_files_to_parent_folder(subfolder_path, extension):
 extension = ".txt"
 copy_files_to_parent_folder("controllers/controllersDefauld", '.json')
 copy_files_to_parent_folder("rjctScripts/rjctScriptsDefauld", '.txt')
+copy_files_to_parent_folder("controllerMaps/defauld", '.json')
 
 objectMap = {}
 objectMap['cli'] = None
@@ -546,9 +547,12 @@ def get_controller_map_defaulf():
 
 @app.route('/controller_maps/get/<controllerName>')
 def get_controller_map_by_name(controllerName):
+    global mapControllerValues, mapControllerFile
     # Opening JSON file
     f = open('controllerMaps/'+controllerName)
     data = json.load(f)
+    mapControllerValues = controllerName
+    mapControllerFile = data
     return jsonify({
         'controllerName': controllerName,
         'jsonFile': data,
