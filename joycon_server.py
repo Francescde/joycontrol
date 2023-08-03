@@ -542,6 +542,7 @@ def get_controller_map_defaulf():
     data = build_defauld_controller_map()
     mapControllerValues = data
     mapControllerFile = None
+    write_config()
     return jsonify({
         'controllerName': None,
         'jsonFile': data,
@@ -556,6 +557,7 @@ def get_controller_map_by_name(controllerName):
     data = json.load(f)
     mapControllerValues = data
     mapControllerFile = controllerName
+    write_config()
     return jsonify({
         'controllerName': controllerName,
         'jsonFile': data,
@@ -564,8 +566,14 @@ def get_controller_map_by_name(controllerName):
 
 @app.route('/delete_controller_map/<controllerName>')
 def delete_controller_map(controllerName):
+    global mapControllerValues, mapControllerFile
     path = os.path.join('controllerMaps', controllerName)  
     os.remove(path)
+    # Opening JSON file
+    data = build_defauld_controller_map()
+    mapControllerValues = data
+    mapControllerFile = None
+    write_config()
     return jsonify({
         'controllerName': controllerName
     })
