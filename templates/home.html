@@ -314,14 +314,14 @@
                 contentType: "application/json",
                 data: JSON.stringify(requestData),
                 success: function(response) {
-                    $("#filenameControllerCtrMap").val(response.controllerName);
                     currentSelectedController = response.controllerName!=null?response.controllerName:'';
+                    $("#filenameControllerCtrMap").val(response.controllerName);
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                     populateControllerSelect();
                     selectController();
                     // Handle the success response here
-                    console.log("Controller map created:", response.message);
+                    console.log("Controller map created:", response);
 
                     // Optionally, perform any additional actions after updating the map
                     // For example, you can clear the input fields or refresh the list of maps
