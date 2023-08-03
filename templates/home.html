@@ -218,6 +218,8 @@
                     // Disable the deleteMapButton
                     $("#deleteMapButton").prop("disabled", true);
                     populateControllerSelect();
+                    updateControllerMapFile();
+                    $("#selectedController").val(null);
                     selectController();
                 },
                 error: function(error) {
