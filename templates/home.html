@@ -187,8 +187,8 @@
                 type: "GET",
                 success: function(response) {
                     // Populate the filename and JSON config
-                    $("#selectedCurrentController").val(response.controllerName);
                     currentSelectedController = response.controllerName;
+                    $("#selectedCurrentController").text(currentSelectedController);
                     $("#filenameControllerCtrMap").val(response.controllerName);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                 },
