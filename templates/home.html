@@ -319,10 +319,10 @@
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#selectedController").val(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
-                    
                     populateControllerSelect();
                     // Handle the success response here
                     console.log("Controller map created:", response);
+                    $('#modalController').modal('toggle');
 
                     // Optionally, perform any additional actions after updating the map
                     // For example, you can clear the input fields or refresh the list of maps
