@@ -147,6 +147,7 @@
                     var option = $("<option></option>").attr("value", controller).text(controller);
                     $("#selectedController").append(option);
                 });
+
                 },
                 error: function(error) {
                 // Handle the error here
@@ -159,7 +160,7 @@
         function selectController() {
             var selectedController = $("#selectedController").val();
 
-            if (selectedController === "") {
+            if (selectController==null || selectedController === "") {
                 // Handle the empty selection
                 $("#deleteMapButton").prop("disabled", true);
 
@@ -169,6 +170,8 @@
                 success: function(response) {
                     // Populate the filename and JSON config
                     $("#filenameControllerCtrMap").val(response.controllerName);
+                    currentSelectedController = response.controllerName!=null?response.controllerName:'';
+                    $("#selectedCurrentController").text(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                 },
                 error: function(error) {
@@ -185,6 +188,8 @@
                 type: "GET",
                 success: function(response) {
                     // Populate the filename and JSON config
+                    currentSelectedController = response.controllerName!=null?response.controllerName:'';
+                    $("#selectedCurrentController").text(currentSelectedController);
                     $("#filenameControllerCtrMap").val(response.controllerName);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                 },
@@ -214,6 +219,8 @@
                     // Disable the deleteMapButton
                     $("#deleteMapButton").prop("disabled", true);
                     populateControllerSelect();
+                    updateControllerMapFile();
+                    $("#selectedController").val(null);
                     selectController();
                 },
                 error: function(error) {
@@ -308,11 +315,14 @@
                 contentType: "application/json",
                 data: JSON.stringify(requestData),
                 success: function(response) {
-                    currentSelectedController = filename;
+                    currentSelectedController = response.controllerName!=null?response.controllerName:'';
+                    $("#selectedCurrentController").text(currentSelectedController);
+                    $("#selectedController").val(currentSelectedController);
+                    $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                     populateControllerSelect();
-                    selectController();
                     // Handle the success response here
-                    console.log("Controller map created:", response.message);
+                    console.log("Controller map created:", response);
+                    $('#modalController').modal('toggle');
 
                     // Optionally, perform any additional actions after updating the map
                     // For example, you can clear the input fields or refresh the list of maps
@@ -425,7 +435,7 @@
                 .then(response => response.json())
                 .then(data => {
                 // Update the variable with the filename
-                    currentSelectedController = data.fileName;
+                    currentSelectedController = data.fileName!=null?data.fileName:'';
                     $("#selectedCurrentController").text(currentSelectedController);
                 })
                 .catch(error => {

@@ -35,6 +35,7 @@ def copy_files_to_parent_folder(subfolder_path, extension):
 extension = ".txt"
 copy_files_to_parent_folder("controllers/controllersDefauld", '.json')
 copy_files_to_parent_folder("rjctScripts/rjctScriptsDefauld", '.txt')
+copy_files_to_parent_folder("controllerMaps/defauld", '.json')
 
 objectMap = {}
 objectMap['cli'] = None
@@ -536,8 +537,12 @@ def get_controller_maps():
 
 @app.route('/controller_maps/get')
 def get_controller_map_defaulf():
+    global mapControllerValues, mapControllerFile
     # Opening JSON file
     data = build_defauld_controller_map()
+    mapControllerValues = data
+    mapControllerFile = None
+    write_config()
     return jsonify({
         'controllerName': None,
         'jsonFile': data,
@@ -546,9 +551,13 @@ def get_controller_map_defaulf():
 
 @app.route('/controller_maps/get/<controllerName>')
 def get_controller_map_by_name(controllerName):
+    global mapControllerValues, mapControllerFile
     # Opening JSON file
     f = open('controllerMaps/'+controllerName)
     data = json.load(f)
+    mapControllerValues = data
+    mapControllerFile = controllerName
+    write_config()
     return jsonify({
         'controllerName': controllerName,
         'jsonFile': data,
@@ -557,10 +566,16 @@ def get_controller_map_by_name(controllerName):
 
 @app.route('/delete_controller_map/<controllerName>')
 def delete_controller_map(controllerName):
+    global mapControllerValues, mapControllerFile
     path = os.path.join('controllerMaps', controllerName)  
     os.remove(path)
+    # Opening JSON file
+    data = build_defauld_controller_map()
+    mapControllerValues = data
+    mapControllerFile = None
+    write_config()
     return jsonify({
-        'controllerName': controllerName
+        'controllerName': mapControllerFile
     })
 
 
@@ -588,7 +603,10 @@ def add_controllers_maps():
     with open(join(folderpath, filename), 'w') as outfile:
         json.dump(file, outfile)
     write_config()
-    return jsonify({'message': 'Created'})
+    return jsonify({
+        'controllerName': filename,
+        'jsonFile': file,
+    })
 
 
 
