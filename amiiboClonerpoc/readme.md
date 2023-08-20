@@ -1,0 +1,1 @@
+First test to clone amiibos
