@@ -96,7 +96,7 @@
                             divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>";
                         }
                         {% if unfixed_exists and secret_exists %}
-                            divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this," + data[i] + ");'>Clone</button>";
+                            divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,'" + data[i] + "'');'>Clone</button>";
                         {% endif %}
                         divTextForAmiibo += "</div>";
                         $("#amiiboList").append(divTextForAmiibo);
