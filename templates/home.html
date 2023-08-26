@@ -94,7 +94,7 @@
                         else {
                             $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
                         }
-                        {% if display_x and display_y %}
+                        {% if unfixed_exists and secret_exists %}
                             $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this," + data[i] + ");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
                         {% endif %}
                     }
@@ -919,11 +919,24 @@
           <button type="button" class="btn btn-danger" onclick="Reboot(this)" data-dismiss="modal">Reboot</button>
           <!--uploadConfFile-->
             <div class="form-group">
-                <label for="unfixed">Unfixed secret File</label>
+
+                {% if unfixed_exists %}
+                    <label for="unfixed">Update Unfixed File</label>
+                {% endif %}
+                {% if not unfixed_exists %}
+                    <label for="unfixed">Load Unfixed File</label>
+                {% endif %}
                 <input type="file" name="unfixed" id="unfixed" onchange="uploadConfFile('unfixed')">
             </div>
             <div class="form-group">
-                <label for="locked">Locked secret File</label>
+
+
+                {% if secret_exists %}
+                    <label for="locked">Update Locked File</label>
+                {% endif %}
+                {% if not secret_exists %}
+                    <label for="locked">Load Locked File</label>
+                {% endif %}
                 <input type="file" name="locked" id="locked" onchange="uploadConfFile('locked')">
             </div>
         </div>
