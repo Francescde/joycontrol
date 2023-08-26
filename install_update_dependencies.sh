@@ -1,9 +1,10 @@
 #!/bin/sh
 if [ -d "./server" ]
 then
-    sudo ./install_rust.sh
+    sudo apt-get install rustc
     echo "./server exists on your filesystem use this space to install server dependencies."
     . server/bin/activate
+    sudo pip3 install cryptography==3.3.2
     sudo pip3 install pyamiibo
 fi
 

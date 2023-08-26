@@ -44,7 +44,7 @@ objectMap['transport'] = None
 objectMap['active'] = False
 objectMap['scriptRunning'] = None
 objectMap['repeats'] = 0
-amiiboCloner = None
+amiibo_generator = None
 unfixed_info_path = os.path.join('amiibo_cloner', 'unfixed-info.bin')
 locked_secret_path = os.path.join('amiibo_cloner', 'locked-secret.bin')
 

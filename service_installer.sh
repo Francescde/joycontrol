@@ -5,7 +5,7 @@ then
     . server/bin/activate 
 else
     sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-pip python3-venv
-    sudo ./install_rust.sh
+    sudo apt-get install rustc
     echo "./server does not exist on your filesystem."
     python3 -m venv server
     sleep 10
@@ -14,6 +14,7 @@ else
     sudo pip3 install aioconsole hid crc8
     sudo pip3 install aioflask
     sudo pip3 install Flask==2
+    sudo pip3 install cryptography==3.3.2
     sudo pip3 install pyamiibo
     # Assign the attributes to a variable
     attributes="-C -P sap,input,avrcp"
