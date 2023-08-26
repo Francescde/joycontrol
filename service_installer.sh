@@ -5,6 +5,7 @@ then
     . server/bin/activate 
 else
     sudo apt install python3-dbus libhidapi-hidraw0 libbluetooth-dev bluez python3-pip python3-venv
+    sudo ./install_rust.sh
     echo "./server does not exist on your filesystem."
     python3 -m venv server
     sleep 10
