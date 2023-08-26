@@ -13,6 +13,7 @@ else
     sudo pip3 install aioconsole hid crc8
     sudo pip3 install aioflask
     sudo pip3 install Flask==2
+    sudo pip3 install pyamiibo
     # Assign the attributes to a variable
     attributes="-C -P sap,input,avrcp"
 

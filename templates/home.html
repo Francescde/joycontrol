@@ -61,6 +61,19 @@
             localStorage.setItem("RJCT_lastClicked_"+btn_id, today);
         }
 
+        function clone(e, filePath){
+            $.ajax({
+                url: '/amiiboclone',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                },
+                data: JSON.stringify({filePath: filePath})
+            });
+        }
+
         function requestAmiibosFromFolder(folderName) {
             $("#amiiboList").empty();
             $.ajax({
@@ -81,6 +94,9 @@
                         else {
                             $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
                         }
+                        {% if display_x and display_y %}
+                            $("#amiiboList").append("<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this," + data[i] + ");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>");
+                        {% endif %}
                     }
                 },
                 data: JSON.stringify({path: folderName})
@@ -369,6 +385,29 @@
                 }
             });
         }
+
+        
+
+        function uploadConfFile(filetype){
+
+            var formData = new FormData();
+            formData.append('file', $('#'+filetype)[0].files[0]); // Obtén el archivo seleccionado
+
+            // Realiza la solicitud AJAX
+            $.ajax({
+                url: '/uploadcnf/'+filetype, // Ruta del servidor donde procesarás la carga del archivo
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    location.reload();
+                }
+            });
+            }
 
         function Connection(e) {
             $.get("/connected", function (data, status) {
@@ -878,6 +917,15 @@
           <button type="button" class="btn btn-warning" onclick="Connection(this)" data-dismiss="modal">Connect/Disconnect</button>
           <button type="button" class="btn btn-danger" onclick="ShutDown(this)" data-dismiss="modal">Shut down</button>
           <button type="button" class="btn btn-danger" onclick="Reboot(this)" data-dismiss="modal">Reboot</button>
+          <!--uploadConfFile-->
+            <div class="form-group">
+                <label for="unfixed">Unfixed secret File</label>
+                <input type="file" name="unfixed" id="unfixed" onchange="uploadConfFile('unfixed')">
+            </div>
+            <div class="form-group">
+                <label for="locked">Locked secret File</label>
+                <input type="file" name="locked" id="locked" onchange="uploadConfFile('locked')">
+            </div>
         </div>
       </div>
     </div>

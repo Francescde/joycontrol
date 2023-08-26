@@ -8,6 +8,7 @@ from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
 from aioflask import Flask, jsonify, render_template, request, redirect
+from amiibo_cloner.amiibo_cloner import AmiiboCloner
 from joycontrol.nfc_tag import NFCTag
 import asyncio
 import os
@@ -43,6 +44,13 @@ objectMap['transport'] = None
 objectMap['active'] = False
 objectMap['scriptRunning'] = None
 objectMap['repeats'] = 0
+amiiboCloner = None
+unfixed_info_path = os.path.join('amiibo_cloner', 'unfixed-info.bin')
+locked_secret_path = os.path.join('amiibo_cloner', 'locked-secret.bin')
+
+if os.path.exists(unfixed_info_path) and os.path.exists(locked_secret_path):
+    amiibo_generator = AmiiboCloner(unfixed_info_path, locked_secret_path)
+
 comandTimer = []
 lastTime = 0
 timerFlag = False
@@ -388,7 +396,7 @@ def check_update():
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
     updatable = check_update().json['value']
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile, updatable=updatable )
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile, updatable=updatable, unfixed_exists = os.path.exists(unfixed_info_path), secret_exists = os.path.exists(locked_secret_path))
 
 
 @app.route('/')
@@ -420,11 +428,15 @@ async def display_controller(controllerName):
 
 @app.route('/files', methods=['POST'])
 def get_files():
+    global amiibo_generator
     content = request.get_json()
     print('content')
     print(content)
     folderpath = content['path']
     if(folderpath and os.path.exists(folderpath)):
+        if amiibo_generator!=None:
+            for amiibo_file in [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)]:
+                amiibo_generator.exclude_value_from(amiibo_file)
         return jsonify(
             [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
     return jsonify([])
@@ -609,14 +621,36 @@ def add_controllers_maps():
     })
 
 
+#"/writeScript/<filename>"
+@app.route('/uploadcnf/<type>', methods=['POST'])
+def upload_cong(type):
+    global unfixed_info_path, locked_secret_path, amiibo_generator
+    file = request.files['file']
+    if file.filename.endswith('.bin'):
+        if 'unfixed' in type:
+            print('processing .bin file'+file.filename)
+            file.save(unfixed_info_path)
+            response = {'message': 'unfixed loaded'}
+        if 'locked' in type:
+            print('processing .bin file'+file.filename)
+            file.save(locked_secret_path)
+            response = {'message': 'locked loaded'}
+        if os.path.exists(unfixed_info_path) and os.path.exists(locked_secret_path):
+            amiibo_generator = AmiiboCloner(unfixed_info_path, locked_secret_path)
+    else:
+        response = {'message': 'Tipo de archivo no valido'}
+    
+    return jsonify(response)
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    global amiibo_generator
     print('arriba')
     file = request.files['file']
     if file.filename.endswith('.bin'):
         print('processing .bin file'+file.filename)
         file.save(os.path.join(amiiboFolder, file.filename))
+        amiibo_generator.exclude_value_from(os.path.join(amiiboFolder, file.filename))
         response = {'message': 'Archivo .bin recibido'}
     elif file.filename.endswith('.zip'):
         print('processing .zip file'+file.filename)
@@ -627,12 +661,27 @@ def upload():
                     extracted_file_path = os.path.join(amiiboFolder, os.path.basename(member))
                     with open(extracted_file_path, 'wb') as extracted_file:
                         extracted_file.write(zip_ref.read(member))
+                        amiibo_generator.exclude_value_from(extracted_file_path)
         response = {'message': 'Archivos ZIP recibidos y los archivos BIN descomprimidos fueron guardados'}
     else:
         response = {'message': 'Tipo de archivo no valido'}
     
     return jsonify(response)
 
+
+@app.route('/amiiboclone', methods=['POST'])
+async def amiibo_clone():
+    global amiibo_generator
+    content = request.get_json()
+    origin_filePath = content['filePath']
+    clone_filePath = 'tmp.bin'
+    response = {'message': 'clonning '+origin_filePath + ' into '+clone_filePath}
+    if amiibo_generator!=None:
+        amiibo_generator.generate_amiibo_clone(origin_filePath, clone_filePath)
+        await execute_line('nfc '+clone_filePath)
+    else:
+        response = {'message': 'Tipo de archivo no valido'}
+    return jsonify(response)
 
 @app.route('/update')
 def update():
