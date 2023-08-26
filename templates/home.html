@@ -74,6 +74,16 @@
             });
         }
 
+        function extractFolderHierarchy(folderUrl, targetFolder) {
+            const index = folderUrl.indexOf(targetFolder);
+            if (index !== -1) {
+                return folderUrl.substring(index + targetFolder.length + 1);
+            } else {
+                return "Target folder not found in the URL";
+            }
+        }
+
+
         function requestAmiibosFromFolder(folderName) {
             $("#amiiboList").empty();
             $.ajax({
@@ -87,13 +97,13 @@
                         const buttonId = "amiibo_btn_"+data[i];
                         var lastClicked = localStorage.getItem("RJCT_lastClicked_"+buttonId);
                         let today = new Date().toLocaleDateString();
-                        let divTextForAmiibo = "<div>";
+                        let divTextForAmiibo = "<div class='d-flex justify-content-between'>";
 
                         if (lastClicked!=null && lastClicked.trim().includes(today.trim())) {
-                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>";
+                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
                         }
                         else {
-                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + data[i] + "</button>";
+                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
                         }
                         {% if unfixed_exists and secret_exists %}
                             divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + data[i] + "\");'>Clone</button>";
