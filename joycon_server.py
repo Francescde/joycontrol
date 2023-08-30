@@ -7,8 +7,7 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask import Flask, jsonify, render_template, request, redirect
-from aiohttp import web
+from aioflask import Flask, jsonify, render_template, request, redirect, send_file
 from amiibo_cloner.amiibo_cloner import AmiiboCloner
 from joycontrol.nfc_tag import NFCTag
 import asyncio
@@ -438,11 +437,7 @@ async def download():
         filename = os.path.basename(file_path)
         print('3')
         
-        response = await app.send_static_file(file_path)
-        print('4')
-        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
-        print('5')
-        return response
+        return await send_file(file_path, as_attachment=True)
 
     except Exception as e:
         print(e)
