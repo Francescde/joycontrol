@@ -431,14 +431,20 @@ async def display_controller(controllerName):
 async def download():
     try:
         content = await request.json()
+        print('1')
         file_path = os.path.abspath(content['path'])
+        print('2')
         filename = os.path.basename(file_path)
+        print('3')
         
         response = await app.send_static_file(file_path)
+        print('4')
         response.headers["Content-Disposition"] = f"attachment; filename={filename}"
+        print('5')
         return response
 
     except Exception as e:
+        print(e)
         return str(e), 500
 
 
