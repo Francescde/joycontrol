@@ -86,6 +86,8 @@
         function download(amiiboPath){
             $.ajax({
             type: 'POST',
+                type: 'post',
+                dataType: 'json',
             url: '/download',
             success: function(data, status, xhr) {
                 // Create a Blob from the response data
