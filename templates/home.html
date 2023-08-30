@@ -83,6 +83,12 @@
             }
         }
 
+function getFileNameFromPath(filePath) {
+    var parts = filePath.split('/');
+    var fileNameWithExtension = parts[parts.length - 1];
+    return fileNameWithExtension;
+}
+
         function download(amiiboPath){
             $.ajax({
             type: 'POST',
@@ -94,7 +100,7 @@
                 // Create a temporary link element to trigger the download
                 var a = document.createElement('a');
                 a.href = window.URL.createObjectURL(blob);
-                a.download = 'downloaded_file.txt'; // Set the desired file name
+                a.download = getFileNameFromPath(amiiboPath); // Set the desired file name
                 a.click();
 
                 // Clean up
