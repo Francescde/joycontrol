@@ -103,7 +103,7 @@
                             divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" style='min-width:70%;' onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
                         }
                         else {
-                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='min-width:70%;'  onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
+                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='min-width:70%;' onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
                         }
                         {% if unfixed_exists and secret_exists %}
                             divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + data[i] + "\");'>Clone</button>";
