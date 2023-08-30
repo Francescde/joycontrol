@@ -427,10 +427,11 @@ async def display_controller(controllerName):
     return await render_template('default_controller.html', params=json.dumps(data))
 
 
-@app.route('/download/<path:file_path>')
-async def download(file_path):
+@app.route('/download', methods=['POST'])
+async def download():
     try:
-        file_path = os.path.abspath(file_path)
+        content = await request.json()
+        file_path = os.path.abspath(content['path'])
         filename = os.path.basename(file_path)
         
         response = await app.send_static_file(file_path)
