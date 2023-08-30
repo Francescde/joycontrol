@@ -430,7 +430,7 @@ async def display_controller(controllerName):
 @app.route('/download', methods=['POST'])
 async def download():
     try:
-        content = await request.json()  # Changed request.get_json() to await request.json()
+        content = await request.json()
         file_path = content['path']
 
         async def file_stream(response):
@@ -445,9 +445,11 @@ async def download():
         await response.prepare(request)
 
         await file_stream(response)
+        await response.write_eof()  # Signal the end of the response
+
         return response
     except Exception as e:
-        return web.json_response({'error': str(e)}, status=500)  
+        return web.json_response({'error': str(e)}, status=500)
 
 
 @app.route('/files', methods=['POST'])
