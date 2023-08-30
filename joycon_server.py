@@ -430,6 +430,7 @@ async def display_controller(controllerName):
 @app.route('/download', methods=['POST'])
 async def download():
     try:
+        print('0')
         content = await request.json()
         print('1')
         file_path = os.path.abspath(content['path'])
