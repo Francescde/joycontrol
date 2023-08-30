@@ -7,8 +7,8 @@ from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask.http import FileResponse
 from aioflask import Flask, jsonify, render_template, request, redirect
+from aiohttp import web
 from amiibo_cloner.amiibo_cloner import AmiiboCloner
 from joycontrol.nfc_tag import NFCTag
 import asyncio
@@ -429,16 +429,26 @@ async def display_controller(controllerName):
 
 
 @app.route('/download', methods=['POST'])
-def download():
-    global amiibo_generator
+async def download():
     content = request.get_json()
     print('content')
     print(content)
     file_path = content['path']
-    response = FileResponse(open(file_path, 'rb'))
-    response['Content-Disposition'] = f'attachment; filename=temp.bin'
+
+
+    async def file_stream(response):
+        with open(file_path, 'rb') as f:
+            chunk = f.read(8192)
+            while chunk:
+                await response.write(chunk)
+                chunk = f.read(8192)
+
+    response = web.StreamResponse()
+    response.content_type = 'application/octet-stream'
+    await response.prepare(request)
+
+    await file_stream(response)
     return response
-   
 
 @app.route('/files', methods=['POST'])
 def get_files():

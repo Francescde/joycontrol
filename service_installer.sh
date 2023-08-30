@@ -16,6 +16,7 @@ else
     sudo pip3 install Flask==2
     sudo pip3 install cryptography==3.3.2
     sudo pip3 install pyamiibo
+    sudo pip3 install aiohttp
     # Assign the attributes to a variable
     attributes="-C -P sap,input,avrcp"
 

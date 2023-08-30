@@ -6,6 +6,7 @@ then
     . server/bin/activate
     sudo pip3 install cryptography==3.3.2
     sudo pip3 install pyamiibo
+    sudo pip3 install aiohttp
 fi
 
 if [ -d "./clientCtr" ]
