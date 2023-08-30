@@ -427,7 +427,7 @@ async def display_controller(controllerName):
 
 
 @app.route('/download', methods=['POST'])
-async def download():
+def download():
     try:
         print('0')
         content = request.get_json()
@@ -437,7 +437,7 @@ async def download():
         filename = os.path.basename(file_path)
         print('3')
         
-        return await send_file(file_path, as_attachment=True)
+        return send_file(file_path, as_attachment=True)
 
     except Exception as e:
         print(e)
