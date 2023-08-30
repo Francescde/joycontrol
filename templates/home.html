@@ -124,12 +124,12 @@
                         let divTextForAmiibo = "<div class='d-flex justify-content-between'>";
 
                         if (lastClicked!=null && lastClicked.trim().includes(today.trim())) {
-                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" style='min-width:70%;' onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
+                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" style='width:40%;' onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
                         }
                         else {
-                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='min-width:70%;' onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
+                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='width:40%;' onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
                         }
-                        divTextForAmiibo +="<button id=\""+ buttonId +"_Download\" type=\"button\" class=\"btn btn-info\" style='min-width:70%;' onclick='download(this,\"" + data[i] + "\");'>Download</button>";
+                        divTextForAmiibo +="<button id=\""+ buttonId +"_Download\" type=\"button\" class=\"btn btn-info\" onclick='download(\"" + data[i] + "\");'>Download</button>";
                         {% if unfixed_exists and secret_exists %}
                             divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + data[i] + "\");'>Clone</button>";
                         {% endif %}
