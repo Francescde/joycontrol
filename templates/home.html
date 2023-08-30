@@ -86,8 +86,6 @@
         function download(amiiboPath){
             $.ajax({
             type: 'POST',
-                type: 'post',
-                dataType: 'json',
             url: '/download',
             success: function(data, status, xhr) {
                 // Create a Blob from the response data
@@ -104,7 +102,9 @@
             },
             error: function(xhr, status, error) {
                 console.error('Error downloading item:', error);
-            },data: JSON.stringify({path: amiiboPath})
+            },
+        contentType: 'application/json',
+        data: JSON.stringify({path: amiiboPath})
         });
 
         }

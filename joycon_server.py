@@ -427,28 +427,28 @@ async def display_controller(controllerName):
     return await render_template('default_controller.html', params=json.dumps(data))
 
 
-
 @app.route('/download', methods=['POST'])
 async def download():
-    content = request.get_json()
-    print('content')
-    print(content)
-    file_path = content['path']
+    try:
+        content = await request.json()  # Changed request.get_json() to await request.json()
+        file_path = content['path']
 
-
-    async def file_stream(response):
-        with open(file_path, 'rb') as f:
-            chunk = f.read(8192)
-            while chunk:
-                await response.write(chunk)
+        async def file_stream(response):
+            with open(file_path, 'rb') as f:
                 chunk = f.read(8192)
+                while chunk:
+                    await response.write(chunk)
+                    chunk = f.read(8192)
 
-    response = web.StreamResponse()
-    response.content_type = 'application/octet-stream'
-    await response.prepare(request)
+        response = web.StreamResponse()
+        response.content_type = 'application/octet-stream'
+        await response.prepare(request)
 
-    await file_stream(response)
-    return response
+        await file_stream(response)
+        return response
+    except Exception as e:
+        return web.json_response({'error': str(e)}, status=500)  
+
 
 @app.route('/files', methods=['POST'])
 def get_files():
