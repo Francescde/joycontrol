@@ -431,7 +431,7 @@ async def display_controller(controllerName):
 async def download():
     try:
         print('0')
-        content = await request.json()
+        content = request.get_json()
         print('1')
         file_path = os.path.abspath(content['path'])
         print('2')
