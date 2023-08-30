@@ -427,29 +427,19 @@ async def display_controller(controllerName):
     return await render_template('default_controller.html', params=json.dumps(data))
 
 
-@app.route('/download', methods=['POST'])
-async def download():
+@app.route('/download/<path:file_path>')
+async def download(file_path):
     try:
-        content = await request.json()
-        file_path = content['path']
-
-        async def file_stream(response):
-            with open(file_path, 'rb') as f:
-                chunk = f.read(8192)
-                while chunk:
-                    await response.write(chunk)
-                    chunk = f.read(8192)
-
-        response = web.StreamResponse()
-        response.content_type = 'application/octet-stream'
-        await response.prepare(request)
-
-        await file_stream(response)
-        await response.write_eof()  # Signal the end of the response
-
+        file_path = os.path.abspath(file_path)
+        filename = os.path.basename(file_path)
+        
+        response = await app.send_static_file(file_path)
+        response.headers["Content-Disposition"] = f"attachment; filename={filename}"
         return response
+
     except Exception as e:
-        return web.json_response({'error': str(e)}, status=500)
+        return str(e), 500
+
 
 
 @app.route('/files', methods=['POST'])
