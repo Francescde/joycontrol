@@ -9,6 +9,34 @@
     <script>
         comands = {}
         var currentSelectedController = "";
+        var amiiboListSrc = [];
+
+        function displayAmiibos(folderName) {
+            folderName = folderName!=null?folderName:$("#amiibo").val();
+            $("#amiiboList").empty();
+            let today = new Date().toLocaleDateString();
+            let amiiboContains = $("#amiiboContains").val()!=null?$("#amiiboContains").val():"";
+            for (let i = 0; i < amiiboListSrc.length; i++) {
+                if(amiiboContains === '' || (extractFolderHierarchy(amiiboListSrc[i], folderName)).includes(amiiboContains)){
+                    const buttonId = "amiibo_btn_"+amiiboListSrc[i];
+                    var lastClicked = localStorage.getItem("RJCT_lastClicked_"+buttonId);
+                    let divTextForAmiibo = "<div class='d-flex justify-content-between'>";
+
+                    if (lastClicked!=null && lastClicked.trim().includes(today.trim())) {
+                        divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" style='width:40%;' onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
+                    }
+                    else {
+                        divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='width:40%;' onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
+                    }
+                    divTextForAmiibo +="<button id=\""+ buttonId +"_Download\" type=\"button\" class=\"btn btn-info\" onclick='download(\"" + amiiboListSrc[i] + "\");'>Download</button>";
+                    {% if unfixed_exists and secret_exists %}
+                        divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + amiiboListSrc[i] + "\");'>Clone</button>";
+                    {% endif %}
+                    divTextForAmiibo += "</div>";
+                    $("#amiiboList").append(divTextForAmiibo);
+                }
+            }
+        }
 
         function sendComandHold(e,cmd) {
             if (!comands[cmd]) {
@@ -117,7 +145,6 @@ function getFileNameFromPath(filePath) {
 
 
         function requestAmiibosFromFolder(folderName) {
-            $("#amiiboList").empty();
             $.ajax({
                 url: '/files',
                 type: 'post',
@@ -125,25 +152,8 @@ function getFileNameFromPath(filePath) {
                 contentType: 'application/json',
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
-                    for (let i = 0; i < data.length; i++) {
-                        const buttonId = "amiibo_btn_"+data[i];
-                        var lastClicked = localStorage.getItem("RJCT_lastClicked_"+buttonId);
-                        let today = new Date().toLocaleDateString();
-                        let divTextForAmiibo = "<div class='d-flex justify-content-between'>";
-
-                        if (lastClicked!=null && lastClicked.trim().includes(today.trim())) {
-                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" style='width:40%;' onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
-                        }
-                        else {
-                            divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='width:40%;' onclick='sendComand(this,\"nfc " + data[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(data[i], folderName) + "</button>";
-                        }
-                        divTextForAmiibo +="<button id=\""+ buttonId +"_Download\" type=\"button\" class=\"btn btn-info\" onclick='download(\"" + data[i] + "\");'>Download</button>";
-                        {% if unfixed_exists and secret_exists %}
-                            divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + data[i] + "\");'>Clone</button>";
-                        {% endif %}
-                        divTextForAmiibo += "</div>";
-                        $("#amiiboList").append(divTextForAmiibo);
-                    }
+                    amiiboListSrc = data;
+                    displayAmiibos(folderName);
                 },
                 data: JSON.stringify({path: folderName})
             });
@@ -844,6 +854,15 @@ function getFileNameFromPath(filePath) {
         <div class="form-group">
             <button class="btn btn-primary" onclick="uploadAmiibo()">Upload amiibo</button>
         </div>
+        <div class="input-group">
+            <div class="form-outline">
+              <input type="search" id="amiiboContains" class="form-control" onchange="displayAmiibos(null)" />
+              <label class="form-label" for="amiiboContains">Search</label>
+            </div>
+            <button type="button" class="btn btn-primary">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
         <div id="amiiboList" class="d-flex flex-column justify-content-around">
         </div>
     </div>
