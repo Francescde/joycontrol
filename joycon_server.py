@@ -461,8 +461,7 @@ def zip_folder():
             return jsonify({'error': 'Folder does not exist'}), 404
 
         # Specify a fixed name for the ZIP file
-        zip_file_name = 'export.zip'
-        zip_file_path = os.path.join(folder_path, zip_file_name)
+        zip_file_path = 'export.zip'
 
         with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, _, files in os.walk(folder_path):
