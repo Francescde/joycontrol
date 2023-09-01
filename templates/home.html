@@ -154,16 +154,13 @@ function delete_amiibo(amiiboPath){
             url: '/zip_folder',
             success: function(data, status, xhr) {
                  // Create a Blob from the response data
-                var blob = new Blob([data]);
-
-                // Create a temporary link element to trigger the download
-                var a = document.createElement('a');
-                a.href = window.URL.createObjectURL(blob);
-                a.download = "export.zip"; // Set the desired file name
+                 const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'export.zip';
+                document.body.appendChild(a);
                 a.click();
-
-                // Clean up
-                window.URL.revokeObjectURL(a.href);
+                window.URL.revokeObjectURL(url);
             },
             error: function(xhr, status, error) {
                 console.error('Error downloading item:', error);
