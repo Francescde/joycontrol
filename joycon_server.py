@@ -453,11 +453,11 @@ def get_files():
     print(content)
     folderpath = content['path']
     if(folderpath and os.path.exists(folderpath)):
+        resultList = [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) f.endswith('.bin')]
         if amiibo_generator!=None:
-            for amiibo_file in [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)]:
+            for amiibo_file in resultList:
                 amiibo_generator.exclude_value_from(amiibo_file)
-        return jsonify(
-            [join(folderpath, f) for f in os.listdir(folderpath) if isfile(join(folderpath, f)) and ('.bin' in f)])
+        return jsonify(resultList)
     return jsonify([])
 
 @app.route('/controllers', methods=['GET'])
