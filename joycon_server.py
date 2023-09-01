@@ -432,7 +432,7 @@ def download():
         content = request.get_json()
         file_path = os.path.abspath(content['path'])
 
-        response = send_file(zip_file_path, as_attachment=True)
+        response = send_file(file_path, as_attachment=True)
         response.headers['Content-Type'] = 'application/octet-stream'
 
         return response
@@ -476,7 +476,7 @@ def zip_folder():
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
         
         # Return the zip file as a response
-        response = send_file(zip_file_path)
+        response = send_file(zip_file_path, as_attachment=True)
         response.headers['Content-Type'] = 'application/zip'
 
         return response
