@@ -26,7 +26,7 @@
             let today = new Date().toLocaleDateString();
             let amiiboContains = $("#amiiboContains").val()!=null?$("#amiiboContains").val():"";
             for (let i = 0; i < amiiboListSrc.length; i++) {
-                if(amiiboContains === '' || (extractFolderHierarchy(amiiboListSrc[i], folderName)).includes(amiiboContains)){
+                if(amiiboContains === '' || (extractFolderHierarchy(amiiboListSrc[i], folderName)).toLowerCase().includes(amiiboContains.toLowerCase())){
                     const buttonId = "amiibo_btn_"+amiiboListSrc[i];
                     var lastClicked = localStorage.getItem("RJCT_lastClicked_"+buttonId);
                     let divTextForAmiibo = "<div class='d-flex justify-content-between'>";
