@@ -466,6 +466,7 @@ def zip_folder():
         with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, _, files in os.walk(folder_path):
                 for file in files:
+                    print('file '+file)
                     file_path = os.path.join(root, file)
                     # Add the file to the zip archive
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
