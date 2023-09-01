@@ -429,20 +429,52 @@ async def display_controller(controllerName):
 @app.route('/download', methods=['POST'])
 def download():
     try:
-        print('0')
         content = request.get_json()
-        print('1')
         file_path = os.path.abspath(content['path'])
-        print('2')
-        filename = os.path.basename(file_path)
-        print('3')
-        
         return send_file(file_path, as_attachment=True)
-
     except Exception as e:
         print(e)
         return str(e), 500
 
+
+@app.route('/delete_amiibo', methods=['POST'])
+def delete_controller(controllerName):
+    try:
+        content = request.get_json()
+        file_path = os.path.abspath(content['path'])
+        os.remove(file_path)
+        return jsonify({
+            'controllerName': controllerName
+        })
+    except Exception as e:
+        print(e)
+        return str(e), 500
+
+
+@app.route('/zip_folder', methods=['POST'])
+def zip_folder():
+    try:
+        # Get the folder path from the request
+        folder_path = request.json.get('folder_path')
+
+        # Check if the folder exists
+        if not os.path.exists(folder_path):
+            return jsonify({'error': 'Folder does not exist'}), 404
+
+        # Create a zip file
+        zip_file_path = 'folder.zip'
+        with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, _, files in os.walk(folder_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    # Add the file to the zip archive
+                    zipf.write(file_path, os.path.relpath(file_path, folder_path))
+
+        # Return the zip file as a response
+        return send_file(zip_file_path, as_attachment=True)
+
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 
 @app.route('/files', methods=['POST'])
@@ -694,6 +726,8 @@ async def amiibo_clone():
     content = request.get_json()
     origin_filePath = content['filePath']
     clone_filePath = 'tmp.bin'
+    if('clonePath' in content):
+        clone_filePath = content['clonePath']
     response = {'message': 'clonning '+origin_filePath + ' into '+clone_filePath}
     if amiibo_generator!=None:
         amiibo_generator.generate_amiibo_clone(origin_filePath, clone_filePath)

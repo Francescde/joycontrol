@@ -26,6 +26,7 @@
             let today = new Date().toLocaleDateString();
             let amiiboContains = $("#amiiboContains").val()!=null?$("#amiiboContains").val():"";
             for (let i = 0; i < amiiboListSrc.length; i++) {
+              
                 if(amiiboContains === '' || (extractFolderHierarchy(amiiboListSrc[i], folderName)).toLowerCase().includes(amiiboContains.toLowerCase())){
                     const buttonId = "amiibo_btn_"+amiiboListSrc[i];
                     var lastClicked = localStorage.getItem("RJCT_lastClicked_"+buttonId);
@@ -38,6 +39,7 @@
                         divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='width:40%;' onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
                     }
                     divTextForAmiibo +="<button id=\""+ buttonId +"_Download\" type=\"button\" class=\"btn btn-info\" onclick='download(\"" + amiiboListSrc[i] + "\");'>Download</button>";
+                    divTextForAmiibo +="<button id=\""+ buttonId +"_delete\" type=\"button\" class=\"btn btn-danger\" onclick='delete_amiibo(\"" + amiiboListSrc[i] + "\");'>Delete</button>";
                     {% if unfixed_exists and secret_exists %}
                         divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + amiiboListSrc[i] + "\");'>Clone</button>";
                     {% endif %}
@@ -125,6 +127,52 @@ function getFileNameFromPath(filePath) {
     var fileNameWithExtension = parts[parts.length - 1];
     return fileNameWithExtension;
 }
+
+function delete_amiibo(amiiboPath){
+            $.ajax({
+            type: 'POST',
+            url: '/delete_amiibo',
+            success: function(data, status, xhr) {
+                    // Maneja la respuesta del servidor
+                    console.log(response); // Aquí puedes imprimir la respuesta en la consola del navegador
+                    let folderName = $("#amiibo").val();
+                    //amiiboList
+                    requestAmiibosFromFolder(folderName);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error downloading item:', error);
+            },
+        contentType: 'application/json',
+        data: JSON.stringify({path: amiiboPath})
+        });
+}
+
+        function exportAmiiboList(){
+            let folderName = $("#amiibo").val();
+            $.ajax({
+            type: 'POST',
+            url: '/download',
+            success: function(data, status, xhr) {
+                // Create a Blob from the response data
+                var blob = new Blob([data]);
+
+                // Create a temporary link element to trigger the download
+                var a = document.createElement('a');
+                a.href = window.URL.createObjectURL(blob);
+                a.download = folderName +".zip"; // Set the desired file name
+                a.click();
+
+                // Clean up
+                window.URL.revokeObjectURL(a.href);
+            },
+            error: function(xhr, status, error) {
+                console.error('Error downloading item:', error);
+            },
+        contentType: 'application/json',
+        data: JSON.stringify({folder_path: folderName})
+        });
+
+        }
 
         function download(amiiboPath){
             $.ajax({
@@ -857,6 +905,7 @@ function getFileNameFromPath(filePath) {
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" onclick="fillAmiiboList()">Folder content</button>
+                <button class="btn btn-success" onclick="exportAmiiboList()">Export Folder content</button>
             </div>
         </div>
         <div class="dotted-margin">
