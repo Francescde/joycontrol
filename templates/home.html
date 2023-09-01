@@ -153,7 +153,7 @@ function delete_amiibo(amiiboPath){
             type: 'POST',
             url: '/zip_folder',
             success: function(data, status, xhr) {
-                // Create a Blob from the response data
+                 // Create a Blob from the response data
                 var blob = new Blob([data]);
 
                 // Create a temporary link element to trigger the download
@@ -168,6 +168,7 @@ function delete_amiibo(amiiboPath){
             error: function(xhr, status, error) {
                 console.error('Error downloading item:', error);
             },
+        responseType: 'blob', // Receive data as a binary blob
         contentType: 'application/json',
         data: JSON.stringify({folder_path: folderName})
         });
