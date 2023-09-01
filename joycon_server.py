@@ -476,7 +476,7 @@ async def zip_folder():
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
         
         # Return the zip file as a response
-        response = send_file(zip_file_path)
+        response = await send_file(zip_file_path)
         response.headers['Content-Type'] = 'application/zip'
 
         return response
