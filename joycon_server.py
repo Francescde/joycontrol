@@ -471,7 +471,7 @@ async def zip_folder():
                     # Add the file to the zip archive
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
         
-        await asyncio.sleep(1)
+        await asyncio.sleep(5)
         # Return the zip file as a response
         response = send_file(zip_file_path, as_attachment=True)
         response.headers['Content-Type'] = 'application/zip'
