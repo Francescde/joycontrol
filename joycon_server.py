@@ -431,7 +431,11 @@ def download():
     try:
         content = request.get_json()
         file_path = os.path.abspath(content['path'])
-        return send_file(file_path, as_attachment=True)
+
+        response = send_file(zip_file_path, as_attachment=True)
+        response.headers['Content-Type'] = 'application/octet-stream'
+
+        return response
     except Exception as e:
         print(e)
         return str(e), 500
@@ -470,11 +474,10 @@ async def zip_folder():
                     file_path = os.path.join(root, file)
                     # Add the file to the zip archive
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
-        
-        await asyncio.sleep(5)
         # Return the zip file as a response
+
         response = send_file(zip_file_path, as_attachment=True)
-        response.headers['Content-Type'] = 'application/zip'
+        response.headers['Content-Type'] = 'application/octet-stream'
 
         return response
 
