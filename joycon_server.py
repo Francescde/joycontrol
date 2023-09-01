@@ -438,7 +438,7 @@ def download():
 
 
 @app.route('/delete_amiibo', methods=['POST'])
-def delete_controller(controllerName):
+def delete_amiibo(controllerName):
     try:
         content = request.get_json()
         file_path = os.path.abspath(content['path'])
