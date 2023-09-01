@@ -438,13 +438,13 @@ def download():
 
 
 @app.route('/delete_amiibo', methods=['POST'])
-def delete_amiibo(controllerName):
+def delete_amiibo():
     try:
         content = request.get_json()
         file_path = os.path.abspath(content['path'])
         os.remove(file_path)
         return jsonify({
-            'controllerName': controllerName
+            'filePath': file_path
         })
     except Exception as e:
         print(e)

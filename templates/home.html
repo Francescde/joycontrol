@@ -151,7 +151,7 @@ function delete_amiibo(amiiboPath){
             let folderName = $("#amiibo").val();
             $.ajax({
             type: 'POST',
-            url: '/download',
+            url: '/zip_folder',
             success: function(data, status, xhr) {
                 // Create a Blob from the response data
                 var blob = new Blob([data]);
