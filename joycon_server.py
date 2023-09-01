@@ -455,7 +455,7 @@ def delete_amiibo():
         return str(e), 500
 
 @app.route('/zip_folder', methods=['POST'])
-async def zip_folder():
+def zip_folder():
     try:
         # Get the folder path from the request
         folder_path = request.json.get('folder_path')
@@ -476,7 +476,7 @@ async def zip_folder():
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
         
         # Return the zip file as a response
-        response = await send_file(zip_file_path)
+        response = send_file(zip_file_path)
         response.headers['Content-Type'] = 'application/zip'
 
         return response
