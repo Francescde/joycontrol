@@ -134,7 +134,7 @@ function delete_amiibo(amiiboPath){
             url: '/delete_amiibo',
             success: function(data, status, xhr) {
                     // Maneja la respuesta del servidor
-                    console.log(response); // Aquí puedes imprimir la respuesta en la consola del navegador
+                    console.log(data); // Aquí puedes imprimir la respuesta en la consola del navegador
                     let folderName = $("#amiibo").val();
                     //amiiboList
                     requestAmiibosFromFolder(folderName);

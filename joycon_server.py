@@ -462,7 +462,7 @@ def zip_folder():
             return jsonify({'error': 'Folder does not exist'}), 404
 
         # Create a zip file
-        zip_file_path = 'folder.zip'
+        zip_file_path = folder_path+'.zip'
         with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, _, files in os.walk(folder_path):
                 for file in files:
