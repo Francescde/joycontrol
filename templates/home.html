@@ -862,7 +862,7 @@ function getFileNameFromPath(filePath) {
         <div class="dotted-margin">
             <div class="form-group">
                 <label for="amiibofile">Amiibo File</label>
-                <input type="file" name="amiibofile" id="amiibofile">
+                <input type="file" name="amiibofile" id="amiibofile" placeholder=".bin/.zip">
             </div>
             <div class="form-group">
                 <button class="btn btn-primary" onclick="uploadAmiibo()">Upload amiibo</button>
@@ -870,8 +870,7 @@ function getFileNameFromPath(filePath) {
         </div>
         <div class="form-group dotted-margin">
             <div class="form-outline">
-              <label class="form-label" for="amiiboContains">Search</label>
-              <input type="search" id="amiiboContains" class="form-control" onchange="displayAmiibos(null)" />
+              <input type="search" placeholder="Search" id="amiiboContains" class="form-control" onchange="displayAmiibos(null)" />
             </div>
         </div>
         <div id="amiiboList" class="d-flex flex-column justify-content-around"></div>
