@@ -154,7 +154,7 @@ function delete_amiibo(amiiboPath){
             url: '/zip_folder',
             success: function(data, status, xhr) {
                  // Create a Blob from the response data
-                 const url = window.URL.createObjectURL(blob);
+                 const url = window.URL.createObjectURL(data);
                 const a = document.createElement('a');
                 a.href = url;
                 a.download = 'export.zip';
