@@ -470,9 +470,11 @@ def zip_folder():
                     file_path = os.path.join(root, file)
                     # Add the file to the zip archive
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
-
         # Return the zip file as a response
-        return send_file(zip_file_path, as_attachment=True)
+        response = send_file(zip_file_path, as_attachment=True)
+        response.headers['Content-Type'] = 'application/zip'
+
+        return response
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
