@@ -1,14 +1,13 @@
 import json
 from os.path import isfile, join
-import io
-import time
+
 from joycontrol.command_line_interface import ControllerCLI
 from joycontrol.protocol import controller_protocol_factory
 from joycontrol.server import create_hid_server
 from joycontrol.controller import Controller
 from joycontrol.memory import FlashMemory
 from run_controller_cli import _register_commands_with_controller_state
-from aioflask import Flask, jsonify, render_template, request, redirect, send_file, Response
+from aioflask import Flask, jsonify, render_template, request, redirect, send_file
 from amiibo_cloner.amiibo_cloner import AmiiboCloner
 from joycontrol.nfc_tag import NFCTag
 import asyncio
@@ -433,7 +432,7 @@ def download():
         content = request.get_json()
         file_path = os.path.abspath(content['path'])
 
-        response = send_file(file_path, as_attachment=True)
+        response = send_file(zip_file_path, as_attachment=True)
         response.headers['Content-Type'] = 'application/octet-stream'
 
         return response
@@ -467,24 +466,20 @@ async def zip_folder():
 
         # Specify a fixed name for the ZIP file
         zip_file_path = 'export.zip'
-        fileobj = io.BytesIO()
-        with zipfile.ZipFile(fileobj, 'w') as zipf:
-            zip_info = zipfile.ZipInfo(zip_file_path)
-            zip_info.date_time = time.localtime(time.time())[:6]
-            zip_info.compress_type = zipfile.ZIP_DEFLATED
+
+        with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, _, files in os.walk(folder_path):
                 for file in files:
+                    print('file '+file)
                     file_path = os.path.join(root, file)
                     # Add the file to the zip archive
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
-        # Return the zip file as a response
         
-        fileobj.seek(0)
+        # Return the zip file as a response
+        response = send_file(zip_file_path)
+        response.headers['Content-Type'] = 'application/zip'
 
-        # Changed line below
-        return Response(fileobj.getvalue(),
-                        mimetype='application/zip',
-                        headers={'Content-Disposition': 'attachment;filename='+zip_file_path})
+        return response
 
     except Exception as e:
         return jsonify({'error': str(e)}), 500
