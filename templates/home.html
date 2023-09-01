@@ -6,6 +6,14 @@
     <title>controller</title>
     <script src="/static/jquery.min.js" type="text/javascript"></script>
     <link href="/static/bootstrap.min.css" rel="stylesheet">
+    <style>
+
+    .dotted-margin{
+        border: gray;
+        border-width: 1px;
+        border-style: dashed
+    }
+    </style>
     <script>
         comands = {}
         var currentSelectedController = "";
@@ -840,33 +848,34 @@ function getFileNameFromPath(filePath) {
         </div>
     </div>
     <div id="amiboolister">
-        <div class="form-group">
-            <label for="amiibo">AmiiboFolder</label>
-            <input type="text" class="amiibo" id="amiibo" aria-describedby="amiibot"
-                   placeholder="Enter amiibo folder" value="{{amiiboFolder}}">
-            <small id="amiibot" class="form-text text-muted">Folder where amiibos are found</small>
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary" onclick="fillAmiiboList()">Folder content</button>
-        </div>
-        <div class="form-group">
-            <label for="amiibofile">Amiibo File</label>
-            <input type="file" name="amiibofile" id="amiibofile">
-        </div>
-        <div class="form-group">
-            <button class="btn btn-primary" onclick="uploadAmiibo()">Upload amiibo</button>
-        </div>
-        <div class="input-group">
-            <div class="form-outline">
-              <input type="search" id="amiiboContains" class="form-control" onchange="displayAmiibos(null)" />
-              <label class="form-label" for="amiiboContains">Search</label>
+        <div class="dotted-margin">
+            <div class="form-group">
+                <label for="amiibo">AmiiboFolder</label>
+                <input type="text" class="amiibo" id="amiibo" aria-describedby="amiibot"
+                    placeholder="Enter amiibo folder" value="{{amiiboFolder}}">
+                <small id="amiibot" class="form-text text-muted">Folder where amiibos are found</small>
             </div>
-            <button type="button" class="btn btn-primary">
-              <i class="fas fa-search"></i>
-            </button>
-          </div>
-        <div id="amiiboList" class="d-flex flex-column justify-content-around">
+            <div class="form-group">
+                <button class="btn btn-primary" onclick="fillAmiiboList()">Folder content</button>
+            </div>
         </div>
+        <div class="dotted-margin">
+            <div class="form-group">
+                <label for="amiibofile">Amiibo File</label>
+                <input type="file" name="amiibofile" id="amiibofile">
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" onclick="uploadAmiibo()">Upload amiibo</button>
+            </div>
+        </div>
+        <div class="form-group dotted-margin">
+            <div class="form-outline">
+              <label class="form-label" for="amiiboContains">Search</label>
+              <input type="search" id="amiiboContains" class="form-control" onchange="displayAmiibos(null)" />
+            </div>
+          </div>
+        </div>
+        <div id="amiiboList" class="d-flex flex-column justify-content-around">
     </div>
     <div id="scriptlister">
         <div class="d-flex justify-content-between">
