@@ -935,28 +935,31 @@ function delete_amiibo(amiiboPath){
             </button>
             <button type="button" class="btn btn-success" onclick="requestScripts()">reload</button>
         </div>
-        <div id="colapseScriptControl" class="panel-collapse collapse in d-flex justify-content-between">
-            <!-- Button trigger modal -->
-            <div class="d-flex flex-column justify-content-around">
-                <div class="form-outline">
-                    <input type="number" id="maxComandLines" class="form-control" value="{{maxComandLines}}" />
-                    <label class="form-label" for="maxComandLines">max stored comands</label>
+        <div id="colapseScriptControl" class="panel-collapse collapse in">
+            <div class="panel-body">
+                <div class="d-flex justify-content-between">
+                    <div class="d-flex flex-column justify-content-around">
+                        <div class="form-outline">
+                            <input type="number" id="maxComandLines" class="form-control" value="{{maxComandLines}}" />
+                            <label class="form-label" for="maxComandLines">max stored comands</label>
+                        </div>
+                        <div class="form-outline">
+                            <input type="number" id="comandDelay" class="form-control" value="{{comandDelay}}" />
+                            <label class="form-label" for="comandDelay">comand delay</label>
+                        </div>
+                        <button type="button" class="btn btn-warning" onclick="cleanCurrentScriptForm()">
+                            clean current
+                        </button>
+                    </div>
+                    <div class="d-flex flex-column justify-content-around">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="showCurrentScriptForm()">
+                            Current script
+                        </button>
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalScript" onclick="cleanScriptsForm()">
+                            Create script
+                        </button>
+                    </div>
                 </div>
-                <div class="form-outline">
-                    <input type="number" id="comandDelay" class="form-control" value="{{comandDelay}}" />
-                    <label class="form-label" for="comandDelay">comand delay</label>
-                </div>
-                <button type="button" class="btn btn-warning" onclick="cleanCurrentScriptForm()">
-                    clean current
-                </button>
-            </div>
-            <div class="d-flex flex-column justify-content-around">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalScript" onclick="showCurrentScriptForm()">
-                    Current script
-                </button>
-                <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalScript" onclick="cleanScriptsForm()">
-                    Create script
-                </button>
             </div>
         </div>
         <div id="scripList" class="d-flex flex-column justify-content-around">
