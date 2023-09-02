@@ -20,6 +20,15 @@
         border-style: solid;
         max-width: 100%;
     }
+
+    
+    .custom-button {
+            width: 40%;
+            overflow: hidden; /* Hide overflow content */
+            text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
+            white-space: nowrap; /* Prevent text from wrapping onto a new line */
+            word-wrap: break-word; /* Allow words to break onto a new line if necessary */
+        }
     </style>
     <script>
         comands = {}
@@ -40,10 +49,10 @@
                     let divTextForAmiibo = "<div class='row-margin d-flex justify-content-between'>";
 
                     if (lastClicked!=null && lastClicked.trim().includes(today.trim())) {
-                        divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning\" onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
+                        divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-warning custom-button\" onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
                     }
                     else {
-                        divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
+                        divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success custom-button\" onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
                     }
                     divTextForAmiibo +="<a class=\"btn btn-info\" href='/download?path=" + amiiboListSrc[i] + "'>Download</a>";
                     
