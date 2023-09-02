@@ -38,7 +38,6 @@
                     else {
                         divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='width:40%;' onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
                     }
-                    divTextForAmiibo +="<button id=\""+ buttonId +"_Download\" type=\"button\" class=\"btn btn-info\" onclick='download(\"" + amiiboListSrc[i] + "\");'>Download</button>";
                     divTextForAmiibo +="<a class=\"btn btn-info\" href='/download?path=" + amiiboListSrc[i] + ");'>Download</a>";
                     
                     divTextForAmiibo +="<button id=\""+ buttonId +"_delete\" type=\"button\" class=\"btn btn-danger\" onclick='delete_amiibo(\"" + amiiboListSrc[i] + "\");'>Delete</button>";
@@ -162,48 +161,7 @@ function delete_amiibo(amiiboPath){
 
         }
 
-        function download(amiiboPath){
-            $.ajax({
-            type: 'POST',
-            url: '/download',
-            success: function(data, status, xhr) {
-                // Check if Blob is supported
-                if (window.Blob && window.URL && window.URL.createObjectURL) {
-                    // Create a Blob from the response data
-                    var blob = new Blob([data], { type: 'application/octet-stream' });
-
-                    // Create a URL for the Blob
-                    var url = window.URL.createObjectURL(blob);
-
-                    // Create a temporary link element to trigger the download
-                    var a = document.createElement('a');
-                    a.href = url;
-                    a.download = getFileNameFromPath(amiiboPath); // Set the desired file name
-                    a.style.display = 'none';
-                    document.body.appendChild(a);
-                    a.click();
-
-                    // Clean up
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-                } else {
-                    // Fallback for browsers that don't support Blob
-                    console.error('Blob and Object URL are not supported in this browser.');
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error('Error downloading item:', error);
-            },
-        contentType: 'application/json',
-            beforeSend: function(xhr) {
-                // Remove the Accept-Encoding header
-                xhr.setRequestHeader('Accept-Encoding', '');
-            },
-        data: JSON.stringify({path: amiiboPath})
-        });
-
-        }
-
+        
 
         function requestAmiibosFromFolder(folderName) {
             $.ajax({

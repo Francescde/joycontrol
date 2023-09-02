@@ -473,10 +473,11 @@ def zip_folder():
 
         with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, _, files in os.walk(folder_path):
-                for file in files and file.endswith('.bin'):
-                    file_path = os.path.join(root, file)
-                    # Add the file to the ZIP archive with relative paths
-                    zipf.write(file_path, os.path.relpath(file_path, folder_path))
+                for file in files:
+                    if file.endswith('.bin'):
+                        file_path = os.path.join(root, file)
+                        # Add the file to the ZIP archive with relative paths
+                        zipf.write(file_path, os.path.relpath(file_path, folder_path))
         
         # Serve the ZIP file using send_from_directory
         response = send_from_directory(folder_path, zip_file_name, as_attachment=True, mimetype='application/octet-stream')
