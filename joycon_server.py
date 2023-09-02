@@ -450,7 +450,9 @@ def download():
         file_directory, file_name = os.path.split(file_path)
 
         # Use send_from_directory to serve the file
-        return send_from_directory(file_directory, file_name, as_attachment=True, mimetype='application/octet-stream')
+        response = send_from_directory(file_directory, file_name, as_attachment=True, mimetype='application/octet-stream')
+        response.headers['Content-Encoding'] = 'identity'
+        return response
     except Exception as e:
         print(e)
         return str(e), 500
@@ -478,7 +480,33 @@ def zip_folder():
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
         
         # Serve the ZIP file using send_from_directory
-        return send_from_directory(folder_path, zip_file_name, as_attachment=True, mimetype='application/octet-stream')
+@app.route('/zip_folder', methods=['POST'])
+def zip_folder():
+    try:
+        # Get the folder path from the request
+        folder_path = request.json.get('folder_path')
+
+        # Check if the folder exists
+        if not os.path.exists(folder_path):
+            return jsonify({'error': 'Folder does not exist'}), 404
+
+        # Specify a fixed name for the ZIP file
+        zip_file_name = 'export.zip'
+        zip_file_path = os.path.join(folder_path, zip_file_name)
+
+        with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+            for root, _, files in os.walk(folder_path):
+                for file in files:
+                    file_path = os.path.join(root, file)
+                    # Add the file to the ZIP archive with relative paths
+                    zipf.write(file_path, os.path.relpath(file_path, folder_path))
+        
+        # Serve the ZIP file using send_from_directory
+        response = send_from_directory(folder_path, zip_file_name, as_attachment=True, mimetype='application/octet-stream')
+        response.headers['Content-Encoding'] = 'identity'
+        return response
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
