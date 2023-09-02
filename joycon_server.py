@@ -440,11 +440,10 @@ def delete_amiibo():
         return str(e), 500
 
 
-@app.route('/download', methods=['POST'])
+@app.route('/download', methods=['GET'])
 def download():
     try:
-        content = request.get_json()
-        file_path = os.path.abspath(content['path'])
+        file_path = request.args.get('path')
         
         # Extract the directory and filename from the provided file_path
         file_directory, file_name = os.path.split(file_path)
@@ -458,11 +457,11 @@ def download():
         return str(e), 500
 
 
-@app.route('/zip_folder', methods=['POST'])
+@app.route('/zip_folder', methods=['GET'])  # Change the HTTP method to GET
 def zip_folder():
     try:
-        # Get the folder path from the request
-        folder_path = request.json.get('folder_path')
+        # Get the folder path from the request or any other method you prefer for GET requests
+        folder_path = request.args.get('folder_path')
 
         # Check if the folder exists
         if not os.path.exists(folder_path):

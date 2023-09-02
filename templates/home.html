@@ -148,47 +148,15 @@ function delete_amiibo(amiiboPath){
 }
 
         function exportAmiiboList(){
-            let folderName = $("#amiibo").val();
-            $.ajax({
-            type: 'POST',
-            url: '/zip_folder',
-            success: function(data, status, xhr) {
-                // Check if Blob is supported
-                if (window.Blob && window.URL && window.URL.createObjectURL) {
-                    // Create a Blob from the response data
-                    var blob = new Blob([data], { type: 'application/octet-stream' });
-
-                    // Create a URL for the Blob
-                    var url = window.URL.createObjectURL(blob);
 
                     // Create a temporary link element to trigger the download
                     var a = document.createElement('a');
-                    a.href = url;
-                    a.download = 'export.zip'; // Set the desired file name
+                    a.href = "/zip_folder?folder_path=" + $("#amiibo").val();;
                     a.style.display = 'none';
                     document.body.appendChild(a);
                     a.click();
 
-                    // Clean up
-                    window.URL.revokeObjectURL(url);
-                    document.body.removeChild(a);
-                } else {
-                    // Fallback for browsers that don't support Blob
-                    console.error('Blob and Object URL are not supported in this browser.');
-                }
-            },
-            beforeSend: function(xhr) {
-                // Remove the Accept-Encoding header
-                xhr.setRequestHeader('Accept-Encoding', '');
-            },
-            responseType: 'blob',
-            error: function(xhr, status, error) {
-                console.error('Error downloading item:', error);
-            },
-        responseType: 'blob', // Receive data as a binary blob
-        contentType: 'application/json',
-        data: JSON.stringify({folder_path: folderName})
-        });
+                    document.body.removeChild(a)
 
         }
 
@@ -229,7 +197,6 @@ function delete_amiibo(amiiboPath){
                 // Remove the Accept-Encoding header
                 xhr.setRequestHeader('Accept-Encoding', '');
             },
-            responseType: 'blob',
         data: JSON.stringify({path: amiiboPath})
         });
 
