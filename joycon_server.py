@@ -450,7 +450,7 @@ def download():
         file_directory, file_name = os.path.split(file_path)
 
         # Use send_from_directory to serve the file
-        return send_from_directory(file_directory, file_name, as_attachment=True, mimetype='application/bin')
+        return send_from_directory(file_directory, file_name, as_attachment=True, mimetype='application/octet-stream')
     except Exception as e:
         print(e)
         return str(e), 500
@@ -478,7 +478,7 @@ def zip_folder():
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
         
         # Serve the ZIP file using send_from_directory
-        return send_from_directory(folder_path, zip_file_name, as_attachment=True, mimetype='application/zip')
+        return send_from_directory(folder_path, zip_file_name, as_attachment=True, mimetype='application/octet-stream')
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
