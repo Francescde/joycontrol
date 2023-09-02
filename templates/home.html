@@ -8,6 +8,13 @@
     <script src="/static/jquey.min.1.11.js" type="text/javascript"></script>
     <link href="/static/bootstrap.min.css" rel="stylesheet">
     <style>
+        body{
+            background-color: #cFcFcF;
+        }
+
+        input {
+            background-color: #E3E3E3!important;
+        }
 
     .dotted-margin{
         border: gray;
@@ -922,7 +929,13 @@ function delete_amiibo(amiiboPath){
     </div>
     <div id="scriptlister">
         <div class="d-flex justify-content-between">
-            <div class="d-flex flex-column justify-content-around"><p>Scripts</p><button type="button" class="btn btn-success" onclick="requestScripts()">reload</button></div>
+            <p>Scripts</p>
+            <button class="btn btn-secondary" type="button" data-toggle="collapse" data-target="#colapseScriptControl" aria-expanded="false">
+                show/hide
+            </button>
+            <button type="button" class="btn btn-success" onclick="requestScripts()">reload</button>
+        </div>
+        <div id="colapseScriptControl" class="panel-collapse collapse in d-flex justify-content-between">
             <!-- Button trigger modal -->
             <div class="d-flex flex-column justify-content-around">
                 <div class="form-outline">
