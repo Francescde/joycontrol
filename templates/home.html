@@ -23,7 +23,7 @@
 
     
     .custom-button {
-            width: 40%;
+            width: 60%;
             overflow: hidden; /* Hide overflow content */
             text-overflow: ellipsis; /* Add ellipsis (...) for overflow text */
             white-space: nowrap; /* Prevent text from wrapping onto a new line */
@@ -36,6 +36,11 @@
         var currentSelectedController = "";
         var amiiboListSrc = [];
         var lastLoadedAmiiboFolder = "{{amiiboFolder}}";
+
+        const trashIcoonString = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+</svg>`;
 
         function displayAmiibos(folderName) {
             folderName = folderName!=null?folderName:lastLoadedAmiiboFolder;
@@ -60,7 +65,7 @@
 '  <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z"/>' +
 '</svg>'+"</a>";
                     
-                    divTextForAmiibo +="<button id=\""+ buttonId +"_delete\" type=\"button\" class=\"btn btn-danger\" onclick='delete_amiibo(\"" + amiiboListSrc[i] + "\");'>Delete</button>";
+                    divTextForAmiibo +="<button id=\""+ buttonId +"_delete\" type=\"button\" class=\"btn btn-danger\" onclick='delete_amiibo(\"" + amiiboListSrc[i] + "\");'>"+trashIcoonString+"</button>";
                     {% if unfixed_exists and secret_exists %}
                         divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + amiiboListSrc[i] + "\");'>Clone</button>";
                     {% endif %}
@@ -212,7 +217,7 @@ function delete_amiibo(amiiboPath){
                         let stringControllerDiv = "<div class='row-margin d-flex justify-content-between'>";
                         stringControllerDiv +="<a href='/controller/" + data[i].replace('.json','') + "'>" + data[i] + "</a>";
                         stringControllerDiv +="<div>"
-                        stringControllerDiv +="<button type=\"button\" class=\"btn btn-danger\" onclick='deleteController(\"" + data[i].replace('.json','') + "\")'>delete</button>";
+                        stringControllerDiv +="<button type=\"button\" class=\"btn btn-danger\" onclick='deleteController(\"" + data[i].replace('.json','') + "\")'>"+trashIcoonString+"</button>";
                         stringControllerDiv +="<button type=\"button\" class=\"btn btn-primary\" onclick='editController(\"" + data[i].replace('.json','') + "\")'>edit</button>";
                         stringControllerDiv +="</div></div>"
                         $("#controllerList").append(stringControllerDiv);
@@ -233,7 +238,7 @@ function delete_amiibo(amiiboPath){
                     for (let i = 0; i < data.length; i++) {
                         let stringControllerDiv = "<div class='row-margin d-flex justify-content-between'>";
                         stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-primary\" onclick='editScript(\"" + data[i].replace('.txt','') + "\")'>edit:"+data[i]+"</button>";
-                        stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-danger\" onclick='deleteScript(\"" + data[i].replace('.txt','') + "\")'>delete:"+data[i]+"</button>";
+                        stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-danger\" onclick='deleteScript(\"" + data[i].replace('.txt','') + "\")'>"+trashIcoonString+"</button>";
                         stringControllerDiv +="</div>"
                         $("#scripList").append(stringControllerDiv);
                     }
@@ -1061,7 +1066,11 @@ function delete_amiibo(amiiboPath){
             Map To connect controller
             <select id="selectedController" class="form-select" aria-label="Get controller" onchange="selectController()">
             </select>
-            <button type="button" class="btn btn-danger" id="deleteMapButton" disabled onclick="deleteControllerMap()">Delete</button>
+            <button type="button" class="btn btn-danger" id="deleteMapButton" disabled onclick="deleteControllerMap()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+              </svg>
+              </button>
             <div class="form-group">
                 <label for="filenameControllerScriptMap">File name</label>
                 <input type="text" class="form-control" id="filenameControllerCtrMap" onchange="checkControllerMapValid()" placeholder="Enter filename">
