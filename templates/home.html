@@ -1006,10 +1006,7 @@ function delete_amiibo(amiiboPath){
         </div>
         <div class="modal-body">
           Connect raspberry to switch, shut down raspberry or restart it
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
+          
           {% if updatable %}
             <a href="/update" class="btn btn-warning">Update</a>
           {% else %}
@@ -1040,6 +1037,9 @@ function delete_amiibo(amiiboPath){
                 {% endif %}
                 <input type="file" name="locked" id="locked" onchange="uploadConfFile('locked')">
             </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
