@@ -39,6 +39,8 @@
                         divTextForAmiibo +="<button id=\""+ buttonId +"\" type=\"button\" class=\"btn btn-success\" style='width:40%;' onclick='sendComand(this,\"nfc " + amiiboListSrc[i] + "\");amiibo_btn(this,\"" + buttonId + "\");'>" + extractFolderHierarchy(amiiboListSrc[i], folderName) + "</button>";
                     }
                     divTextForAmiibo +="<button id=\""+ buttonId +"_Download\" type=\"button\" class=\"btn btn-info\" onclick='download(\"" + amiiboListSrc[i] + "\");'>Download</button>";
+                    divTextForAmiibo +="<a class=\"btn btn-info\" href='/download?path=" + amiiboListSrc[i] + ");'>Download</a>";
+                    
                     divTextForAmiibo +="<button id=\""+ buttonId +"_delete\" type=\"button\" class=\"btn btn-danger\" onclick='delete_amiibo(\"" + amiiboListSrc[i] + "\");'>Delete</button>";
                     {% if unfixed_exists and secret_exists %}
                         divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + amiiboListSrc[i] + "\");'>Clone</button>";

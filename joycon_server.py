@@ -473,7 +473,7 @@ def zip_folder():
 
         with zipfile.ZipFile(zip_file_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
             for root, _, files in os.walk(folder_path):
-                for file in files:
+                for file in files and file.endswith('.bin'):
                     file_path = os.path.join(root, file)
                     # Add the file to the ZIP archive with relative paths
                     zipf.write(file_path, os.path.relpath(file_path, folder_path))
