@@ -177,6 +177,11 @@ function delete_amiibo(amiiboPath){
                     console.error('Blob and Object URL are not supported in this browser.');
                 }
             },
+            beforeSend: function(xhr) {
+                // Remove the Accept-Encoding header
+                xhr.setRequestHeader('Accept-Encoding', '');
+            },
+            responseType: 'blob',
             error: function(xhr, status, error) {
                 console.error('Error downloading item:', error);
             },
@@ -192,17 +197,6 @@ function delete_amiibo(amiiboPath){
             type: 'POST',
             url: '/download',
             success: function(data, status, xhr) {
-                // Create a Blob from the response data
-                var blob = new Blob([data]);
-
-                // Create a temporary link element to trigger the download
-                var a = document.createElement('a');
-                a.href = window.URL.createObjectURL(blob);
-                a.download = getFileNameFromPath(amiiboPath); // Set the desired file name
-                a.click();
-
-                // Clean up
-                window.URL.revokeObjectURL(a.href);
                 // Check if Blob is supported
                 if (window.Blob && window.URL && window.URL.createObjectURL) {
                     // Create a Blob from the response data
@@ -231,6 +225,11 @@ function delete_amiibo(amiiboPath){
                 console.error('Error downloading item:', error);
             },
         contentType: 'application/json',
+            beforeSend: function(xhr) {
+                // Remove the Accept-Encoding header
+                xhr.setRequestHeader('Accept-Encoding', '');
+            },
+            responseType: 'blob',
         data: JSON.stringify({path: amiiboPath})
         });
 
