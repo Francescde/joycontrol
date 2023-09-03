@@ -1087,7 +1087,7 @@ function delete_amiibo(amiiboPath){
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="modalCloneTitle">Clone</h5>
-          <button type="button" class="close" data-dismiss="modalClone" aria-label="Close">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -1099,9 +1099,11 @@ function delete_amiibo(amiiboPath){
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modalClone">Close</button>
-          <button type="button" class="btn btn-primary" id="persistAmiiboClone" disabled onclick="submitAndClone()" data-dismiss="modalClone">Clone and save</button>
-          <button type="button" class="btn btn-primary" id="amiiboFastClone" onclick="clone()">Clone without saving</button>
+            <div class='row-margin d-flex justify-content-between'>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="persistAmiiboClone" disabled onclick="submitAndClone()" data-dismiss="modal">Clone and save</button>
+                <button type="button" class="btn btn-primary" id="amiiboFastClone" onclick="clone()" data-dismiss="modal">Clone without saving</button>
+            </div>
         </div>
       </div>
     </div>
