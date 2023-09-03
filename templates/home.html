@@ -267,6 +267,7 @@ function delete_amiibo(amiiboPath){
         }
 
         function displayControllers(){
+            $("#controllerList").empty();
             
             let contains = $("#controllerContains").val()!=null?$("#controllerContains").val():"";
               
@@ -284,7 +285,6 @@ function delete_amiibo(amiiboPath){
         }
 
         function requestControllers(){
-            $("#controllerList").empty();
             $.ajax({
                 url: '/controllers',
                 type: 'get',
@@ -293,13 +293,14 @@ function delete_amiibo(amiiboPath){
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
                     controllersListSrc = data;
-                    print_controllers();
+                    displayControllers();
                 }
             });
         }
 
         
         function displayScripts(){
+            $("#scripList").empty();
             //scriptContains
             let contains = $("#scriptContains").val()!=null?$("#scriptContains").val():"";
             for (let i = 0; i < scriptsListSrc.length; i++) {
@@ -314,7 +315,6 @@ function delete_amiibo(amiiboPath){
         }
 
         function requestScripts(){
-            $("#scripList").empty();
             $.ajax({
                 url: '/scripts',
                 type: 'get',
