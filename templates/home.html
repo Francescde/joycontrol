@@ -1413,13 +1413,11 @@ function delete_amiibo(amiiboPath){
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
-        textarea.style.height = 'auto';
-        textarea.style.height = (this.scrollHeight) + 'px';
     });
     function updateTextareas(){
     textareas.forEach(function (textarea) {
         textarea.style.height = 'auto';
-        textarea.style.height = (this.scrollHeight) + 'px';
+        textarea.style.height = (textarea.scrollHeight) + 'px';
     });
     }
     // Call the function every minute (60,000 milliseconds)
