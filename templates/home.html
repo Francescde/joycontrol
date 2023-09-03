@@ -84,8 +84,14 @@ $("#exampleModal").modal('hide');-->
         textareas2.forEach(function (textarea) {
             textarea.style.height = 'auto';
             textarea.style.height = (textarea.scrollHeight) + 'px';
-        },500);
-    });
+        })},500);
+        
+        setTimeout( _=>{
+        const textareas2 = document.querySelectorAll('.resizable-textarea');
+        textareas2.forEach(function (textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        })},1000);
     }
 
     // Function to show the spinner overlay
