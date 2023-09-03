@@ -39,6 +39,12 @@
         }
     </style>
     
+  <!--  modalController modalShutdown modalClone exampleModalScript exampleModal
+$("#modalController").modal('hide');
+$("#modalShutdown").modal('hide');
+$("#modalClone").modal('hide');
+$("#exampleModalScript").modal('hide');
+$("#exampleModal").modal('hide');-->
     <script>
         comands = {};
 
@@ -51,6 +57,21 @@
         var amiiboListSrc = [];
         var controllersListSrc = [];
         var scriptsListSrc = [];
+
+    // Function to show the spinner overlay
+    function showSpinner() {
+        $("#modalController").modal('hide');
+        $("#modalShutdown").modal('hide');
+        $("#modalClone").modal('hide');
+        $("#exampleModalScript").modal('hide');
+        $("#exampleModal").modal('hide');
+        $('#spinnerOverlay').modal({ backdrop: 'static', keyboard: false });
+    }
+
+    // Function to hide the spinner overlay
+    function hideSpinner() {
+        $('#spinnerOverlay').modal('hide');
+    }
 
         function displayAmiibos(folderName) {
             folderName = folderName!=null?folderName:lastLoadedAmiiboFolder;
@@ -86,6 +107,7 @@
         }
 
         function sendComandHold(e,cmd) {
+            showSpinner();
             if (!comands[cmd]) {
                 $.ajax({
                     url: '/comand',
@@ -95,6 +117,10 @@
                     success: function (data, status) {
                         console.log("Data: " + data + "\nStatus: " + status);
                         comands[cmd] = true;
+                        hideSpinner();
+                    },
+                    error: function(jq, text, errCode){
+                        hideSpinner()
                     },
                     data: JSON.stringify({line: 'hold ' + cmd})
                 });
@@ -107,6 +133,10 @@
                     success: function (data, status) {
                         console.log("Data: " + data + "\nStatus: " + status);
                         comands[cmd] = false;
+                        hideSpinner();
+                    },
+                    error: function(jq, text, errCode){
+                        hideSpinner()
                     },
                     data: JSON.stringify({line: 'release ' + cmd})
                 });
@@ -114,7 +144,7 @@
         }
 
         function sendComand(e,cmd) {
-
+            showSpinner();
             $.ajax({
                 url: '/comand',
                 type: 'post',
@@ -122,7 +152,11 @@
                 contentType: 'application/json',
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
-                },
+                        hideSpinner();
+                    },
+                    error: function(jq, text, errCode){
+                        hideSpinner()
+                    },
                 data: JSON.stringify({line: cmd})
             });
         }
@@ -145,6 +179,7 @@
         }
         
         function clone(){
+         showSpinner();
             $.ajax({
                 url: '/amiiboclone',
                 type: 'post',
@@ -153,11 +188,16 @@
                 success: function (data, status) {
                     requestAmiibosFromFolder(lastLoadedAmiiboFolder);
                     console.log("Data: " + data + "\nStatus: " + status);
-                },
+                        hideSpinner();
+                    },
+                    error: function(jq, text, errCode){
+                        hideSpinner()
+                    },
                 data: JSON.stringify({filePath: $("#filenameAmiiboOrigin").val()})
             });
         } 
         function submitAndClone(){
+            showSpinner();
             $.ajax({
                 url: '/amiiboclone',
                 type: 'post',
@@ -166,7 +206,11 @@
                 success: function (data, status) {
                     requestAmiibosFromFolder(lastLoadedAmiiboFolder);
                     console.log("Data: " + data + "\nStatus: " + status);
-                },
+                        hideSpinner();
+                    },
+                    error: function(jq, text, errCode){
+                        hideSpinner()
+                    },
                 data: JSON.stringify({filePath: $("#filenameAmiiboOrigin").val(), clonePath: $("#filenameAmiibo").val()})
             });
         }
@@ -217,6 +261,7 @@ function getFileNameFromPath(filePath) {
 }
 
 function delete_amiibo(amiiboPath){
+    showSpinner();
             $.ajax({
             type: 'POST',
             url: '/delete_amiibo',
@@ -226,9 +271,12 @@ function delete_amiibo(amiiboPath){
                     let folderName = $("#amiibo").val();
                     //amiiboList
                     requestAmiibosFromFolder(folderName);
+                    hideSpinner();
+
             },
             error: function(xhr, status, error) {
                 console.error('Error downloading item:', error);
+                hideSpinner();
             },
         contentType: 'application/json',
         data: JSON.stringify({path: amiiboPath})
@@ -251,6 +299,7 @@ function delete_amiibo(amiiboPath){
         
 
         function requestAmiibosFromFolder(folderName) {
+            showSpinner();
             $.ajax({
                 url: '/files',
                 type: 'post',
@@ -260,7 +309,12 @@ function delete_amiibo(amiiboPath){
                     lastLoadedAmiiboFolder = folderName;
                     console.log("Data: " + data + "\nStatus: " + status);
                     amiiboListSrc = data;
+                    hideSpinner
                     displayAmiibos(folderName);
+                    hideSpinner();
+                },
+                error: function(jq, text, errCode){
+                    hideSpinner()
                 },
                 data: JSON.stringify({path: folderName})
             });
@@ -285,6 +339,7 @@ function delete_amiibo(amiiboPath){
         }
 
         function requestControllers(){
+            showSpinner();
             $.ajax({
                 url: '/controllers',
                 type: 'get',
@@ -294,6 +349,10 @@ function delete_amiibo(amiiboPath){
                     console.log("Data: " + data + "\nStatus: " + status);
                     controllersListSrc = data;
                     displayControllers();
+                    hideSpinner();
+                },
+                error: function(jq, text, errCode){
+                    hideSpinner()
                 }
             });
         }
@@ -315,6 +374,7 @@ function delete_amiibo(amiiboPath){
         }
 
         function requestScripts(){
+            showSpinner();
             $.ajax({
                 url: '/scripts',
                 type: 'get',
@@ -324,12 +384,17 @@ function delete_amiibo(amiiboPath){
                     console.log("Data: " + data + "\nStatus: " + status);
                     scriptsListSrc = data;
                     displayScripts();
+                    hideSpinner();
+                },
+                error: function(jq, text, errCode){
+                    hideSpinner()
                 }
             });
         }
 
         // Function to populate the controller select element
         function populateControllerSelect() {
+            showSpinner();
             $.ajax({
                 url: "/controller_maps",
                 type: "GET",
@@ -346,11 +411,13 @@ function delete_amiibo(amiiboPath){
                     var option = $("<option></option>").attr("value", controller).text(controller);
                     $("#selectedController").append(option);
                 });
+                hideSpinner();
 
                 },
                 error: function(error) {
                 // Handle the error here
                 console.log(error);
+                hideSpinner();
                 }
             });
         }
@@ -358,7 +425,7 @@ function delete_amiibo(amiiboPath){
         // Function to handle the change event on the select element
         function selectController() {
             var selectedController = $("#selectedController").val();
-
+            showSpinner();
             if (selectController==null || selectedController === "") {
                 // Handle the empty selection
                 $("#deleteMapButton").prop("disabled", true);
@@ -372,10 +439,12 @@ function delete_amiibo(amiiboPath){
                     currentSelectedController = response.controllerName!=null?response.controllerName:'';
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
+                    hideSpinner();
                 },
                 error: function(error) {
                     // Handle the error here
                     console.log(error);
+                    hideSpinner();
                 }
                 });
             } else {
@@ -391,10 +460,12 @@ function delete_amiibo(amiiboPath){
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#filenameControllerCtrMap").val(response.controllerName);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
+                    hideSpinner();
                 },
                 error: function(error) {
                     // Handle the error here
                     console.log(error);
+                    hideSpinner();
                 }
                 });
             }
@@ -402,6 +473,7 @@ function delete_amiibo(amiiboPath){
 
         // Function to handle the click event on the deleteMapButton
         function deleteControllerMap() {
+            showSpinner();
             var selectedController = $("#selectedController").val();
 
             if (selectedController !== "") {
@@ -421,10 +493,12 @@ function delete_amiibo(amiiboPath){
                     updateControllerMapFile();
                     $("#selectedController").val(null);
                     selectController();
+                    hideSpinner();
                 },
                 error: function(error) {
                     // Handle the error here
                     console.log(error);
+                    hideSpinner();
                 }
                 });
             }
@@ -506,7 +580,7 @@ function delete_amiibo(amiiboPath){
                 filename: filename,
                 json: JSON.parse(jsonConfig)
             };
-
+            showSpinner();
             // Send the AJAX request
             $.ajax({
                 url: "/controllers_maps_post",
@@ -522,12 +596,13 @@ function delete_amiibo(amiiboPath){
                     // Handle the success response here
                     console.log("Controller map created:", response);
                     $('#modalController').modal('toggle');
-
+                    hideSpinner();
                     // Optionally, perform any additional actions after updating the map
                     // For example, you can clear the input fields or refresh the list of maps
                 },
                 error: function(error) {
                 // Handle the error here
+                hideSpinner();
                 console.log(error);
                 }
             });
@@ -544,7 +619,7 @@ function delete_amiibo(amiiboPath){
 
             var formData = new FormData();
             formData.append('file', $('#amiibofile')[0].files[0]); // Obtén el archivo seleccionado
-            
+            showSpinner();
             // Realiza la solicitud AJAX
             $.ajax({
                 url: '/upload', // Ruta del servidor donde procesarás la carga del archivo
@@ -557,13 +632,14 @@ function delete_amiibo(amiiboPath){
                     console.log(response); // Aquí puedes imprimir la respuesta en la consola del navegador
                     
                     requestAmiibosFromFolder(lastLoadedAmiiboFolder);
-                    
+                    hideSpinner();
                     // Dependiendo de la respuesta, puedes realizar acciones específicas en el cliente
                     // Por ejemplo, mostrar un mensaje de éxito o error al usuario, redirigirlo a otra página, etc.
                 },
                 error: function(xhr, status, error) {
                     // Maneja los errores de la solicitud AJAX
                     console.error(error);
+                    hideSpinner();
                 }
             });
         }
@@ -574,7 +650,7 @@ function delete_amiibo(amiiboPath){
 
             var formData = new FormData();
             formData.append('file', $('#'+filetype)[0].files[0]); // Obtén el archivo seleccionado
-
+            showSpinner();
             // Realiza la solicitud AJAX
             $.ajax({
                 url: '/uploadcnf/'+filetype, // Ruta del servidor donde procesarás la carga del archivo
@@ -583,23 +659,28 @@ function delete_amiibo(amiiboPath){
                 contentType: false,
                 processData: false,
                 success: function(response) {
+                    hideSpinner();
                     location.reload();
                 },
                 error: function(xhr, status, error) {
+                    hideSpinner();
                     location.reload();
                 }
             });
             }
 
         function Connection(e) {
+            showSpinner();
             $.get("/connected", function (data, status) {
                 console.log("Data: " + data + "\nStatus: " + status);
                 if (data.connected) {
                     $.get("/disconnect", function (data, status) {
+                        hideSpinner();
                         console.log("Data: " + data + "\nStatus: " + status);
                     });
                 } else {
                     $.get("/connect", function (data, status) {
+                        hideSpinner();
                         console.log("Data: " + data + "\nStatus: " + status);
                     });
                 }
@@ -607,19 +688,25 @@ function delete_amiibo(amiiboPath){
         }
 
         function ShutDown(e){
+            showSpinner();
             $.ajax({
                 url: '/system',
                 type: 'post',
                 dataType: 'json',
                 contentType: 'application/json',
                 success: function (data, status) {
+                    hideSpinner();
                     console.log("Data: " + data + "\nStatus: " + status);
+                },
+                error: function(xhr, status, error) {
+                    hideSpinner();
                 },
                 data: JSON.stringify({action: 'shutdown'})
             });
         }
 
         function Reboot(e){
+            showSpinner();
             $.ajax({
                 url: '/system',
                 type: 'post',
@@ -627,6 +714,10 @@ function delete_amiibo(amiiboPath){
                 contentType: 'application/json',
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
+                    hideSpinner();
+                },
+                error: function(xhr, status, error) {
+                    hideSpinner();
                 },
                 data: JSON.stringify({action: 'reboot'})
             });
@@ -742,6 +833,7 @@ function delete_amiibo(amiiboPath){
         }
 
         function editController(controllerName){
+            showSpinner();
             $.ajax({
                     url: '/controllers/'+controllerName,
                     type: 'get',
@@ -752,11 +844,16 @@ function delete_amiibo(amiiboPath){
                         $("#filenameController").val(data.controllerName);
                         $('#exampleModal').modal('toggle');
                         checkControllerJsonValid();
+                        hideSpinner();
+                    },
+                    error: function(xhr, status, error) {
+                        hideSpinner();
                     }
                 });
         }
 
         function deleteController(controllerName){
+            showSpinner();
             $.ajax({
                     url: '/delete_controller/'+controllerName,
                     type: 'get',
@@ -764,11 +861,16 @@ function delete_amiibo(amiiboPath){
                     contentType: 'application/json',
                     success: function (data, status) {
                         requestControllers();
+                        hideSpinner();
+                    },
+                    error: function(xhr, status, error) {
+                        hideSpinner();
                     }
                 });
         }
 
         function editScript(controllerName){
+            showSpinner();
             $.ajax({
                     url: '/scripts/'+controllerName,
                     type: 'get',
@@ -779,11 +881,16 @@ function delete_amiibo(amiiboPath){
                         $("#filenameControllerScript").val(data.controllerName);
                         $('#exampleModalScript').modal('toggle');
                         checkControllerScriptValid();
+                    hideSpinner();
+                    },
+                    error: function(xhr, status, error) {
+                        hideSpinner();
                     }
                 });
         }
 
         function deleteScript(controllerName){
+            showSpinner();
             $.ajax({
                     url: '/delete_script/'+controllerName,
                     type: 'get',
@@ -791,7 +898,11 @@ function delete_amiibo(amiiboPath){
                     contentType: 'application/json',
                     success: function (data, status) {
                         requestScripts();
-                    }
+                    hideSpinner();
+                },
+                error: function(xhr, status, error) {
+                    hideSpinner();
+                }
                 });
         }
 
@@ -808,6 +919,7 @@ function delete_amiibo(amiiboPath){
         function showCurrentScriptForm(){
             $("#txtBodyControllerScript").val("");
             $("#filenameControllerScript").val("");
+            showSpinner();
             $.ajax({
                     url: '/last-actions',
                     type: 'get',
@@ -815,6 +927,10 @@ function delete_amiibo(amiiboPath){
                     success: function (data, status) {
                         $("#txtBodyControllerScript").val(data.message);
                         $("#filenameControllerScript").val("");
+                        hideSpinner();
+                    },
+                    error: function(xhr, status, error) {
+                        hideSpinner();
                     }
                 });
 
@@ -823,13 +939,17 @@ function delete_amiibo(amiiboPath){
         function cleanCurrentScriptForm(){
             const comandDelay = $("#comandDelay").val();
             const maxComandLines = $("#maxComandLines").val();
+            showSpinner();
             $.ajax({
                     url: '/reset-actions',
                     type: 'post',
                     dataType: 'json',
                     contentType: 'application/json',
                     success: function (data, status) {
-                        
+                        hideSpinner();
+                    },
+                    error: function(xhr, status, error) {
+                        hideSpinner();
                     },
                     data: JSON.stringify({maxComandLines: maxComandLines, comandDelay: comandDelay})
                 });
@@ -851,6 +971,7 @@ function delete_amiibo(amiiboPath){
         }
 
         function updateJsonController(){
+            showSpinner();
             const bodyVal = $("#jsonBodyController").val();
             const filenameVal = $("#filenameController").val();
             $.ajax({
@@ -861,6 +982,10 @@ function delete_amiibo(amiiboPath){
                     success: function (data, status) {
                         requestControllers();
                         $('#exampleModal').modal('toggle');
+                        hideSpinner();
+                    },
+                    error: function(xhr, status, error) {
+                        hideSpinner();
                     },
                     data: JSON.stringify({json: JSON.parse(bodyVal), filename: filenameVal+".json"})
                 });
@@ -869,6 +994,7 @@ function delete_amiibo(amiiboPath){
         function updateScript(){
             const bodyVal = $("#txtBodyControllerScript").val();
             const filenameVal = $("#filenameControllerScript").val();
+            showSpinner();
             $.ajax({
                     url: '/scripts',
                     type: 'post',
@@ -877,6 +1003,10 @@ function delete_amiibo(amiiboPath){
                     success: function (data, status) {
                         requestScripts();
                         $('#exampleModalScript').modal('toggle');
+                        hideSpinner();
+                    },
+                    error: function(xhr, status, error) {
+                        hideSpinner();
                     },
                     data: JSON.stringify({data: bodyVal, filename: filenameVal+".txt"})
                 });
@@ -918,6 +1048,17 @@ function delete_amiibo(amiiboPath){
 
 </head>
 <body>
+    <div class="modal" id="spinnerOverlay" style="display: none;">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center">
+                    <div class="spinner-border" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 <div style="width: 100%">
     <div class="d-flex justify-content-between">
         <ul class="nav">
@@ -1052,6 +1193,7 @@ function delete_amiibo(amiiboPath){
         </div>
     </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -1081,6 +1223,7 @@ function delete_amiibo(amiiboPath){
     </div>
   </div>
 <!-- Modal2 -->
+
 <div class="modal fade" id="exampleModalScript" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabelScript" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -1112,8 +1255,6 @@ function delete_amiibo(amiiboPath){
       </div>
     </div>
   </div>
-
-  
 <!-- Modal2 -->
 <div class="modal fade" id="modalClone" tabindex="-1" role="dialog" aria-labelledby="modalCloneTitle" aria-hidden="true">
     <div class="modal-dialog" role="document">
