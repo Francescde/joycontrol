@@ -75,7 +75,7 @@
                     
                     divTextForAmiibo +="<button id=\""+ buttonId +"_delete\" type=\"button\" class=\"btn btn-danger\" onclick='delete_amiibo(\"" + amiiboListSrc[i] + "\");'>"+trashIcoonString+"</button>";
                     {% if unfixed_exists and secret_exists %}
-                        divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='clone(this,\"" + amiiboListSrc[i] + "\");'>Clone</button>";
+                        divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='cloneModal(this,\"" + amiiboListSrc[i] + "\");'>Clone</button>";
                     {% endif %}
                     divTextForAmiibo += "</div>";
                     $("#amiiboList").append(divTextForAmiibo);
@@ -133,8 +133,16 @@
             // Store the current date as the last clicked date
             localStorage.setItem("RJCT_lastClicked_"+btn_id, today);
         }
-
-        function clone(e, filePath){
+        //<!-- checkfilenameAmiiboValid() #filenameAmiibo #filenameAmiiboOrigin #persistAmiiboClone clone() submitAndClone()-->
+        function checkfilenameAmiiboValid(){
+            let dissabledBut = true;
+            $("#persistAmiiboClone").prop("disabled", dissabledBut);
+            dissabledBut = !($("#filenameAmiibo").val()).endsWith(".bin");
+            $("#persistAmiiboClone").prop("disabled", dissabledBut);
+            
+        }
+        
+        function clone(){
             $.ajax({
                 url: '/amiiboclone',
                 type: 'post',
@@ -143,8 +151,50 @@
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
                 },
-                data: JSON.stringify({filePath: filePath})
+                data: JSON.stringify({filePath: $("#filenameAmiiboOrigin").val()})
             });
+        } 
+        function submitAndClone(){
+            $.ajax({
+                url: '/amiiboclone',
+                type: 'post',
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data, status) {
+                    console.log("Data: " + data + "\nStatus: " + status);
+                },
+                data: JSON.stringify({filePath: $("#filenameAmiiboOrigin").val(), clonePath: $("#filenameAmiibo").val()})
+            });
+        }
+
+        function cloneReName(originalFileName) {
+            // Find the last occurrence of '.' to get the position of the file extension
+            const lastDotIndex = originalFileName.lastIndexOf('.');
+            let newFileName = originalFileName;
+
+            if (lastDotIndex !== -1) {
+            // Extract the filename without the extension and the extension separately
+            const fileNameWithoutExtension = originalFileName.substring(0, lastDotIndex);
+            const fileExtension = originalFileName.substring(lastDotIndex);
+
+            // Add "_clone" before the extension and combine them
+            newFileName = `${fileNameWithoutExtension}_clone${fileExtension}`;
+
+            console.log(newFileName); // This will print "example_clone.bin"
+            } else {
+            // If there is no file extension, you can choose how to handle it
+            console.log("The string does not contain a file extension.");
+            }
+            return newFileName;
+        }
+
+
+        function cloneModal(e, filePath){
+            
+            $("#filenameAmiiboOrigin").val(filePath);
+            $("#filenameAmiibo").val(cloneReName(filePath));
+            checkfilenameAmiiboValid();
+            $("#modalClone").modal('show');
         }
 
         function extractFolderHierarchy(folderUrl, targetFolder) {
@@ -1029,6 +1079,33 @@ function delete_amiibo(amiiboPath){
       </div>
     </div>
   </div>
+
+  
+<!-- Modal2 -->
+<div class="modal fade" id="modalClone" tabindex="-1" role="dialog" aria-labelledby="modalCloneTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalCloneTitle">Clone</h5>
+          <button type="button" class="close" data-dismiss="modalClone" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="filenameAmiibo">File name</label>
+                <input type="text" class="form-control" id="filenameAmiibo" onchange="checkfilenameAmiiboValid()" placeholder="Enter filename">
+                <input type="hidden" id="filenameAmiiboOrigin" name="filenameAmiiboOrigin" value="">
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modalClone">Close</button>
+          <button type="button" class="btn btn-primary" id="persistAmiiboClone" disabled onclick="submitAndClone()" data-dismiss="modalClone">Clone and save</button>
+          <button type="button" class="btn btn-primary" id="amiiboFastClone" onclick="clone()">Clone without saving</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- checkfilenameAmiiboValid() #filenameAmiibo #filenameAmiiboOrigin #persistAmiiboClone clone() submitAndClone()-->
   
   <!-- Modal -->
   <div class="modal fade" id="modalShutdown" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -1053,23 +1130,20 @@ function delete_amiibo(amiiboPath){
           <button type="button" class="btn btn-danger" onclick="Reboot(this)" data-dismiss="modal">Reboot</button>
           <!--uploadConfFile-->
             <div class="form-group">
-
                 {% if unfixed_exists %}
-                    <label for="unfixed">Update Unfixed File</label>
+                    <label for="unfixed" class="text-primary">Update Unfixed File</label>
                 {% endif %}
                 {% if not unfixed_exists %}
-                    <label for="unfixed">Load Unfixed File</label>
+                    <label for="unfixed" class="text-warning">Load Unfixed File</label>
                 {% endif %}
                 <input type="file" name="unfixed" id="unfixed" onchange="uploadConfFile('unfixed')">
             </div>
             <div class="form-group">
-
-
                 {% if secret_exists %}
-                    <label for="locked">Update Locked File</label>
+                    <label for="locked" class="text-primary">Update Locked File</label>
                 {% endif %}
                 {% if not secret_exists %}
-                    <label for="locked">Load Locked File</label>
+                    <label for="locked" class="text-warning">Load Locked File</label>
                 {% endif %}
                 <input type="file" name="locked" id="locked" onchange="uploadConfFile('locked')">
             </div>
