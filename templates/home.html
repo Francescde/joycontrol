@@ -1416,6 +1416,14 @@ function delete_amiibo(amiiboPath){
         textarea.style.height = 'auto';
         textarea.style.height = (this.scrollHeight) + 'px';
     });
+    function updateTextareas(){
+    textareas.forEach(function (textarea) {
+        textarea.style.height = 'auto';
+        textarea.style.height = (this.scrollHeight) + 'px';
+    });
+    }
+    // Call the function every minute (60,000 milliseconds)
+    setInterval(updateTextareas, 5000);
 </script>
 </body>
 </html>
