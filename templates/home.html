@@ -77,6 +77,14 @@ $("#exampleModal").modal('hide');-->
         var amiiboListSrc = [];
         var controllersListSrc = [];
         var scriptsListSrc = [];
+        
+    function updateTextareas(){
+        const textareas = document.querySelectorAll('.resizable-textarea');
+        textareas.forEach(function (textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = (textarea.scrollHeight) + 'px';
+        });
+    }
 
     // Function to show the spinner overlay
     function showSpinner() {
@@ -458,6 +466,8 @@ function delete_amiibo(amiiboPath){
                     currentSelectedController = response.controllerName!=null?response.controllerName:'';
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
+                    updateTextareas();
+                    updateTextareas();
                     hideSpinner();
                 },
                 error: function(error) {
@@ -479,6 +489,7 @@ function delete_amiibo(amiiboPath){
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#filenameControllerCtrMap").val(response.controllerName);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
+                    updateTextareas();
                     hideSpinner();
                 },
                 error: function(error) {
@@ -611,6 +622,7 @@ function delete_amiibo(amiiboPath){
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#selectedController").val(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
+                    updateTextareas();
                     populateControllerSelect();
                     // Handle the success response here
                     console.log("Controller map created:", response);
@@ -908,6 +920,7 @@ function delete_amiibo(amiiboPath){
                     contentType: 'application/json',
                     success: function (data, status) {
                         $("#txtBodyControllerScript").val(data.jsonFile);
+                    updateTextareas();
                         $("#filenameControllerScript").val(data.controllerName);
                         $('#exampleModalScript').modal('toggle');
                         checkControllerScriptValid();
@@ -943,11 +956,13 @@ function delete_amiibo(amiiboPath){
 
         function cleanScriptsForm(){
             $("#txtBodyControllerScript").val("");
+                    updateTextareas();
             $("#filenameControllerScript").val("");
         }
 
         function showCurrentScriptForm(){
             $("#txtBodyControllerScript").val("");
+                    updateTextareas();
             $("#filenameControllerScript").val("");
             showSpinner();
             $.ajax({
@@ -956,6 +971,7 @@ function delete_amiibo(amiiboPath){
                     contentType: 'application/json',
                     success: function (data, status) {
                         $("#txtBodyControllerScript").val(data.message);
+                    updateTextareas();
                         $("#filenameControllerScript").val("");
                         hideSpinner();
                     },
@@ -1023,6 +1039,7 @@ function delete_amiibo(amiiboPath){
 
         function updateScript(){
             const bodyVal = $("#txtBodyControllerScript").val();
+                    updateTextareas();
             const filenameVal = $("#filenameControllerScript").val();
             showSpinner();
             $.ajax({
@@ -1045,6 +1062,7 @@ function delete_amiibo(amiiboPath){
         function submitAndRun(){
 
             const bodyVal = $("#txtBodyControllerScript").val();
+                    updateTextareas();
             const filenameVal = $("#filenameControllerScript").val();
             const repetitions = $("#repetitions").val();
             
@@ -1414,14 +1432,7 @@ function delete_amiibo(amiiboPath){
             this.style.height = (this.scrollHeight) + 'px';
         });
     });
-    function updateTextareas(){
-    textareas.forEach(function (textarea) {
-        textarea.style.height = 'auto';
-        textarea.style.height = (textarea.scrollHeight) + 'px';
-    });
-    }
     // Call the function every minute (60,000 milliseconds)
-    setInterval(updateTextareas, 5000);
 </script>
 </body>
 </html>
