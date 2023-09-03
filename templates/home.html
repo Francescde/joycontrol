@@ -1292,7 +1292,7 @@ function delete_amiibo(amiiboPath){
             <p>Connect raspberry to switch, shut down raspberry or restart it</p>
           
           {% if updatable %}
-            <a href="/update" class="btn btn-warning">Update</a>
+            <a href="/update" onclick="showSpinner()" class="btn btn-warning">Update</a>
           {% else %}
             <span class="btn btn-warning disabled">Update</span>
           {% endif %}
