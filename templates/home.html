@@ -434,7 +434,6 @@ function delete_amiibo(amiiboPath){
         // Function to handle the change event on the select element
         function selectController() {
             var selectedController = $("#selectedController").val();
-            showSpinner();
             if (selectController==null || selectedController === "") {
                 // Handle the empty selection
                 $("#deleteMapButton").prop("disabled", true);
