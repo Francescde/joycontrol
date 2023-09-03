@@ -1301,14 +1301,17 @@ function delete_amiibo(amiiboPath){
                 <label for="txtBodyControllerScript">Json config</label>
                 <textarea class="form-control resizable-textarea" id="txtBodyControllerScript" min-rows="3" onchange="checkControllerScriptValid()"></textarea>
             </div>
+            
+          <div class="form-outline">
+            <input type="number" placeholder="repetitions" id="repetitions" class="form-control" value="1" />
+            <label class="form-label" for="repetitions">repetitions</label>
+          </div>
+          <div class="form-outline">
+            <button type="button" class="btn btn-primary" id="submitAndRun" disabled onclick="submitAndRun()">run</button>
+          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="killScript()">Close</button>
-          <div class="form-outline">
-            <input type="number" id="repetitions" class="form-control" value="1" />
-            <label class="form-label" for="repetitions">repetitions</label>
-          </div>
-          <button type="button" class="btn btn-primary" id="submitAndRun" disabled onclick="submitAndRun()">run</button>
           <button type="button" class="btn btn-primary" id="submitScript" disabled onclick="updateScript()">Create</button>
         </div>
       </div>
