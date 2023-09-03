@@ -922,8 +922,8 @@ function delete_amiibo(amiiboPath){
                         $("#txtBodyControllerScript").val(data.jsonFile);
                         $("#filenameControllerScript").val(data.controllerName);
                         $('#exampleModalScript').modal('toggle');
-                        updateTextareas();
                         checkControllerScriptValid();
+                        updateTextareas();
                     hideSpinner();
                     },
                     error: function(xhr, status, error) {
@@ -1405,7 +1405,7 @@ function delete_amiibo(amiiboPath){
                 <div class="invalid-feedback"></div>
             </div>
             <div class="form-group">
-                <label for="txtBodyControllerScript">Json config</label>
+                <label for="txtBodyControllerCtr">Json config</label>
                 <textarea class="form-control resizable-textarea" id="txtBodyControllerCtr" min-rows="3" onchange="checkControllerMapValid()"></textarea>
                 <div class="invalid-feedback"></div>
             </div>
