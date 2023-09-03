@@ -924,7 +924,7 @@ function delete_amiibo(amiiboPath){
                         $('#exampleModalScript').modal('toggle');
                         checkControllerScriptValid();
                         updateTextareas();
-                    hideSpinner();
+                        hideSpinner();
                     },
                     error: function(xhr, status, error) {
                         hideSpinner();
@@ -1041,7 +1041,6 @@ function delete_amiibo(amiiboPath){
 
         function updateScript(){
             const bodyVal = $("#txtBodyControllerScript").val();
-                    updateTextareas();
             const filenameVal = $("#filenameControllerScript").val();
             showSpinner();
             $.ajax({
@@ -1064,7 +1063,6 @@ function delete_amiibo(amiiboPath){
         function submitAndRun(){
 
             const bodyVal = $("#txtBodyControllerScript").val();
-                    updateTextareas();
             const filenameVal = $("#filenameControllerScript").val();
             const repetitions = $("#repetitions").val();
             
