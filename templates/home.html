@@ -467,7 +467,6 @@ function delete_amiibo(amiiboPath){
                     $("#selectedCurrentController").text(currentSelectedController);
                     $("#txtBodyControllerCtr").val(JSON.stringify(response.jsonFile, null, 2));
                     updateTextareas();
-                    updateTextareas();
                     hideSpinner();
                 },
                 error: function(error) {
@@ -883,6 +882,7 @@ function delete_amiibo(amiiboPath){
                     contentType: 'application/json',
                     success: function (data, status) {
                         $("#jsonBodyController").val(JSON.stringify(data.jsonFile,null, 3));
+                    updateTextareas();
                         $("#filenameController").val(data.controllerName);
                         $('#exampleModal').modal('toggle');
                         checkControllerJsonValid();
@@ -951,6 +951,7 @@ function delete_amiibo(amiiboPath){
 
         function cleanControllerForm(){
             $("#jsonBodyController").val("");
+                    updateTextareas();
             $("#filenameController").val("");
         }
 
@@ -1003,6 +1004,7 @@ function delete_amiibo(amiiboPath){
 
         function positionObjects(){
             const bodyVal = $("#jsonBodyController").val();
+                    updateTextareas();
             const filenameVal = $("#filenameController").val();
             $.ajax({
                     url: '/controllers',
