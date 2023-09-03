@@ -1048,12 +1048,15 @@ function delete_amiibo(amiiboPath){
 
 </head>
 <body>
-    
-    <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
-        <div class="spinner-grow text-success" role="status">
-            <span class="sr-only">Loading...</span>
+<div class="modal" id="spinnerOverlay" style="display: none;">
+    <div class="modal-dialog" role="document">
+        <div class="d-flex justify-content-center align-items-center" style="height: 100vh;">
+            <div class="spinner-grow text-success" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
         </div>
     </div>
+</div>
 <div style="width: 100%">
     <div class="d-flex justify-content-between">
         <ul class="nav">
@@ -1296,7 +1299,6 @@ function delete_amiibo(amiiboPath){
           {% else %}
             <span class="btn btn-warning disabled">Update</span>
           {% endif %}
-          
           <button type="button" class="btn btn-warning" onclick="Connection(this)" data-dismiss="modal">Connect/Disconnect</button>
           <button type="button" class="btn btn-danger" onclick="ShutDown(this)" data-dismiss="modal">Shut down</button>
           <button type="button" class="btn btn-danger" onclick="Reboot(this)" data-dismiss="modal">Reboot</button>
