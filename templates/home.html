@@ -13,17 +13,12 @@
         }
 
         input {
-            background-color: #E3E3E3!important;
+            background-color: #A3A3E3!important;
         }
         /* Style for the resizable textarea */
         textarea {
             resize: none; /* Prevent manual resizing */
-            overflow: hidden; /* Hide any overflow content */
-            background-color: #E3E3E3!important;
-        }
-
-        /* Set a minimum height for the textarea */
-        textarea[min-rows] {
+            background-color: #A3A3E3!important;
             height: auto; /* Auto height to fit content */
         }
 
@@ -1246,7 +1241,7 @@ function delete_amiibo(amiiboPath){
             </div>
             <div class="form-group">
                 <label for="jsonBodyController">Json config</label>
-                <textarea class="form-control" id="jsonBodyController" rows="3" min-rows="3" onchange="checkControllerJsonValid()"></textarea>
+                <textarea class="form-control" id="jsonBodyController" min-rows="3" onchange="checkControllerJsonValid()"></textarea>
             </div>
         </div>
         <div class="modal-footer">
@@ -1275,7 +1270,7 @@ function delete_amiibo(amiiboPath){
             </div>
             <div class="form-group">
                 <label for="txtBodyControllerScript">Json config</label>
-                <textarea class="form-control" id="txtBodyControllerScript" rows="3" min-rows="3" onchange="checkControllerScriptValid()"></textarea>
+                <textarea class="form-control" id="txtBodyControllerScript" min-rows="3" onchange="checkControllerScriptValid()"></textarea>
             </div>
         </div>
         <div class="modal-footer">
@@ -1390,7 +1385,7 @@ function delete_amiibo(amiiboPath){
             </div>
             <div class="form-group">
                 <label for="txtBodyControllerScript">Json config</label>
-                <textarea class="form-control" id="txtBodyControllerCtr" rows="3" min-rows="3" onchange="checkControllerMapValid()"></textarea>
+                <textarea class="form-control" id="txtBodyControllerCtr" min-rows="3" onchange="checkControllerMapValid()"></textarea>
                 <div class="invalid-feedback"></div>
             </div>
         </div>
