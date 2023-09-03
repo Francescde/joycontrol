@@ -20,6 +20,7 @@
             resize: none; /* Prevent manual resizing */
             background-color: #A3A3E3!important;
             height: auto; /* Auto height to fit content */
+            overflow: hidden;
         }
 
         .nav-link {
@@ -1405,6 +1406,10 @@ function delete_amiibo(amiiboPath){
     // Add the same input event listener to each textarea
     textareas.forEach(function (textarea) {
         textarea.addEventListener('input', function () {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+        textarea.addEventListener('change', function () {
             this.style.height = 'auto';
             this.style.height = (this.scrollHeight) + 'px';
         });
