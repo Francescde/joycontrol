@@ -40,15 +40,17 @@
     </style>
     
     <script>
-        comands = {}
-        var currentSelectedController = "";
-        var amiiboListSrc = [];
-        var lastLoadedAmiiboFolder = "{{amiiboFolder}}";
+        comands = {};
 
         const trashIcoonString = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
-  <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
-</svg>`;
+            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+            <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+            </svg>`;
+        var currentSelectedController = "";
+        var lastLoadedAmiiboFolder = "{{amiiboFolder}}";
+        var amiiboListSrc = [];
+        var controllersListSrc = [];
+        var scriptsListSrc = [];
 
         function displayAmiibos(folderName) {
             folderName = folderName!=null?folderName:lastLoadedAmiiboFolder;
@@ -264,6 +266,23 @@ function delete_amiibo(amiiboPath){
             });
         }
 
+        function displayControllers(){
+            
+            let contains = $("#controllerContains").val()!=null?$("#controllerContains").val():"";
+              
+            for (let i = 0; i < controllersListSrc.length; i++) {
+                if(contains === '' || (controllersListSrc[i]).toLowerCase().includes(contains.toLowerCase())){
+                    let stringControllerDiv = "<div class='row-margin d-flex justify-content-between'>";
+                    stringControllerDiv +="<a href='/controller/" + controllersListSrc[i].replace('.json','') + "'>" + controllersListSrc[i] + "</a>";
+                    stringControllerDiv +="<div>"
+                    stringControllerDiv +="<button type=\"button\" class=\"btn btn-danger\" onclick='deleteController(\"" + controllersListSrc[i].replace('.json','') + "\")'>"+trashIcoonString+"</button>";
+                    stringControllerDiv +="<button type=\"button\" class=\"btn btn-primary\" onclick='editController(\"" + controllersListSrc[i].replace('.json','') + "\")'>edit</button>";
+                    stringControllerDiv +="</div></div>"
+                    $("#controllerList").append(stringControllerDiv);
+                }
+            }
+        }
+
         function requestControllers(){
             $("#controllerList").empty();
             $.ajax({
@@ -273,17 +292,25 @@ function delete_amiibo(amiiboPath){
                 contentType: 'application/json',
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
-                    for (let i = 0; i < data.length; i++) {
-                        let stringControllerDiv = "<div class='row-margin d-flex justify-content-between'>";
-                        stringControllerDiv +="<a href='/controller/" + data[i].replace('.json','') + "'>" + data[i] + "</a>";
-                        stringControllerDiv +="<div>"
-                        stringControllerDiv +="<button type=\"button\" class=\"btn btn-danger\" onclick='deleteController(\"" + data[i].replace('.json','') + "\")'>"+trashIcoonString+"</button>";
-                        stringControllerDiv +="<button type=\"button\" class=\"btn btn-primary\" onclick='editController(\"" + data[i].replace('.json','') + "\")'>edit</button>";
-                        stringControllerDiv +="</div></div>"
-                        $("#controllerList").append(stringControllerDiv);
-                    }
+                    controllersListSrc = data;
+                    print_controllers();
                 }
             });
+        }
+
+        
+        function displayScripts(){
+            //scriptContains
+            let contains = $("#scriptContains").val()!=null?$("#scriptContains").val():"";
+            for (let i = 0; i < scriptsListSrc.length; i++) {
+                if(contains === '' || (scriptsListSrc[i]).toLowerCase().includes(contains.toLowerCase())){
+                    let stringControllerDiv = "<div class='row-margin d-flex justify-content-between'>";
+                    stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-primary\" onclick='editScript(\"" + scriptsListSrc[i].replace('.txt','') + "\")'>"+scriptsListSrc[i]+"</button>";
+                    stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-danger\" onclick='deleteScript(\"" + scriptsListSrc[i].replace('.txt','') + "\")'>"+trashIcoonString+"</button>";
+                    stringControllerDiv +="</div>"
+                    $("#scripList").append(stringControllerDiv);
+                }
+            }
         }
 
         function requestScripts(){
@@ -295,13 +322,8 @@ function delete_amiibo(amiiboPath){
                 contentType: 'application/json',
                 success: function (data, status) {
                     console.log("Data: " + data + "\nStatus: " + status);
-                    for (let i = 0; i < data.length; i++) {
-                        let stringControllerDiv = "<div class='row-margin d-flex justify-content-between'>";
-                        stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-primary\" onclick='editScript(\"" + data[i].replace('.txt','') + "\")'>"+data[i]+"</button>";
-                        stringControllerDiv +="<button type=\"button\" style=\"width:100%;\" class=\"btn btn-danger\" onclick='deleteScript(\"" + data[i].replace('.txt','') + "\")'>"+trashIcoonString+"</button>";
-                        stringControllerDiv +="</div>"
-                        $("#scripList").append(stringControllerDiv);
-                    }
+                    scriptsListSrc = data;
+                    displayScripts();
                 }
             });
         }
@@ -938,6 +960,11 @@ function delete_amiibo(amiiboPath){
                 Create controller
             </button>
         </div>
+        <div class="form-group dotted-margin">
+            <div class="form-outline">
+            <input type="search" placeholder="Search" id="controllerContains" class="form-control" onchange="displayControllers()" />
+            </div>
+        </div>
         <div id="controllerList" class="d-flex flex-column justify-content-around">
         </div>
     </div>
@@ -1014,6 +1041,11 @@ function delete_amiibo(amiiboPath){
                         </button>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div class="form-group dotted-margin">
+            <div class="form-outline">
+            <input type="search" placeholder="Search" id="scriptContains" class="form-control" onchange="displayScripts()" />
             </div>
         </div>
         <div id="scripList" class="d-flex flex-column justify-content-around">
