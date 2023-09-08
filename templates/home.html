@@ -1367,9 +1367,6 @@ function delete_amiibo(amiiboPath){
           <button type="button" class="btn btn-danger" onclick="ShutDown(this)" data-dismiss="modal">Shut down</button>
           <button type="button" class="btn btn-danger" onclick="Reboot(this)" data-dismiss="modal">Reboot</button>
           <!--uploadConfFile-->
-            {% if unfixed_exists and secret_exists and not amiibo_generator_loaded %}
-            <p class="text-danger">Unfixed or locked file do not match</p>
-            {% endif %}
             <div class="form-group">
                 {% if unfixed_exists %}
                     <label for="unfixed" class="text-primary">Update Unfixed File</label>
@@ -1388,6 +1385,9 @@ function delete_amiibo(amiiboPath){
                 {% endif %}
                 <input type="file" name="locked" id="locked" onchange="uploadConfFile('locked')">
             </div>
+            {% if unfixed_exists and secret_exists and not amiibo_generator_loaded %}
+                <p class="text-danger">Unfixed or locked files do not match</p>
+            {% endif %}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
