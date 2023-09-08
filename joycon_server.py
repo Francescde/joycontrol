@@ -49,7 +49,10 @@ unfixed_info_path = os.path.join('amiibo_cloner', 'unfixed-info.bin')
 locked_secret_path = os.path.join('amiibo_cloner', 'locked-secret.bin')
 
 if os.path.exists(unfixed_info_path) and os.path.exists(locked_secret_path):
-    amiibo_generator = AmiiboCloner(unfixed_info_path, locked_secret_path)
+    try:
+        amiibo_generator = AmiiboCloner(unfixed_info_path, locked_secret_path)
+    except:
+        amiibo_generator = None
 
 comandTimer = []
 lastTime = 0
@@ -396,7 +399,7 @@ def check_update():
 @app.route('/view/<controllerName>')
 async def display_view(controllerName):
     updatable = check_update().json['value']
-    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile, updatable=updatable, unfixed_exists = os.path.exists(unfixed_info_path), secret_exists = os.path.exists(locked_secret_path))
+    return await render_template(controllerName+'.html', amiiboFolder=amiiboFolder, script=script,  maxComandLines=maxComandLines, comandDelay=comandDelay, mapControllerFile=mapControllerFile, updatable=updatable, unfixed_exists = os.path.exists(unfixed_info_path), secret_exists = os.path.exists(locked_secret_path), amiibo_generator_loaded = amiibo_generator!=None)
 
 
 @app.route('/')
@@ -698,7 +701,10 @@ def upload_cong(type):
             file.save(locked_secret_path)
             response = {'message': 'locked loaded'}
         if os.path.exists(unfixed_info_path) and os.path.exists(locked_secret_path):
-            amiibo_generator = AmiiboCloner(unfixed_info_path, locked_secret_path)
+            try:
+                amiibo_generator = AmiiboCloner(unfixed_info_path, locked_secret_path)
+            except:
+                amiibo_generator = None
     else:
         response = {'message': 'Tipo de archivo no valido'}
     

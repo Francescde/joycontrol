@@ -134,7 +134,7 @@ $("#exampleModal").modal('hide');-->
 '</svg>'+"</a>";
                     
                     divTextForAmiibo +="<button id=\""+ buttonId +"_delete\" type=\"button\" class=\"btn btn-danger\" onclick='delete_amiibo(\"" + amiiboListSrc[i] + "\");'>"+trashIcoonString+"</button>";
-                    {% if unfixed_exists and secret_exists %}
+                    {% if amiibo_generator_loaded %}
                         divTextForAmiibo +="<button id=\""+ buttonId +"Clone\" type=\"button\" class=\"btn btn-warning\" onclick='cloneModal(this,\"" + amiiboListSrc[i] + "\");'>Clone</button>";
                     {% endif %}
                     divTextForAmiibo += "</div>";
@@ -1385,6 +1385,9 @@ function delete_amiibo(amiiboPath){
                 {% endif %}
                 <input type="file" name="locked" id="locked" onchange="uploadConfFile('locked')">
             </div>
+            {% if unfixed_exists and secret_exists and not amiibo_generator_loaded %}
+                <p class="text-danger">Unfixed or locked files do not match</p>
+            {% endif %}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
