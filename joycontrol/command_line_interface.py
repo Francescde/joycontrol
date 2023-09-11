@@ -196,7 +196,11 @@ class ControllerCLI(CLI):
             if buttons_to_push:
                 await button_push(self.controller_state, *buttons_to_push)
             else:
-                await self.controller_state.send()
+                try:
+                    await self.controller_state.send()
+                except NotConnectedError:
+                    logger.info('Connection was lost.')
+                    return
 
     async def run_line(self, line):
         buttons_to_push = []
@@ -231,4 +235,8 @@ class ControllerCLI(CLI):
         if buttons_to_push:
             await button_push(self.controller_state, *buttons_to_push)
         else:
-            await self.controller_state.send()
+            try:
+                await self.controller_state.send()
+            except NotConnectedError:
+                logger.info('Connection was lost.')
+                return
