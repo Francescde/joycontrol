@@ -1387,19 +1387,19 @@ function delete_amiibo(amiiboPath){
           <!--uploadConfFile-->
             <div class="form-group">
                 {% if unfixed_exists %}
-                    <label for="unfixed" class="text-primary">Update Unfixed File</label>
+                    <label for="unfixed" class="text-primary">Update unfixed-info.bin File</label>
                 {% endif %}
                 {% if not unfixed_exists %}
-                    <label for="unfixed" class="text-warning">Load Unfixed File</label>
+                    <label for="unfixed" class="text-warning">Load unfixed-info.bin File</label>
                 {% endif %}
                 <input type="file" name="unfixed" id="unfixed" onchange="uploadConfFile('unfixed')">
             </div>
             <div class="form-group">
                 {% if secret_exists %}
-                    <label for="locked" class="text-primary">Update Locked File</label>
+                    <label for="locked" class="text-primary">Update locked-secret.bin File</label>
                 {% endif %}
                 {% if not secret_exists %}
-                    <label for="locked" class="text-warning">Load Locked File</label>
+                    <label for="locked" class="text-warning">Load locked-secret.bin File</label>
                 {% endif %}
                 <input type="file" name="locked" id="locked" onchange="uploadConfFile('locked')">
             </div>
