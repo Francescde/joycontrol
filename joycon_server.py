@@ -718,7 +718,8 @@ def upload():
     if file.filename.endswith('.bin'):
         print('processing .bin file'+file.filename)
         file.save(os.path.join(amiiboFolder, file.filename))
-        amiibo_generator.exclude_value_from(os.path.join(amiiboFolder, file.filename))
+        if amiibo_generator != None:
+            amiibo_generator.exclude_value_from(os.path.join(amiiboFolder, file.filename))
         response = {'message': 'Archivo .bin recibido'}
     elif file.filename.endswith('.zip'):
         print('processing .zip file'+file.filename)
@@ -729,7 +730,8 @@ def upload():
                     extracted_file_path = os.path.join(amiiboFolder, os.path.basename(member))
                     with open(extracted_file_path, 'wb') as extracted_file:
                         extracted_file.write(zip_ref.read(member))
-                        amiibo_generator.exclude_value_from(extracted_file_path)
+                        if amiibo_generator != None:
+                            amiibo_generator.exclude_value_from(extracted_file_path)
         response = {'message': 'Archivos ZIP recibidos y los archivos BIN descomprimidos fueron guardados'}
     else:
         response = {'message': 'Tipo de archivo no valido'}
