@@ -211,8 +211,8 @@ async def runScriptAsync(script, nfc):
 
     if len(non_sleep_line)>0:  # Handle any remaining non-sleep lines
         execution_objects.append({
-            'non_sleep_lines': non_sleep_line,
-            'sleep_lines': []
+            'non_sleep_line': non_sleep_line,
+            'sleep_line': []
         })
     while objectMap['repeats'] != 0:
         awaitable_tasks = []
